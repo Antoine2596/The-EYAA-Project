@@ -1,0 +1,91 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Avantgarde, sans-serif;
+    height: 100vh;
+}
+
+header {
+    background-color: darkslateblue;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bienvenue-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.bienvenue {
+    text-align: center;
+    color: black;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.site-name {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: "Audiowide", serif;
+    text-transform: uppercase;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.menu li {
+    margin: 0;
+}
+
+.menu a {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.menu a:hover {
+    background-color: darkcyan;
+    border-radius: 5px;
+}
+
+.connexion-button {
+    background-color: darkcyan;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.connexion-button:hover {
+    background-color: teal;
+}
+
+.contacts ul {
+    text-align: center;
+    list-style: none;
+}
+
+.contacts li {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
