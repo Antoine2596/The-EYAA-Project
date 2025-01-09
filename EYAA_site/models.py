@@ -2,12 +2,13 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib import admin
+from django.core.validators import RegexValidator
 
 class Genome(models.Model):
     genome_id = models.CharField(max_length=20, primary_key = True)
 
     # Only ACGT or ACGU, peut être mettre quelque chose pour vérifier la condition plus tard
-    genome_sequence = models.TextField()
+    genome_sequence = models.TextField(validators=[RegexValidator(regex=r"^[ACGTU]*$", message="La séquence doit être uniquement composée des caractères ACGT ou U.")])
 
     TYPE_CHOICES = [("DNA", "ADN"), ("RNA", "ARN")]
     genome_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
@@ -24,10 +25,10 @@ class Sequence(models.Model):
     sequence_id = models.CharField(max_length=20, primary_key=True)
     dna_sequence = models.TextField()
     aa_sequence = models.TextField()
-    num_chromosome = models.IntegerField(max_length=2)
-    sequence_start = models.IntegerField(max_length=10)
-    sequence_stop = models.IntegerField(max_length=10)
-    sequence_length = models.IntegerField(max_length=10)
+    num_chromosome = models.IntegerField()
+    sequence_start = models.IntegerField()
+    sequence_stop = models.IntegerField()
+    sequence_length = models.IntegerField() # On peut ajouter une def() pour calculer automatiquement
     gene_name = models.CharField(max_length=20)
 
     STATUS_CHOICES = [("Nothing", "Non-annotée"), ("Assigned", "Attribuée"),
@@ -35,23 +36,38 @@ class Sequence(models.Model):
     
     sequence_status = models.CharField(max_length=50, choices=STATUS_CHOICES)
 
+    # Relation One-to-Many avec genome
+    genome = models.ForeignKey(Genome, on_delete= models.CASCADE, related_name= "sequences")
+
+    def __str__(self):
+        return self.sequence_id
 
 class Annotation(models.Model):
-    annotation_id = models.CharField(max_length=20)
+    annotation_id = models.CharField(max_length=20, primary_key=True)
     annotation_text = models.TextField() # Définir un max ?
     annotation_author = models.CharField(max_length=50)
+    # On pourrait possiblement ajouter un attribut "date de création" ou de "validation" 
 
+    #Relation One-to-zero-or-one avec sequence
+    sequence = models.OneToOneField(Sequence, on_delete=models.CASCADE, related_name="annotation")
 
+    def __str__(self):
+        return self.annotation_id
 
 
 class Domaine(models.Model):
-    domain_id = models.CharField(max_length=20)
+    domain_id = models.CharField(max_length=20, primary_key=True)
     domain_name = models.CharField(max_length=20)
 
-    domain_start = models.IntegerField(max_length=10)
-    domain_stop = models.IntegerField(max_length=10)
-    domain_length = models.IntegerField(max_length=10)
+    domain_start = models.IntegerField()
+    domain_stop = models.IntegerField()
+    domain_length = models.IntegerField()
     
     domain_function = models.CharField(max_length=50)
 
-# Pas fini
+    # Relation One-to-Many avec sequence
+    sequence = models.ForeignKey(Sequence, on_delete=models.CASCADE, related_name = "domaines")
+    # sequence.domaines.all() --> récupère tous les domaines liés à la séquence X
+
+    def __str__(self):
+        return self.domain_id
