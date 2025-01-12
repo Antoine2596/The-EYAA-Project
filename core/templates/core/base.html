@@ -20,11 +20,18 @@
                     <li><a href="#contacts">Contacts</a></li>
                 </ul>
             </nav>
-            <button class="connexion-button">Connexion</button>
+            <button class="connexion-button"><a href="{% url 'connexion' %}">Connexion</a></button>
         </header>
         <main>
             {% block content %}
             {% endblock %}
         </main>
     </body>
+    <style>
+        a {
+            font-size: 16px;
+            color: darkslateblue;
+            text-decoration: none;
+        }
+    </style>
 </html>
