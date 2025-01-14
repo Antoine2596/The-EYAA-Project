@@ -14,10 +14,11 @@
             <div class="site-name">EYAA</div>
             <nav class="menu">
                 <ul>
-                    <li><a href="#home">Accueil</a></li>
+                    <li><a href="{% url 'home' %}">Accueil</a></li>
                     <li><a href="#genomes">Génomes disponibles</a></li>
                     <li><a href="#annotations">Annotations</a></li>
                     <li><a href="#contacts">Contacts</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
                 </ul>
             </nav>
             <button class="connexion-button"><a href="{% url 'connexion' %}">Connexion</a></button>

@@ -5,11 +5,11 @@ from .forms import CustomUserCreationForm
 
 def connexion(request):
     if request.method == "POST":
-        # On récupère email et password du formulaire
+
         email = request.POST["email"]
         password = request.POST["password"]
 
-        # On passe username=email, car USERNAME_FIELD = "email"
+
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
@@ -24,11 +24,8 @@ def inscription(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, "Compte créé avec succès. Vous pouvez maintenant vous connecter.")
-            return redirect("connexion")
-        else:
-            messages.error(request, "Erreur lors de la création du compte.")
+            form.save()
+            return redirect('connexion')
     else:
         form = CustomUserCreationForm()
 

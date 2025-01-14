@@ -9,7 +9,7 @@ class CustomUserCreationForm(UserCreationForm):
             "email",
             "first_name",
             "last_name",
-            "role",         # si on veut laisser le user choisir
+            "role",      # faudra l'enlever hein
             "password1",
             "password2",
         ]

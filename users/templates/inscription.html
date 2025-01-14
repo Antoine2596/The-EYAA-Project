@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Inscription</title>
-</head>
-<body>
-  <h1>Inscription</h1>
-  <form method="POST" action="{% url 'inscription' %}">
+<h1>Inscription</h1>
+
+<form method="POST">
     {% csrf_token %}
+
+
+    {% if form.non_field_errors %}
+        <ul>
+            {% for error in form.non_field_errors %}
+                <li style="color:red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
     {{ form.as_p }}
+
     <button type="submit">S'inscrire</button>
-  </form>
-  <p>Déjà inscrit ? <a href="{% url 'connexion' %}">Connexion</a></p>
-</body>
-</html>
+</form>
+
+<p>Déjà inscrit ? <a href="{% url 'connexion' %}">Se connecter</a></p>
