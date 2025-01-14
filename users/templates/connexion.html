@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Connexion</title>
 </head>
 <body>
     <div class="container">
@@ -11,16 +11,18 @@
             <h1>Connexion</h1>
             <form method="post" action="{% url 'connexion' %}">
                 {% csrf_token %}
-                <label for="username">Nom d'utilisateur</label>
-                <input type="text" name="username" required>
+                <label for="email">Adresse email</label>
+                <input type="text" name="email" required>
+                
                 <label for="password">Mot de passe</label>
                 <input type="password" name="password" required>
+                
                 <button type="submit">Se connecter</button>
             </form>
             <p class="link">Pas encore inscrit ? <a href="{% url 'inscription' %}">S'inscrire</a></p>
         </div>
     </div>
-    
+
     <style>
         /* CSS */
         /* Import Google font - Poppins */

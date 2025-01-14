@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<head>
+    <title>Profil</title>
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+</head>
+<body>
+    <header>
+        <div class="site-name">EYAA Project</div>
+        <nav class="menu">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#genomes">Available genomes</a></li>
+                <li><a href="#annotations">Annotations</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+            </ul>
+        </nav>
+        <button class="connexion-button"><a href="{% url 'connexion' %}">Connexion</a></button>
+    </header>
+    <main>
+        <h1>My profile</h1>
+        <p><strong>Email :</strong> {{ user.email }}</p>
+        <p><strong>Nom :</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p><strong>Rôle :</strong> {{ user.role }}</p>    
+    </main>
+</body>

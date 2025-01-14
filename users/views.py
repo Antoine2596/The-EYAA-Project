@@ -1,28 +1,35 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from .form import CustomUserCreationForm
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
-def inscription(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('connexion')  
-    else:
-        form = CustomUserCreationForm()  
-
-    return render(request, 'inscription.html', {'form': form}) 
+from django.contrib.auth import authenticate, login
+from .forms import CustomUserCreationForm
 
 def connexion(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+    if request.method == "POST":
+        # On récupère email et password du formulaire
+        email = request.POST["email"]
+        password = request.POST["password"]
+
+        # On passe username=email, car USERNAME_FIELD = "email"
+        user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            messages.success(request, "Connexion réussie !")
+            return redirect("home")
         else:
-            return messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
-    return render(request, 'connexion.html')
+            messages.error(request, "Adresse email ou mot de passe incorrect.")
+    return render(request, "connexion.html")
+
+
+def inscription(request):
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Compte créé avec succès. Vous pouvez maintenant vous connecter.")
+            return redirect("connexion")
+        else:
+            messages.error(request, "Erreur lors de la création du compte.")
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, "inscription.html", {"form": form})
