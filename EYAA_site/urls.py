@@ -22,6 +22,4 @@ from core import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("core.urls")),
-    path("inscription/", views.inscription, name="inscription"),
-    path("connexion/", views.connexion, name="connexion"),
 ]

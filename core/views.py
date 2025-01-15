@@ -12,6 +12,12 @@ def home(request):
 def contact(request):
     return render(request,"core/contacts.html")
 
+def database(request):
+    return render(request, "core/database.html")
+
+def visualisation(request):
+    return render(request, "core/visualisation.html")
+
 def inscription(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
