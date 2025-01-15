@@ -15,3 +15,38 @@ def connexion(request):
 @login_required
 def profile(request):
     return render(request, "core/profile.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def test(request):
+    message = ""    
+    if request.user.is_authenticated:
+        # Vérifier son rôle
+        if request.user.role == "annotateur":
+            message = "COUCOU"
+    
+    return render(request, "core/home.html", {"message": message})
