@@ -1,4 +1,7 @@
 
 .codegpt
 *.pyc
+django_env/
+
+
 
