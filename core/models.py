@@ -3,7 +3,11 @@ from django.utils import timezone
 from django.urls import reverse
 from django.contrib import admin
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 
+class Utilisateur(models.Model):
+    email = models.EmailField(unique=True)
+    mot_de_passe = models.CharField(max_length=10)
 
 class Genome(models.Model):
     genome_id = models.CharField(max_length=20, primary_key=True)
