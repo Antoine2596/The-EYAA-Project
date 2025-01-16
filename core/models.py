@@ -1,9 +1,13 @@
 from django.db import models
+
+# Create your models here.
+from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
+from django import forms 
 
 class Utilisateur(models.Model):
     email = models.EmailField(unique=True)
@@ -87,3 +91,4 @@ class Domaine(models.Model):
 
     def __str__(self):
         return str(self.domain_id)
+
