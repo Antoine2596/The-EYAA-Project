@@ -12,7 +12,9 @@
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="#genomes">Available genomes</a></li>
-                <li><a href="#annotations">Annotations</a></li>
+                {% if user.role == "annotateur" %}
+                <li><a href="{% url 'AnnotationPage' %}">Annotations</a></li>
+                {% endif %}
                 <li><a href="#contacts">Contacts</a></li>
             </ul>
         </nav>
