@@ -34,6 +34,17 @@
             padding: 30px;
         }
 
+        .container2 {
+            width: 400px;
+            background: #fff;
+            border-radius: 7px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .container2 .form {
+            padding: 30px;
+        }
 
 
         label {
@@ -92,5 +103,18 @@
             margin-bottom: 10px;
             font-size: 14px;
             text-align: center;
+        }
+
+
+        .container2 {
+            width: 400px;
+            background: #fff;
+            border-radius: 7px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .container2 .form {
+            padding: 30px;
         }
 

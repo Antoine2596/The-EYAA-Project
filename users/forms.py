@@ -20,3 +20,7 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields["role"].label = "Rôle"
         self.fields["password1"].label = "Mot de passe"
         self.fields["password2"].label = "Confirmation du mot de passe"
+        # https://stackoverflow.com/questions/46945449/how-to-edit-usercreationform-password-help-text
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
+
