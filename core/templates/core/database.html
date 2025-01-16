@@ -6,5 +6,36 @@ Database - EYAA
 {% endblock %}
 
 {% block content %}
-<button class="visualisation_acces_button"><a href="{% url 'visualisation' %}">Accès visualisation</a></button>
+    <div class="database-title">
+        <h1 class="database">Ensemble de la base de données disponnible.</h1>
+    </div>
+
+    <div class="database-filter">
+        <form method="GET" action="{% url 'genome_database' %}">
+            <input type="text" name="user_request" placeholder="Nom de gène, ID, organisme">
+            <select name="sequence_type">
+                <option value="DNA">ADN</option>
+                <option value="RNA">ARN</option>
+            </select>
+            <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
+        </form>
+    </div>
+
+    <div class="database-container">
+        {% if results %}
+            {% for sequence in results %}
+            <div class="sequence-card">
+                <h3>{{ genome.genome_id }}</h3>
+                <p>Organisme : {{ genome.organism }}</p>
+                <p>Type : {{ genome.get_genome_type_display }}</p>
+                <button class="visualisation_acces_button">
+                    <a href="{% url 'visualisation' genome.genome_id %}">Accès visualisation</a>
+                </button>
+        </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucun résultat trouvé pour votre recherche.</p>
+        {% endif %}
+    </div>
+
 {% endblock %}
