@@ -11,41 +11,20 @@ def contact(request):
 def connexion(request):
     return render(request, "connexion.html")
 
+
+
 # https://docs-djangoproject-com.translate.goog/en/5.1/topics/auth/default/?_x_tr_sl=en&_x_tr_tl=fr&_x_tr_hl=fr&_x_tr_pto=sc
 @login_required
 def profile(request):
     return render(request, "core/profile.html")
 
+def AnnotationPage(request):
+    return render(request, "core/AnnotationPage.html")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# (C'est juste pour faire des test, cette fonction sera supprimé prochainement)
 def test(request):
     message = ""    
     if request.user.is_authenticated:
-        # Vérifier son rôle
         if request.user.role == "annotateur":
             message = "COUCOU"
     
