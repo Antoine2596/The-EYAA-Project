@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}
+Database - EYAA
+{% endblock %}
+
+{% block content %}
+    <div class="database-title">
+        <h1 class="database">Ensemble de la base de données disponnible.</h1>
+    </div>
+
+    <div class="database-filter">
+        <form method="GET" action="{% url 'genome_database' %}">
+            <input type="text" name="user_request" placeholder="Nom de gène, ID, organisme">
+            <select name="sequence_type">
+                <option value="DNA">ADN</option>
+                <option value="RNA">ARN</option>
+            </select>
+            <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
+        </form>
+    </div>
+
+    <div class="database-container">
+        {% if results %}
+            {% for genome in results %}
+            <div class="sequence-card">
+                <h3>{{ genome.genome_id }}</h3>
+                <p>Organisme : {{ genome.organism }}</p>
+                <p>Type : {{ genome.get_genome_type_display }}</p>
+                {% if genome.genome_id %}
+                    <a href="{% url 'visualisation' genome.genome_id %}">Accès visualisation</a>
+                {% else %}
+                    <p>Aucun accès de visualisation disponible pour ce génome.</p>
+                {% endif %}
+        </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucun résultat trouvé pour votre recherche.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

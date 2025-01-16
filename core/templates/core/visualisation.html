@@ -1,0 +1,66 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}
+Visualisation - EYAA
+{% endblock %}
+
+{% block content %}
+    <div class="visualisation-container">
+        <h1 class="visualisation">On retrouve ici la visualisation du génome : {{ genome.genome_id }}</h1>
+        <p class = "visualisation_descriptif"> -- Visualisation sans doute réalisée avec IGV</p>
+        <section>
+            <h2>Détails</h2>
+            <p><strong>ID du génome :</strong> {{ genome.genome_id }}</p>
+            <p><strong>Organisme :</strong> {{ genome.organism }}</p>
+            <p><strong>Type :</strong> {{ genome.get_genome_type_display }}</p>
+            <p><strong>Séquence annotée :</strong> 
+                {% if genome.is_annotated %}
+                    Oui
+                {% else %}
+                    Non
+                {% endif %}
+            </p>
+        </section>
+
+
+        <section>
+            <h2>Visualisation avec IGV</h2>
+            <div id="igv-container" style="height: 500px; border: 1px solid #ccc;"></div>
+            <script src="{% static 'core/igv.min.js' %}"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const options = {
+                        //genome: "{{ genome.genome_id }}", // Remplacez par l'ID ou type de génome compatible avec IGV
+                        //locus: "{{ genome.locus|default:'' }}", // Remplacez avec une position génomique valide si disponible
+                        genome: "hg19",
+                        locus: "chr1:1000000-2000000",
+                        tracks: [
+                            {
+                                name: "Séquence génomique",
+                                type: "sequence",
+                                fastaURL: "{{ genome.fasta_url|default:'' }}", // Lien vers un fichier FASTA si disponible
+                                indexed: false
+                            }
+                        ]
+                    };
+
+                    const igvContainer = document.getElementById("igv-container");
+                    igv.createBrowser(igvContainer, options).then(function (browser) {
+                        console.log("IGV instance created:", browser);
+                    });
+                });
+            </script>
+        </section>
+
+        <section>
+            <h2>Séquence</h2>
+            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ genome.genome_sequence }}
+            </pre>
+        </section>
+    </div>
+    <footer>
+        <a href="{% url 'genome_database' %}">Retour à la base de données</a>
+    </footer>
+{% endblock %}

@@ -3,5 +3,9 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path('genome_viewer/', views.genome_viewer, name='genome_viewer'),
+    path("inscription/", views.inscription, name="inscription"),
+    path("connexion/", views.connexion, name="connexion"),
+    path("contacts/", views.contacts, name="contacts"),
+    path("database/", views.database_view, name="genome_database"),
+    path("visualisation/<str:genome_id>/", views.visualisation, name="visualisation"),
 ]
