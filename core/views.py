@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from .form import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -16,8 +16,10 @@ def contacts(request):
 def database(request):
     return render(request, "core/database.html")
 
-def visualisation(request):
-    return render(request, "core/visualisation.html")
+def visualisation(request, genome_id):
+    genome = get_object_or_404(Genome, genome_id=genome_id)
+
+    return render(request, "core/visualisation.html", {"genome": genome})
 
 def inscription(request):
     if request.method == 'POST':
@@ -42,6 +44,12 @@ def connexion(request):
             return messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
     return render(request, 'core/connexion.html')
 
+
+def genome_list(request):
+    genomes = Genome.objects.all()  # Récupère tous les génomes
+    return render(request, "test.html", {"genomes": genomes})
+
+
 def database_view(request):
     user_request = request.GET.get("user_request", "")
     sequence_type = request.GET.get("sequence_type", "")
@@ -53,9 +61,9 @@ def database_view(request):
             organism__icontains=user_request,
             genome_type__icontains=sequence_type
         )
-        
-        context = {"results": results}
-        return render(request,"database.html", context)
+
+    context = {"results": results}
+    return render(request,"core/database.html", context)
 
 # def database_search(request):
 #     query = request.GET.get("user_request", "")

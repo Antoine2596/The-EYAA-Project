@@ -1,0 +1,12 @@
+<div class="database-results">
+    {% for genome in genomes %}
+        <div class="genome-card">
+            <p>ID : {{ genome.genome_id }}</p>
+            <p>Organisme : {{ genome.organism }}</p>
+            <p>Type : {{ genome.get_genome_type_display }}</p>
+            <p>Longueur de la séquence : {{ genome.genome_sequence|length }}</p>
+        </div>
+    {% empty %}
+        <p>Aucun génome trouvé.</p>
+    {% endfor %}
+</div>

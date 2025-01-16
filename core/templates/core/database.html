@@ -23,14 +23,16 @@ Database - EYAA
 
     <div class="database-container">
         {% if results %}
-            {% for sequence in results %}
+            {% for genome in results %}
             <div class="sequence-card">
                 <h3>{{ genome.genome_id }}</h3>
                 <p>Organisme : {{ genome.organism }}</p>
                 <p>Type : {{ genome.get_genome_type_display }}</p>
-                <button class="visualisation_acces_button">
+                {% if genome.genome_id %}
                     <a href="{% url 'visualisation' genome.genome_id %}">Accès visualisation</a>
-                </button>
+                {% else %}
+                    <p>Aucun accès de visualisation disponible pour ce génome.</p>
+                {% endif %}
         </div>
             {% endfor %}
         {% else %}
