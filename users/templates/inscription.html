@@ -10,13 +10,13 @@
 <body>
     <DOCTYPE html>
 
-
+        <div class="container">
         <h1>Inscription</h1>
         
         <form method="POST">
             {% csrf_token %}
         
-        
+            
             {% if form.non_field_errors %}
                 <ul>
                     {% for error in form.non_field_errors %}
@@ -30,7 +30,9 @@
         
             <button type="submit">S'inscrire</button>
         </form>
+    
         
         <p>Déjà inscrit ? <a href="{% url 'connexion' %}">Se connecter</a></p>
+    </div>
 </body>
 </html>
