@@ -63,50 +63,10 @@ def database_view(request):
     user_request = request.GET.get("user_request", "").strip()
     filter_types = request.GET.getlist("filter_type")
     is_annotated = request.GET.get("is_annotated") == "true"
-
-    # # Initialisation des résultats
-    # genomes = sequences = annotations = None
-
-    # # Recherche filtrée
-    # if user_request:
-    #     query = Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)
-    #     if "genome" in filter_types or not filter_types:
-    #         genomes = Genome.objects.filter(query)
-    #         if is_annotated:
-    #             genomes = genomes.filter(is_annotated=True)
-
-    #     if "sequence" in filter_types or not filter_types:
-    #         sequences = Sequence.objects.filter(
-    #             Q(sequence_id__icontains=user_request) | Q(gene_name__icontains=user_request)
-    #         )
-
-    #     if "annotation" in filter_types or not filter_types:
-    #         annotations = Annotation.objects.filter(
-    #             Q(annotation_id__icontains=user_request) | Q(annotation_text__icontains=user_request)
-    #         )
-    # else:
-    #     # Pas de recherche, afficher tout
-    #     if "genome" in filter_types or not filter_types:
-    #         genomes = Genome.objects.all()
-    #         if is_annotated:
-    #             genomes = genomes.filter(is_annotated=True)
-    #     if "sequence" in filter_types or not filter_types:
-    #         sequences = Sequence.objects.all()
-    #     if "annotation" in filter_types or not filter_types:
-    #         annotations = Annotation.objects.all()
-
-    # return render(request, "core/database.html", {
-    #     "genomes": genomes,
-    #     "sequences": sequences,
-    #     "annotations": annotations,
-    # })
-
     min_length = request.GET.get("min_length")
     max_length = request.GET.get("max_length")
     chromosome = request.GET.get("chromosome", "").strip()
-    sequence_type = request.GET.get("sequence_type", "").strip()
 
-    # Initialisation des résultats
     genomes = sequences = annotations = None
 
     # Recherche filtrée
@@ -122,15 +82,13 @@ def database_view(request):
                 Q(sequence_id__icontains=user_request) | Q(gene_name__icontains=user_request)
             )
 
-            # Appliquer les nouveaux filtres sur les séquences
+            # Appliquer les filtres sur les résultats
             if min_length:
-                sequences = sequences.filter(length__gte=int(min_length))
+                sequences = sequences.filter(sequence_length__gte=int(min_length))
             if max_length:
-                sequences = sequences.filter(length__lte=int(max_length))
+                sequences = sequences.filter(sequence_length__lte=int(max_length))
             if chromosome:
-                sequences = sequences.filter(chromosome__iexact=chromosome)
-            if sequence_type:
-                sequences = sequences.filter(type__iexact=sequence_type)
+                sequences = sequences.filter(num_chromosome__iexact=chromosome)
 
         if "annotation" in filter_types or not filter_types:
             annotations = Annotation.objects.filter(
@@ -145,15 +103,13 @@ def database_view(request):
         if "sequence" in filter_types or not filter_types:
             sequences = Sequence.objects.all()
 
-            # Appliquer les nouveaux filtres sur les séquences
+            # Appliquer les filtres sur les résultats
             if min_length:
-                sequences = sequences.filter(length__gte=int(min_length))
+                sequences = sequences.filter(sequence_length__gte=int(min_length))
             if max_length:
-                sequences = sequences.filter(length__lte=int(max_length))
+                sequences = sequences.filter(sequence_length__lte=int(max_length))
             if chromosome:
-                sequences = sequences.filter(chromosome__iexact=chromosome)
-            if sequence_type:
-                sequences = sequences.filter(type__iexact=sequence_type)
+                sequences = sequences.filter(num_chromosome__iexact=chromosome)
 
         if "annotation" in filter_types or not filter_types:
             annotations = Annotation.objects.all()

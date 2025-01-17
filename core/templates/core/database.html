@@ -6,22 +6,18 @@ Database - EYAA
 {% endblock %}
 
 {% block content %}
-    <!-- <div class="database-title">
-        <h1 class="database">Ensemble de la base de données disponnible.</h1>
-    </div> -->
 
-    <!-- <div class="database-filter">
+    <div class="search-bar-container">
         <form method="GET" action="{% url 'genome_database' %}">
-            <input type="text" name="user_request" placeholder="Nom de gène, ID, organisme">
-            <select name="sequence_type">
-                <option value="DNA">ADN</option>
-                <option value="RNA">ARN</option>
-            </select>
-            <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
+            <div class="search-bar">
+                <input type="text" name="user_request" placeholder="ID, organisme, gène">
+                <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
+            </div>
         </form>
-    </div> -->
+    </div>
 
     <div class="main-content">
+
         <div class="database-section">
             <h2>Génomes entiers</h2>
     <div class="database-container">
@@ -92,10 +88,6 @@ Database - EYAA
     <div class="filter-menu">
         <h2>Filtres</h2>
         <form method="GET" action="{% url 'genome_database' %}">
-            <div class="search-bar">
-                <input type="text" name="user_request" placeholder="ID, organisme, gène" value="{{ request.GET.user_request|default:'' }}">
-                <button type="submit" value="Recherche" style="color: white;">Rechercher</button>    
-            </div>
             <hr>
 
             <h3>Type</h3>
@@ -117,7 +109,7 @@ Database - EYAA
             </label>
             <hr>
             
-            <h3>Filtres avancés</h3>
+            <h3> Avancés</h3>
             <!-- Longueur de séquence -->
             <label for="min_length">Longueur minimale :</label>
             <input type="number" name="min_length" placeholder="Min">

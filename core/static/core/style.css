@@ -97,7 +97,7 @@ header {
     gap: 20px;
 }
 
-/* Section principale (contenu principal) */
+/* Section principale */
 .database-section {
     flex: 3;
     background-color: #f9f9f9;
@@ -108,8 +108,8 @@ header {
 
 /* Menu vertical à droite */
 .filter-menu {
-    position: fixed;
-    top: 100px;
+    position: static;
+    top: 160px;
     right: 20px;
     width: 300px;
     background-color: #f4f4f4;
@@ -128,7 +128,7 @@ header {
 }
 
 .filter-menu h3 {
-    margin-top: 20px;
+    margin-top: 10px;
     font-size: 1.5em;
     color: darkslateblue;
     border-bottom: 1px solid #ccc;
@@ -150,7 +150,7 @@ header {
 .filter-menu input[type="text"]{
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -185,55 +185,45 @@ header {
     background-color: teal;
 }
 
-.filter-menu .search-bar {
-    display: flex;
-    flex-wrap: wrap; /* Adapte la barre aux petits écrans */
-    align-items: center; /* Aligne verticalement les éléments */
-    gap: 10px; /* Espace entre l'input et le bouton */
-    margin-bottom: 20px; /* Espacement inférieur */
-}
 
-.filter-menu .search-bar input[type="text"] {
-    flex: 1; /* Prend tout l'espace restant */
-    min-width: 200px; /* Largeur minimale pour éviter un écrasement */
+/* Container pour la barre de recherche */
+.search-bar-container {
+    margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
-.filter-menu .search-bar button {
-    padding: 10px 20px;
-    background-color: darkslateblue;
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-bar input {
+    width: 80%;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.search-bar button {
+    padding: 10px 15px;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
-    font-weight: bold;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-weight: bold;
 }
 
-.filter-menu .search-bar button:hover {
-    background-color: teal;
+.search-bar button:hover {
+    background-color: #0056b3;
 }
 
-@media screen and (max-width: 768px) {
-    .main-content {
-        flex-direction: column;
-    }
-
-    .filter-menu {
-        position: static;
-        width: 100%;
-        max-height: none;
-        margin-top: 20px;
-        box-shadow: none;
-    }
-
-    .filter-menu .search-bar {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
 
 /* Conteneur pour les résultats */
 .database-container {
