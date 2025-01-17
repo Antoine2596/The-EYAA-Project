@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+    <title>Connexion</title>
+</head>
+<body>
+    <div class="container">
+        <div class="form">
+            <h1>Connexion</h1>
+            <form method="post" action="{% url 'connexion' %}">
+                {% csrf_token %}
+                <label for="email">Adresse email</label>
+                <input type="text" name="email" required>
+                
+                <label for="password">Mot de passe</label>
+                <input type="password" name="password" required>
+                
+                <button type="submit">Se connecter</button>
+            </form>
+            <p class="link">Pas encore inscrit ? <a href="{% url 'inscription' %}">S'inscrire</a></p>
+        </div>
+    </div>
+</html>
+        

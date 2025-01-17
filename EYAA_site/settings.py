@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "import_export",
     "django_extensions",
     "core",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ ROOT_URLCONF = "EYAA_site.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates"],  
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -70,6 +71,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = "EYAA_site.wsgi.application"
 
 
@@ -78,7 +81,7 @@ WSGI_APPLICATION = "EYAA_site.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
+        "ENGINE": "django.db.backends.sqlite3", # j'ai ajouter sqlite3 car il était pas mis à la fin
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
@@ -120,7 +123,14 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Pour l'instant on définit le modèle utilisateur à utiliser, pour l'instant on utilise le modèle par défaut
+# https://docs.djangoproject.com/en/5.1/topics/auth/customizing/
+
+AUTH_USER_MODEL = "users.CustomUser"

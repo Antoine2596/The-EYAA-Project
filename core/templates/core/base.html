@@ -4,6 +4,7 @@
 <html lang="fr">
     <head>
         <title>{% block title %}EYAA{% endblock %}</title>
+        
         <link rel="stylesheet" href="{% static 'core/style.css' %}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,16 +12,21 @@
     </head>
     <body>
         <header>
-            <div class="site-name">EYAA</div>
+            <div class="site-name">
+                <a href="{% url 'home' %}">EYAA</a>
+            </div>
             <nav class="menu">
                 <ul>
-                    <li><a href="#home">Accueil</a></li>
                     <li><a href="#genomes">Génomes disponibles</a></li>
-                    <li><a href="#annotations">Annotations</a></li>
-                    <li><a href="#contacts">Contacts</a></li>
+                    {% if user.role == "annotateur" %}
+                    <li><a href="{% url 'AnnotationPage' %}">Annotations</a></li>
+                    {% endif %}
+
+                    <li><a href="{% url 'contacts' %}">Contacts</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
                 </ul>
             </nav>
-            <button class="connexion-button">Connexion</button>
+            <button class="connexion-button"><a href="{% url 'connexion' %}">Connexion</a></button>
         </header>
         <main>
             {% block content %}
