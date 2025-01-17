@@ -15,9 +15,8 @@ class Genome(models.Model):
     # Only ACGT or ACGU
     # peut être mettre quelque chose pour vérifier la condition plus tard
     genome_sequence = models.TextField(validators=[RegexValidator(
-        regex=r"^[ACGTU]*$",
-        message="La séquence doit être uniquement "
-        "composée des caractères ACGT ou U.")])
+         regex=r"^[ACGTURYKMSWBDHVN]*$",
+         message="La séquence doit être composée uniquement des caractères ACGTURYKMSWBDHVN (norme IUPAC).")])
 
     TYPE_CHOICES = [("DNA", "ADN"), ("RNA", "ARN")]
     genome_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
