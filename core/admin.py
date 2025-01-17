@@ -14,7 +14,7 @@ from .resources import GenomeResource, SequenceResource, AnnotationResource
 class GenomeImportForm(ImportForm):
     genome_id = forms.CharField(required=True, label="Identifiant unique du génome sur les bases de données")
     organism = forms.CharField(required=True, label="Genre et espece du génome") 
-    is_annotated = forms.BooleanField(required=False, label="Déjà annoté") 
+    is_annotated = forms.BooleanField(required=False, label="Déjà annoté", initial=False) 
     import_file = forms.FileField(required=True, label="Fichier FASTA à importer")
 
     

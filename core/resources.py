@@ -20,7 +20,13 @@ class GenomeResource(resources.ModelResource):
         file = request.FILES.get("import_file")
         genome_id = request.POST.get("genome_id")  # Récupérer genome_id
         organism = request.POST.get("organism")   # Récupérer organism
-        is_annotated = request.POST.get("is_annotated", False) #Recuperer si annnote ou pas
+        is_annotated = request.POST.get("is_annotated") #Recuperer si annnote ou pas
+        
+        if is_annotated:
+            is_annotated = True
+        else:
+            is_annotated = False
+        print(is_annotated)
 
         fasta_content = ""
         for line in file:
