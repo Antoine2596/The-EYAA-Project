@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request,"core/home.html")
 
-def contact(request):
-    return render(request,"contacts/home.html")
+def contacts(request):
+    return render(request, "core/contacts.html")
 
 def connexion(request):
     return render(request, "connexion.html")
