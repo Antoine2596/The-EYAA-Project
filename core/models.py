@@ -57,6 +57,9 @@ class Sequence(models.Model):
 
     def __str__(self):
         return str(self.sequence_id)
+    
+    def length(self):
+        return str(self.sequence_id)
 
 
 class Annotation(models.Model):

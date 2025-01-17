@@ -6,11 +6,11 @@ Database - EYAA
 {% endblock %}
 
 {% block content %}
-    <div class="database-title">
+    <!-- <div class="database-title">
         <h1 class="database">Ensemble de la base de données disponnible.</h1>
-    </div>
+    </div> -->
 
-    <div class="database-filter">
+    <!-- <div class="database-filter">
         <form method="GET" action="{% url 'genome_database' %}">
             <input type="text" name="user_request" placeholder="Nom de gène, ID, organisme">
             <select name="sequence_type">
@@ -19,25 +19,130 @@ Database - EYAA
             </select>
             <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
         </form>
-    </div>
+    </div> -->
 
+    <div class="main-content">
+        <div class="database-section">
+            <h2>Génomes entiers</h2>
     <div class="database-container">
-        {% if results %}
-            {% for genome in results %}
+        {% if genomes %}
+            {% for genome in genomes %}
             <div class="sequence-card">
                 <h3>{{ genome.genome_id }}</h3>
-                <p>Organisme : {{ genome.organism }}</p>
-                <p>Type : {{ genome.get_genome_type_display }}</p>
+                <p><strong>Organisme :</strong> {{ genome.organism }}</p>
+                <p><strong>Type :</strong> {{ genome.get_genome_type_display }}</p>
+                <p><strong>Annoté :</strong> {{ genome.is_annotated }}</p>
                 {% if genome.genome_id %}
-                    <a href="{% url 'visualisation' genome.genome_id %}">Accès visualisation</a>
+                    <a href="{% url 'visualisation' 'genome' genome.genome_id %}" class="visualisation-access-button">Visualiser</a>
                 {% else %}
-                    <p>Aucun accès de visualisation disponible pour ce génome.</p>
+                    <p>Aucun accès de visualisation disponible pour ce génome</p>
                 {% endif %}
-        </div>
+            </div>
             {% endfor %}
         {% else %}
-            <p>Aucun résultat trouvé pour votre recherche.</p>
+            <p>Aucun génome trouvé</p>
         {% endif %}
     </div>
+
+    <h2>Séquences</h2>
+    <div class="database-container">
+        {% if sequences %}
+            {% for sequence in sequences %}
+            <div class="sequence-card">
+                <h3>{{sequence.sequence_id }}</h3>
+                <p><strong>Gène :</strong> {{sequence.gene_name }}</p>
+                <p><strong>Statut :</strong> {{ sequence.get_sequence_status_display }}</p>
+                <p><strong>Organisme :</strong> {{ sequence.genome.organism }}</p>
+                <p><strong>Génome associé :</strong> {{ sequence.genome.genome_id }} <a href="{% url 'visualisation' 'genome' sequence.genome.genome_id %}">Accès génome entier</a></p>
+                {% if sequence.sequence_id %}
+                    <a href="{% url 'visualisation' 'sequence' sequence.sequence_id %}" class="visualisation-access-button">Visualiser</a>
+                {% else %}
+                    <p>Aucun accès de visualisation disponible pour cette séquence</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune séquence trouvée</p>
+        {% endif %}
+    </div>
+
+    <h2>Annotations</h2>
+    <div class="database-container">
+        {% if annotations %}
+            {% for annotation in annotations %}
+            <div class="sequence-card">
+                <h3>{{ annotation.annotation_id }}</h3>
+                <p><strong>Auteur :</strong> {{ annotation.annotation_author }}</p>
+                <p><strong>Séquence associée :</strong> {{ annotation.sequence.sequence_id }}</p>
+                {% if annotation.annotation_id %}
+                    <a href="{% url 'visualisation' 'annotation' annotation.annotation_id %}" class="visualisation-access-button">Visualiser</a>
+                {% else %}
+                    <p>Aucun accès de visualisation disponible pour cette annotation</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune annotation trouvée</p>
+        {% endif %}
+
+    </div>
+
+    </div>
+
+    <div class="filter-menu">
+        <h2>Filtres</h2>
+        <form method="GET" action="{% url 'genome_database' %}">
+            <div class="search-bar">
+                <input type="text" name="user_request" placeholder="ID, organisme, gène" value="{{ request.GET.user_request|default:'' }}">
+                <button type="submit" value="Recherche" style="color: white;">Rechercher</button>    
+            </div>
+            <hr>
+
+            <h3>Type</h3>
+            <label>
+                <input type="checkbox" name="filter_type" value="genome"> Génomes
+            </label><br>
+            <label>
+                <input type="checkbox" name="filter_type" value="sequence"> Séquences
+            </label><br>
+            <label>
+                <input type="checkbox" name="filter_type" value="annotation"> Annotations
+            </label>
+
+            <hr>
+
+            <h3>Statut</h3>
+            <label>
+                <input type="checkbox" name="is_annotated" value="true"> Annoté uniquement
+            </label>
+            <hr>
+            
+            <h3>Filtres avancés</h3>
+            <!-- Longueur de séquence -->
+            <label for="min_length">Longueur minimale :</label>
+            <input type="number" name="min_length" placeholder="Min">
+            <label for="max_length">Longueur maximale :</label>
+            <input type="number" name="max_length" placeholder="Max">
+            <hr>
+
+            <!-- Numéro de chromosome -->
+            <label for="chromosome">Numéro de chromosome :</label>
+            <input type="text" name="chromosome" placeholder="Ex : 1, X, Y">
+            <hr>
+
+            <!-- Type ADN ou ARN -->
+            <label for="sequence_type">Type :</label>
+            <select name="sequence_type">
+                <option value="">Tous</option>
+                <option value="ADN">ADN</option>
+                <option value="ARN">ARN</option>
+            </select>
+
+            <hr>
+
+            <button type="submit" class="filter-button">Appliquer les filtres</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

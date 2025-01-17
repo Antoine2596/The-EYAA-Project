@@ -7,5 +7,5 @@ urlpatterns = [
     path("connexion/", views.connexion, name="connexion"),
     path("contacts/", views.contacts, name="contacts"),
     path("database/", views.database_view, name="genome_database"),
-    path("visualisation/<str:genome_id>/", views.visualisation, name="visualisation")
+    path("visualisation/<str:obj_type>/<str:obj_id>/", views.visualisation, name="visualisation"),
 ]
