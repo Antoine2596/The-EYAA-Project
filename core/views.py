@@ -14,9 +14,6 @@ def home(request):
 def contacts(request):
     return render(request,"core/contacts.html")
 
-def Pageconnexion(request):
-    return render(request, "core/connexion.html")
-
 def Pageinscription(request):
     return render(request, "core/inscription.html")
 
@@ -39,18 +36,19 @@ def visualisation(request, obj_type, obj_id):
 def connexion(request):
     if request.method == "POST":
 
-        email = request.POST["email"]
-        password = request.POST["password"]
+        email = request.POST.get("email", "")
+        password = request.POST.get("password", "") 
 
 
         user = authenticate(request, username=email, password=password)
+
         if user is not None:
             login(request, user)
             messages.success(request, "Connexion réussie !")
             return redirect("home")
         else:
             messages.error(request, "Adresse email ou mot de passe incorrect.")
-    return render(request, "connexion.html")
+    return render(request, "core/connexion.html")
 
 
 def inscription(request):
