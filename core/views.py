@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
-from .form import CustomUserCreationForm
+from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
@@ -50,7 +50,7 @@ def connexion(request):
             return redirect("home")
         else:
             messages.error(request, "Adresse email ou mot de passe incorrect.")
-    return render(request, "core/connexion.html")
+    return render(request, "connexion.html")
 
 
 def inscription(request):
@@ -61,7 +61,7 @@ def inscription(request):
             return redirect('connexion')
     else:
         form = CustomUserCreationForm()
-
+        
     return render(request, "core/inscription.html", {"form": form})
 
 def genome_list(request):

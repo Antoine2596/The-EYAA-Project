@@ -1,5 +1,6 @@
 from django.contrib import admin
 from import_export import resources
+from .models import CustomUser
 
 from .models import Genome, Sequence, Annotation
 
@@ -8,6 +9,12 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from .models import Genome
 from .resources import GenomeResource, SequenceResource, AnnotationResource  
+from .models import CustomUser
+
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ("email", "role", "is_staff", "is_superuser", "last_login")
+    search_fields = ("email",)
 
 @admin.register(Genome)
 class GenomeAdmin(ImportExportModelAdmin):
@@ -47,3 +54,4 @@ class AnnotationAdmin(ImportExportModelAdmin):
      # Empêche l'ajout manuel de génomes
     def has_add_permission(self, request):
         return True
+    

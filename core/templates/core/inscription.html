@@ -12,14 +12,28 @@
 
     <div class="container2">
         <div class="form">
-            <h2>Inscription</h2>
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}  <!-- Affichage du formulaire -->
-                <button type="submit">S'inscrire</button>
-            </form>
-            <p>Déjà inscrit ? <a href="{% url 'connexion' %}">Se connecter</a></p>
+        <h1>Inscription</h1>
+        
+        <form method="POST">
+            {% csrf_token %}
+        
             
+            {% if form.non_field_errors %}
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        
+        
+            {{ form.as_p }}
+        
+            <button type="submit">S'inscrire</button>
+        </form>
+    
+        
+        <p>Déjà inscrit ? <a href="{% url 'connexion' %}">Se connecter</a></p>
     </div>
     </div>
 </body>
