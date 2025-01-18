@@ -95,3 +95,19 @@ class Domaine(models.Model):
     def __str__(self):
         return str(self.domain_id)
 
+ROLE_CHOICES = [
+    ("lecteur", "Lecteur"),
+    ("annotateur", "Annotateur"),
+    ("validateur", "Validateur"),
+]
+
+class CustomUser(AbstractUser):
+    username = None
+    email = models.EmailField(unique=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="lecteur")
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+
+    def __str__(self):
+        return f"{self.email} ({self.role})"

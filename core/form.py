@@ -1,17 +1,25 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
 
 class CustomUserCreationForm(UserCreationForm):
-    password1 = forms.CharField(
-        label='Password',
-        strip=False,
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-    )
-    password2 = forms.CharField(
-        label='Password confirmation',
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-        strip=False,
-    )
+    class Meta:
+        model = CustomUser
+        fields = [
+            "email",
+            "first_name",
+            "last_name",
+            "role",      # faudra l'enlever hein
+            "password1",
+            "password2",
+        ]
 
-    class Meta(UserCreationForm.Meta):
-        fields = UserCreationForm.Meta.fields + ("password1", "password2")
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].label = "Adresse email"
+        self.fields["role"].label = "Rôle"
+        self.fields["password1"].label = "Mot de passe"
+        self.fields["password2"].label = "Confirmation du mot de passe"
+        # https://stackoverflow.com/questions/46945449/how-to-edit-usercreationform-password-help-text
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
