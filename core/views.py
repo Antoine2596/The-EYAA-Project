@@ -50,7 +50,7 @@ def connexion(request):
             return redirect("home")
         else:
             messages.error(request, "Adresse email ou mot de passe incorrect.")
-    return render(request, "connexion.html")
+    return render(request, "core/connexion.html")
 
 
 def inscription(request):
@@ -62,7 +62,7 @@ def inscription(request):
     else:
         form = CustomUserCreationForm()
 
-    return render(request, "inscription.html", {"form": form})
+    return render(request, "core/inscription.html", {"form": form})
 
 def genome_list(request):
     genomes = Genome.objects.all()  # Récupère tous les génomes
