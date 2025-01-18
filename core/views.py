@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
 from django.db.models import Q
@@ -14,6 +15,10 @@ def home(request):
 def contacts(request):
     return render(request,"core/contacts.html")
 
+@login_required
+def profile(request):
+    return render(request, "core/profile.html")
+    
 def Pageinscription(request):
     return render(request, "core/inscription.html")
 
