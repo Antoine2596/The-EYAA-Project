@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
 from django.db.models import Q
+from django.contrib.auth import logout
 
 # Page d'accueil
 def home(request):
@@ -24,6 +25,12 @@ def Pageinscription(request):
 
 def database(request):
     return render(request, "core/database.html")
+
+# https://docs.djangoproject.com/fr/5.1/topics/auth/default/
+# deconnexion
+def deconnexion(request):
+    logout(request)
+    return redirect("home")
 
 def visualisation(request, obj_type, obj_id):
     if obj_type == "genome":
