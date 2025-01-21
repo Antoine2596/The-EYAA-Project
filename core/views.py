@@ -4,9 +4,10 @@ from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Genome, Sequence, Annotation
+from .models import Genome, Sequence, Annotation, ConnexionHistorique
 from django.db.models import Q
 from django.contrib.auth import logout
+from django.utils.timezone import now
 
 # Page d'accueil
 def home(request):
@@ -139,3 +140,36 @@ def database_view(request):
         "sequences": sequences,
         "annotations": annotations,
     })
+
+def get_client_ip(request):
+    """Récupérer l'adresse IP du client"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+def connexion(request):
+    if request.method == "POST":
+        email = request.POST.get("email", "")
+        password = request.POST.get("password", "")
+
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Connexion réussie !")
+
+            # Enregistrer l'historique de connexion
+            ConnexionHistorique.objects.create(
+                user=user,
+                ip_address=get_client_ip(request),
+                user_agent=request.META.get('HTTP_USER_AGENT', ''),
+                timestamp=now()
+            )
+
+            return redirect("home")
+        else:
+            messages.error(request, "Adresse email ou mot de passe incorrect.")
+
+    return render(request, "core/connexion.html")

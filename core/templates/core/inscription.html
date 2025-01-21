@@ -16,16 +16,21 @@
         
         <form method="POST">
             {% csrf_token %}
+        
             
-            <label for="email">Email :</label>
-            <input type="email" name="email" required>
+            {% if form.non_field_errors %}
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         
-            <label for="password">Mot de passe :</label>
-            <input type="password" name="password" required>
         
-            <button type="submit">Se connecter</button>
+            {{ form.as_p }}
+        
+            <button type="submit">S'inscrire</button>
         </form>
-        
     
         
         <p>Déjà inscrit ? <a href="{% url 'connexion' %}">Se connecter</a></p>

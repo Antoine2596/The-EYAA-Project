@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export import resources
 from .models import CustomUser
 
-from .models import Genome, Sequence, Annotation
+from .models import Genome, Sequence, Annotation, ConnexionHistorique
 
 
 from django.contrib import admin
@@ -55,3 +55,8 @@ class AnnotationAdmin(ImportExportModelAdmin):
     def has_add_permission(self, request):
         return True
     
+@admin.register(ConnexionHistorique)
+class ConnexionHistoriqueAdmin(admin.ModelAdmin):
+    list_display = ("user", "ip_address", "user_agent", "timestamp")
+    search_fields = ("user__email", "ip_address")
+    list_filter = ("timestamp",)

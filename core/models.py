@@ -1,13 +1,11 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django import forms 
+from django.contrib.auth import get_user_model
 
 class Utilisateur(models.Model):
     email = models.EmailField(unique=True)
@@ -111,3 +109,15 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"{self.email} ({self.role})"
+
+# Historique des connexion
+User = get_user_model()
+
+class ConnexionHistorique(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.timestamp}"

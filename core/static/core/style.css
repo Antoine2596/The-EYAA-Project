@@ -318,10 +318,10 @@ header {
     text-decoration: none;
 }
 
-.lien_function:hover{
+/* .lien_function:hover{
     transform: scale(1.05);
     transition: 0.6s ease;
-}
+} */
 
 .filtre{
     backdrop-filter: blur(2px);
