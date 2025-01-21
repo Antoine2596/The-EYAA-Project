@@ -1,34 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
-from .form import CustomUserCreationForm
+from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 
 # Page d'accueil
 def home(request):
     return render(request,"core/home.html")
 
-# Contacts
+
 def contacts(request):
     return render(request,"core/contacts.html")
-
-def database(request):
-    return render(request, "core/database.html")
-
-def visualisation(request, obj_type, obj_id):
-    if obj_type == "genome":
-        obj = get_object_or_404(Genome, genome_id=obj_id)
-    elif obj_type == "sequence":
-        obj = get_object_or_404(Sequence, sequence_id = obj_id)
-    elif obj_type == "annoation":
-        obj = get_object_or_404(Annotation, annotation_id=obj_id)
-    else:
-        return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
-
-    return render(request, "core/visualisation.html", {"obj": obj, "obj_type": obj_type})
-
+ 
 
 def inscription(request):
     if request.method == 'POST':
@@ -41,17 +28,51 @@ def inscription(request):
 
     return render(request, 'core/inscription.html', {'form': form}) 
 
+
 def connexion(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        email =  request.POST["email"]
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+
+        user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
+            messages.success(request, "Connexion réussie !")
             return redirect('home')
         else:
-            return messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
+            return messages.error(request, "Adresse mail ou mot de passe incorrect")
     return render(request, 'core/connexion.html')
+
+
+@login_required
+def profile(request):
+    return render(request, "core/profile.html")
+
+
+def AnnotationPage(request):
+    return render(request, "core/AnnotationPage.html")
+
+
+def database(request):
+    return render(request, "core/database.html")
+
+
+def deconnexion(request):
+    logout(request)
+    return redirect("home")
+
+
+def visualisation(request, obj_type, obj_id):
+    if obj_type == "genome":
+        obj = get_object_or_404(Genome, genome_id=obj_id)
+    elif obj_type == "sequence":
+        obj = get_object_or_404(Sequence, sequence_id = obj_id)
+    elif obj_type == "annoation":
+        obj = get_object_or_404(Annotation, annotation_id=obj_id)
+    else:
+        return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
+
+    return render(request, "core/visualisation.html", {"obj": obj, "obj_type": obj_type})
 
 
 def genome_list(request):
@@ -119,3 +140,6 @@ def database_view(request):
         "sequences": sequences,
         "annotations": annotations,
     })
+
+# Partie utilisateur 
+
