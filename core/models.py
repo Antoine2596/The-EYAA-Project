@@ -7,7 +7,9 @@ from django.urls import reverse
 from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
-from django import forms 
+from django import forms
+
+# Partie Utilisateur
 
 class Utilisateur(models.Model):
     email = models.EmailField(unique=True)
@@ -30,7 +32,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"{self.email} ({self.role})"
-
 
 class Genome(models.Model):
     genome_id = models.CharField(max_length=20, primary_key=True)

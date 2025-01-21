@@ -7,12 +7,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 
 # Page d'accueil
 def home(request):
     return render(request,"core/home.html")
 
-# Contacts
+
 def contacts(request):
     return render(request,"core/contacts.html")
 
@@ -55,6 +57,7 @@ def inscription(request):
     return render(request, "core/inscription.html", {"form": form})
 
 
+
 def connexion(request):
     if request.method == "POST":
 
@@ -71,6 +74,19 @@ def connexion(request):
         else:
             messages.error(request, "Adresse email ou mot de passe incorrect.")
     return render(request, "core/connexion.html")
+
+
+def visualisation(request, obj_type, obj_id):
+    if obj_type == "genome":
+        obj = get_object_or_404(Genome, genome_id=obj_id)
+    elif obj_type == "sequence":
+        obj = get_object_or_404(Sequence, sequence_id = obj_id)
+    elif obj_type == "annoation":
+        obj = get_object_or_404(Annotation, annotation_id=obj_id)
+    else:
+        return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
+
+    return render(request, "core/visualisation.html", {"obj": obj, "obj_type": obj_type})
 
 
 def genome_list(request):
@@ -138,3 +154,6 @@ def database_view(request):
         "sequences": sequences,
         "annotations": annotations,
     })
+
+# Partie utilisateur 
+
