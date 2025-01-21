@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
-from .form import CustomUserCreationForm
+from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
 from django.db.models import Q
@@ -14,8 +16,19 @@ def home(request):
 def contacts(request):
     return render(request,"core/contacts.html")
 
+@login_required
+def profile(request):
+    return render(request, "core/profile.html")
+    
+def Pageinscription(request):
+    return render(request, "core/inscription.html")
+
 def database(request):
     return render(request, "core/database.html")
+
+def deconnexion(request):
+    logout(request)
+    return redirect("home")
 
 def visualisation(request, obj_type, obj_id):
     if obj_type == "genome":
@@ -31,27 +44,33 @@ def visualisation(request, obj_type, obj_id):
 
 
 def inscription(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('connexion')  
+            return redirect('connexion')
     else:
-        form = CustomUserCreationForm()  
+        form = CustomUserCreationForm()
+        
+    return render(request, "core/inscription.html", {"form": form})
 
-    return render(request, 'core/inscription.html', {'form': form}) 
 
 def connexion(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+    if request.method == "POST":
+
+        email = request.POST.get("email", "")
+        password = request.POST.get("password", "") 
+
+
+        user = authenticate(request, username=email, password=password)
+
         if user is not None:
             login(request, user)
-            return redirect('home')
+            messages.success(request, "Connexion réussie !")
+            return redirect("home")
         else:
-            return messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
-    return render(request, 'core/connexion.html')
+            messages.error(request, "Adresse email ou mot de passe incorrect.")
+    return render(request, "core/connexion.html")
 
 
 def genome_list(request):

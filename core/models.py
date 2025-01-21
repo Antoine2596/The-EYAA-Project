@@ -13,6 +13,25 @@ class Utilisateur(models.Model):
     email = models.EmailField(unique=True)
     mot_de_passe = models.CharField(max_length=10)
 
+
+ROLE_CHOICES = [
+    ("lecteur", "Lecteur"),
+    ("annotateur", "Annotateur"),
+    ("validateur", "Validateur"),
+]
+
+class CustomUser(AbstractUser):
+    username = None
+    email = models.EmailField(unique=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="lecteur")
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+
+    def __str__(self):
+        return f"{self.email} ({self.role})"
+
+
 class Genome(models.Model):
     genome_id = models.CharField(max_length=20, primary_key=True)
 

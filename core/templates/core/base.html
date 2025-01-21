@@ -16,11 +16,16 @@
                 <ul>
                     <li><a href="{% url 'home' %}">Accueil</a></li>
                     <li><a href="{% url 'genome_database' %}">Base de donnée</a></li>
-                    <li><a>Visualisation</a></li>
                     <li><a href="{% url 'contacts' %}">Contacts</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
                 </ul>
             </nav>
-            <button class="connexion-button"><a href="{% url 'connexion' %}">Connexion</a></button>
+            <button class="connexion-button">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'deconnexion' %}">Déconnexion</a>
+                {% else %}
+                    <a href="{% url 'connexion' %}">Connexion</a>
+                {% endif %}
         </header>
         <main>
             {% block content %}
