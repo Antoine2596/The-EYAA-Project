@@ -27,12 +27,19 @@ header {
     font-weight: bold;
 }
 
-.site-name {
+.site-name a {
     color: white;
     font-size: 40px;
     font-weight: bold;
     font-family: "Audiowide", serif;
     text-transform: uppercase;
+    text-decoration: none;
+}
+
+.site-name a:hover,
+.site-name a:focus {
+    color: white;
+    text-decoration: none;
 }
 
 .menu ul {
@@ -77,6 +84,17 @@ header {
 
 .connexion-button:hover {
     background-color: teal;
+}
+
+.connexion-button a {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.connexion-button a:hover{
+    color: white;
+    text-decoration: none;
 }
 
 .contacts ul {

@@ -7,7 +7,6 @@ Username : admin
 Password : @JlJBq4Y9eXiPX
 email : anne.beigeaud2@gmail.com
 
-
 Pour importer les donnees : transforme le fasta en .csv avec les bonnes categories. Ensuite on utilise la bibliotheque import export de django qui supporte les csv pour l import de donnees
 
 En plus  cette bibliotheque permettra l export de donnees plus tard

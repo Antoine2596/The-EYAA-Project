@@ -1,0 +1,24 @@
+{% extends "core/base_profile.html" %}
+
+{% block profile_content %}
+<div id="annotations">
+    <h2>Mes annotations</h2>
+    {% if annotations.exists %}
+        <ul>
+            {% for annotation in annotations %}
+                <li>
+                    <strong>ID :</strong> {{ annotation.annotation_id }} - 
+                    <strong>Texte :</strong> {{ annotation.annotation_text }}
+                    {% if annotation.sequence.sequence_status %}
+                        <span class ="badge status-{{ annotation.sequence.sequence_status|lower|slugify }}">
+                            {{ annotation.sequence.get_sequence_status_display }}
+                        </span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Vous n'avez aucune annotation pour le moment.</p>
+    {% endif %}
+</div>
+{% endblock %}

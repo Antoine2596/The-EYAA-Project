@@ -1,0 +1,117 @@
+/* Style global */
+.profile-page {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+/* Menu de navigation entre Mes informations et Mes annotations */
+.vertical-menu {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vertical-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.vertical-menu li {
+    margin-bottom: 20px;
+}
+
+/* Elements du menu */
+.vertical-menu a {
+    text-decoration: none;
+    font-size: 16px;
+    color: gray;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.vertical-menu a:hover,
+.vertical-menu a.active {
+    color: teal;
+}
+
+/* Cadre principal du contenu affiché (le plus grand cadre) */
+.profile-content {
+    flex-grow: 1;
+    margin-left: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Cadre intérieur pour l'affichage des éléments Mes informations et Mes annotations */
+#informations, #annotations {
+    margin-bottom: 40px;
+}
+
+#informations h2, #annotations h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#informations p, #annotations p {
+    font-size: 16px;
+}
+
+/* Bordures */
+#informations, #annotations {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Liste des annotations */
+#annotations ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#annotations li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+#annotations li strong {
+    color: #333;
+}
+
+/* Message réservé à l'annotateur */
+.annotateur-message {
+    color: #ff4500;
+    font-weight: bold;
+}
+
+/* Pour le badge statut de l'annotation */
+.badge {
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-radius: 0.25em;
+    color: white;
+    margin-left: 10px;
+}
+
+.status-assigned {
+    background-color: blue;
+}
+
+.status-awaiting-validation {
+    background-color: orange;
+}
+
+.status-validated {
+    background-color: green;
+}
