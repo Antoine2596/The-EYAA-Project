@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
-from .models import Genome, Sequence, Annotation, ConnexionHistorique
+from .models import Genome, Sequence, Annotation
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
@@ -55,24 +55,6 @@ def visualisation(request, obj_type, obj_id):
         return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
 
     return render(request, "core/visualisation.html", {"obj": obj, "obj_type": obj_type})
-
-
-def connexion(request):
-    if request.method == "POST":
-
-        email = request.POST.get("email", "")
-        password = request.POST.get("password", "") 
-
-
-        user = authenticate(request, username=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, "Connexion réussie !")
-            return redirect("home")
-        else:
-            messages.error(request, "Adresse email ou mot de passe incorrect.")
-    return render(request, "core/connexion.html")
 
 
 def inscription(request):

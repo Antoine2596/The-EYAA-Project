@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +40,6 @@ INSTALLED_APPS = [
     "import_export",
     "django_extensions",
     "core",
-    "users",
 ]
 
 MIDDLEWARE = [
@@ -59,7 +57,7 @@ ROOT_URLCONF = "EYAA_site.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -72,8 +70,6 @@ TEMPLATES = [
     },
 ]
 
-
-
 WSGI_APPLICATION = "EYAA_site.wsgi.application"
 
 
@@ -82,7 +78,7 @@ WSGI_APPLICATION = "EYAA_site.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3", # j'ai ajouter sqlite3 car il était pas mis à la fin
+        "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
@@ -123,8 +119,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
-MEDIA_URL = "/images/"
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -1,4 +1,7 @@
 from django.db import models
+
+# Create your models here.
+from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib import admin
@@ -136,31 +139,3 @@ class Domaine(models.Model):
     def __str__(self):
         return str(self.domain_id)
 
-ROLE_CHOICES = [
-    ("lecteur", "Lecteur"),
-    ("annotateur", "Annotateur"),
-    ("validateur", "Validateur"),
-]
-
-class CustomUser(AbstractUser):
-    username = None
-    email = models.EmailField(unique=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="lecteur")
-    
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
-
-    def __str__(self):
-        return f"{self.email} ({self.role})"
-
-# Historique des connexion
-User = get_user_model()
-
-class ConnexionHistorique(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
-    user_agent = models.TextField(null=True, blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.email} - {self.timestamp}"
