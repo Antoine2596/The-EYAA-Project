@@ -1,0 +1,358 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Avantgarde, sans-serif;
+    height: 100vh;
+}
+
+header {
+    background-color: darkslateblue;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bienvenue-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.bienvenue {
+    text-align: center;
+    color: black;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.site-name {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: "Audiowide", serif;
+    text-transform: uppercase;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.menu li {
+    margin: 0;
+}
+
+.menu a {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.menu a:hover {
+    background-color: darkcyan;
+    border-radius: 5px;
+}
+
+.connexion-button {
+    background-color: darkcyan;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.connexion-button:hover {
+    background-color: teal;
+}
+
+.contacts ul {
+    text-align: center;
+    list-style: none;
+}
+
+.contacts li {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Conteneur de la base de données */
+.main-content {
+    display: flex;
+    margin: 20px;
+    gap: 20px;
+}
+
+/* Section principale */
+.database-section {
+    flex: 3;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Menu vertical à droite */
+.filter-menu {
+    position: static;
+    top: 160px;
+    right: 20px;
+    width: 300px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.filter-menu h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.filter-menu h3 {
+    margin-top: 10px;
+    font-size: 1.5em;
+    color: darkslateblue;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+.filter-menu h4 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    color: darkcyan;
+}
+
+.filter-menu label {
+    font-size: 0.9em;
+    display: block;
+    margin: 10px 0;
+}
+
+.filter-menu input[type="text"]{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.filter-menu input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.filter-menu button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-menu button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: darkslateblue;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+.filter-menu button:hover {
+    background-color: teal;
+}
+
+
+/* Container pour la barre de recherche */
+.search-bar-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-bar input {
+    width: 80%;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.search-bar button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+}
+
+
+/* Conteneur pour les résultats */
+.database-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Carte pour chaque séquence */
+.sequence-card {
+    background-color: white;
+    border: 2px solid darkslateblue;
+    border-radius: 10px;
+    width: 300px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sequence-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.sequence-card p {
+    margin: 10px 0;
+    font-size: 1em;
+    color: black;
+}
+
+.sequence-card p strong {
+    color: darkslateblue;
+}
+
+.visualisation-access-button {
+    display: block;
+    text-align: center;
+    background-color: darkcyan;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.visualisation-access-button:hover {
+    background-color: teal;
+}
+
+/* Message "Aucun résultat" */
+.database-container p {
+    font-size: 1.2em;
+    color: darkred;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+.zone-fonctions{
+    margin-top: 15px;
+    padding-left: 15%;
+    padding-right: 15%;
+    display: flex;
+    height: 40vh;
+    z-index: 0;
+    /* transform: translate(-50%,0); */
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+.lien_function{
+    height: 20vh;
+    width: 20vw;
+    min-height: 100px;
+    min-width: 100px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;  
+    align-items: center;     
+    float: left;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    border-radius: 15px;
+    transition: 0.5 ease; 
+    background-color: orange;
+    text-decoration: none;
+    /* transform: scale(1.0); */
+    transition: ease-in-out 0.6s;
+}
+
+.lien_function:hover{
+    transform: scale(1.05);
+    transition: 0.6s ease;
+}
+
+
+
+.filtre{
+    /* backdrop-filter: blur(2px); */
+    height: 100%;
+    width: auto ;
+    text-align: center;
+}
+
+h2{
+    /* text-shadow: black 0 0 2px; */
+    font-size: 15px;
+}
+
+.cours1{
+    background-color: orange;
+}
+
+/* Images des fonctionnalités */
+
+.fonction_visualiser_genome {
+    position: relative;
+    background-image: url("../images/dna_function.png");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
