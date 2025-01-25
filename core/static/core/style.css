@@ -331,13 +331,14 @@ header {
 
 
 .filtre{
-    backdrop-filter: blur(2px);
+    /* backdrop-filter: blur(2px); */
     height: 100%;
     width: auto ;
+    text-align: center;
 }
 
 h2{
-    text-shadow: black 0 0 5px;
+    /* text-shadow: black 0 0 2px; */
     font-size: 15px;
 }
 
@@ -347,6 +348,11 @@ h2{
 
 /* Images des fonctionnalités */
 
-.fonction_visualiser_genome{
-    background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(https://image.jimcdn.com/app/cms/image/transf/dimension=1920x1080:format=jpg/path/sd65a69ec263b6fc1/image/i8525cd70bd4b24e1/version/1587576109/image.jpg);
+.fonction_visualiser_genome {
+    position: relative;
+    background-image: url("../images/dna_function.png");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
 }
+
