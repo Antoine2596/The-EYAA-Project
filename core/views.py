@@ -3,32 +3,43 @@ from django.contrib.auth.forms import UserCreationForm
 from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation, ConnexionHistorique
 from django.db.models import Q
-from django.contrib.auth import logout
-from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+
 
 # Page d'accueil
 def home(request):
     return render(request,"core/home.html")
 
-# Contacts
+
 def contacts(request):
     return render(request,"core/contacts.html")
 
 @login_required
 def profile(request):
-    return render(request, "core/profile.html")
-    
+    return render(request, "core/base_profile.html")
+
+@login_required
+def profile_informations(request):
+    return render(request, 'core/profile_informations.html')
+
+@login_required
+def profile_annotations(request):
+    if request.user.role == "lecteur":
+        return HttpResponseForbidden("En tant que lecteur vous n'avez pas accès à cette fonctionnalité.")
+    annotations = Annotation.objects.filter(annotation_author=request.user)
+    return render(request, 'core/profile_annotations.html', {'annotations': annotations})
+
 def Pageinscription(request):
     return render(request, "core/inscription.html")
 
 def database(request):
     return render(request, "core/database.html")
 
-# https://docs.djangoproject.com/fr/5.1/topics/auth/default/
-# deconnexion
 def deconnexion(request):
     logout(request)
     return redirect("home")
@@ -74,6 +85,24 @@ def inscription(request):
         form = CustomUserCreationForm()
         
     return render(request, "core/inscription.html", {"form": form})
+
+
+def connexion(request):
+    if request.method == "POST":
+
+        email = request.POST.get("email", "")
+        password = request.POST.get("password", "") 
+
+
+        user = authenticate(request, email=email, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Connexion réussie !")
+            return redirect("home")
+        else:
+            messages.error(request, "Adresse email ou mot de passe incorrect.")
+    return render(request, "core/connexion.html")
 
 def genome_list(request):
     genomes = Genome.objects.all()  # Récupère tous les génomes
@@ -141,35 +170,5 @@ def database_view(request):
         "annotations": annotations,
     })
 
-def get_client_ip(request):
-    """Récupérer l'adresse IP du client"""
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
+# def annotations(request):
 
-def connexion(request):
-    if request.method == "POST":
-        email = request.POST.get("email", "")
-        password = request.POST.get("password", "")
-
-        user = authenticate(request, username=email, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, "Connexion réussie !")
-
-            # Enregistrer l'historique de connexion
-            ConnexionHistorique.objects.create(
-                user=user,
-                ip_address=get_client_ip(request),
-                user_agent=request.META.get('HTTP_USER_AGENT', ''),
-                timestamp=now()
-            )
-
-            return redirect("home")
-        else:
-            messages.error(request, "Adresse email ou mot de passe incorrect.")
-
-    return render(request, "core/connexion.html")

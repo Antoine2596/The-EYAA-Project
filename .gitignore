@@ -3,5 +3,6 @@ __pycache__/*
 .codegpt
 *.pyc
 django_env/
-
+venv/
 db.sqlite3
+

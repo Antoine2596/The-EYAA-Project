@@ -1,0 +1,13 @@
+{% extends "core/base_profile.html" %}
+
+{% block profile_content %}
+<div id="informations">
+    <h2>Mes informations</h2>
+    <p><strong>Email :</strong> {{ user.email }}</p>
+    <p><strong>Nom :</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><strong>Rôle :</strong> {{ user.role }}</p>
+    {% if user.role == "annotateur" %}
+        <p class="annotateur-message">Ce message s'affiche uniquement si vous êtes annotateur.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -4,12 +4,55 @@ from django.urls import reverse
 from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
-from django import forms 
-from django.contrib.auth import get_user_model
+from django import forms
+
+# Partie Utilisateur
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self.create_user(email, password, **extra_fields)
+
 
 class Utilisateur(models.Model):
     email = models.EmailField(unique=True)
     mot_de_passe = models.CharField(max_length=10)
+
+ROLE_CHOICES = [
+    ("lecteur", "Lecteur"),
+    ("annotateur", "Annotateur"),
+    ("validateur", "Validateur"),
+]
+
+class CustomUser(AbstractUser):
+    username = None
+    email = models.EmailField(unique=True, primary_key=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="lecteur")
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+
+    objects = CustomUserManager()  # Lien avec le gestionnaire personnalisé
+
+    def __str__(self):
+        return f"{self.email} ({self.role})"
+
 
 class Genome(models.Model):
     genome_id = models.CharField(max_length=20, primary_key=True)
@@ -63,7 +106,7 @@ class Sequence(models.Model):
 class Annotation(models.Model):
     annotation_id = models.CharField(max_length=20, primary_key=True)
     annotation_text = models.TextField()  # Définir un max ?
-    annotation_author = models.CharField(max_length=50)
+    annotation_author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="annotations")
     # On pourrait possiblement ajouter
     # un attribut "date de création" ou de "validation"
 
