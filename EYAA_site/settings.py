@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,6 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+MEDIA_URL = "/images/"
 
 
 # Default primary key field type
@@ -129,8 +131,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "core.CustomUser"
 
-# Pour l'instant on définit le modèle utilisateur à utiliser, pour l'instant on utilise le modèle par défaut
-# https://docs.djangoproject.com/en/5.1/topics/auth/customizing/
-
-AUTH_USER_MODEL = "users.CustomUser"
+AUTHENTICATION_BACKENDS = [
+    'core.backends.EmailBackend',  
+    'django.contrib.auth.backends.ModelBackend',
+]

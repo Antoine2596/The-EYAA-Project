@@ -1,13 +1,15 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib import admin
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django import forms 
+from django.contrib.auth import get_user_model
 
+class Utilisateur(models.Model):
+    email = models.EmailField(unique=True)
+    mot_de_passe = models.CharField(max_length=10)
 
 class Genome(models.Model):
     genome_id = models.CharField(max_length=20, primary_key=True)
@@ -53,6 +55,9 @@ class Sequence(models.Model):
 
     def __str__(self):
         return str(self.sequence_id)
+    
+    def length(self):
+        return str(self.sequence_id)
 
 
 class Annotation(models.Model):
@@ -88,3 +93,31 @@ class Domaine(models.Model):
     def __str__(self):
         return str(self.domain_id)
 
+ROLE_CHOICES = [
+    ("lecteur", "Lecteur"),
+    ("annotateur", "Annotateur"),
+    ("validateur", "Validateur"),
+]
+
+class CustomUser(AbstractUser):
+    username = None
+    email = models.EmailField(unique=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="lecteur")
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+
+    def __str__(self):
+        return f"{self.email} ({self.role})"
+
+# Historique des connexion
+User = get_user_model()
+
+class ConnexionHistorique(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.timestamp}"

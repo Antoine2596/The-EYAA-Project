@@ -1,0 +1,78 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}
+Visualisation - EYAA
+{% endblock %}
+
+{% block content %}
+<div class="visualisation-container">
+    {% if obj_type == "genome" %}
+        <h1 class="visualisation">On retrouve ici la visualisation du génome : {{ obj.genome_id }}</h1>
+        <p class="visualisation_descriptif"> -- Visualisation sans doute réalisée avec IGV</p>
+        <section>
+            <h2>Détails</h2>
+            <p><strong>ID du génome :</strong> {{ obj.genome_id }}</p>
+            <p><strong>Organisme :</strong> {{ obj.organism }}</p>
+            <p><strong>Type :</strong> {{ obj.get_genome_type_display }}</p>
+            <p><strong>Séquence annotée :</strong> 
+                {% if obj.is_annotated %}
+                    Oui
+                {% else %}
+                    Non
+                {% endif %}
+            </p>
+        </section>
+        <section>
+            <h2>Séquence</h2>
+            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ obj.genome_sequence }}
+            </pre>
+        </section>
+
+    {% elif obj_type == "sequence" %}
+        <h1 class="visualisation">On retrouve ici la visualisation de la séquence : {{ obj.sequence_id }}</h1>
+        <section>
+            <h2>Détails</h2>
+            <p><strong>ID de la séquence :</strong> {{ obj.sequence_id }}</p>
+            <p><strong>Nom du gène :</strong> {{ obj.gene_name }}</p>
+            <p><strong>Statut :</strong> {{ obj.get_sequence_status_display }}</p>
+            <p><strong>Génome associé :</strong> {{ obj.genome.genome_id }}</p>
+            <p><strong>Longueur :</strong> {{ obj.sequence_length }}</p>
+        </section>
+        <section>
+            <h2>Séquences</h2>
+            <h3>ADN :</h3>
+            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ obj.dna_sequence }}
+            </pre>
+            <h3>Protéine :</h3>
+            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ obj.aa_sequence }}
+            </pre>
+        </section>
+
+    {% elif obj_type == "annotation" %}
+        <h1 class="visualisation">On retrouve ici la visualisation de l'annotation : {{ obj.annotation_id }}</h1>
+        <section>
+            <h2>Détails</h2>
+            <p><strong>ID de l'annotation :</strong> {{ obj.annotation_id }}</p>
+            <p><strong>Auteur :</strong> {{ obj.annotation_author }}</p>
+            <p><strong>Séquence associée :</strong> {{ obj.sequence.sequence_id }}</p>
+        </section>
+        <section>
+            <h2>Texte de l'annotation</h2>
+            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ obj.annotation_text }}
+            </pre>
+        </section>
+
+    {% else %}
+        <p>Type d'objet non reconnu.</p>
+    {% endif %}
+    </div>
+
+    <footer>
+        <a href="{% url 'genome_database' %}">Retour à la base de données</a>
+    </footer>
+{% endblock %}
