@@ -4,9 +4,9 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class EmailBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, request, email=None, password=None, **kwargs):
         try:
-            user = User.objects.get(email=username)  # Vérifie si un user avec cet email existe
+            user = User.objects.get(email=email)  # Vérifie si un user avec cet email existe
         except User.DoesNotExist:
             return None
 
