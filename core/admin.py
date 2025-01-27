@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export import resources
 
-from .models import Genome, Sequence, Annotation
+from .models import Genome, Sequence, Annotation, ConnectionHistory
 
 
 from django.contrib import admin
@@ -53,3 +53,8 @@ class AnnotationAdmin(ImportExportModelAdmin):
      # Empêche l'ajout manuel de génomes
     def has_add_permission(self, request):
         return True
+    
+@admin.register(ConnectionHistory)
+class ConnectionHistoryAdmin(admin.ModelAdmin):
+    list_display = ('user', 'login_time', 'logout_time')
+    list_filter = ('user', 'login_time')

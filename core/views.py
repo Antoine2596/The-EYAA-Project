@@ -7,9 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-
+from django.utils import timezone
+from .models import ConnectionHistory
 
 # Page d'accueil
 def home(request):
@@ -154,3 +154,17 @@ def database_view(request):
 
 # def annotations(request):
 
+
+def deconnexion(request):
+    if request.user.is_authenticated:
+        last_conn = ConnectionHistory.objects.filter(
+            user=request.user,
+            logout_time__isnull=True
+        ).order_by('-login_time').first()
+
+        if last_conn:
+            last_conn.logout_time = timezone.now()
+            last_conn.save()
+
+    logout(request)
+    return redirect("home")

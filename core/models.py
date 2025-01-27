@@ -8,6 +8,7 @@ from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django import forms
+from django.contrib.auth import get_user_model
 
 # Partie Utilisateur
 
@@ -139,3 +140,14 @@ class Domaine(models.Model):
     def __str__(self):
         return str(self.domain_id)
 
+
+# Historique connexion
+User = get_user_model()
+
+class ConnectionHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    login_time = models.DateTimeField()
+    logout_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.login_time}"
