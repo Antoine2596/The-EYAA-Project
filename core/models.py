@@ -42,7 +42,9 @@ ROLE_CHOICES = [
     ("lecteur", "Lecteur"),
     ("annotateur", "Annotateur"),
     ("validateur", "Validateur"),
+    ("visiteur", "Visiteur"),
 ]
+
 
 class CustomUser(AbstractUser):
     username = None
@@ -53,6 +55,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
     objects = CustomUserManager()  # Lien avec le gestionnaire personnalisé
+    # default="visiteur",
 
     def __str__(self):
         return f"{self.email} ({self.role})"
