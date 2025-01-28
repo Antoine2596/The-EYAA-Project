@@ -11,6 +11,8 @@ from django.http import HttpResponseForbidden
 from django.utils import timezone
 from .models import ConnectionHistory
 
+import re
+
 # Page d'accueil
 def home(request):
     return render(request,"core/home.html")
@@ -44,19 +46,6 @@ def deconnexion(request):
     logout(request)
     return redirect("home")
 
-def visualisation(request, obj_type, obj_id):
-    if obj_type == "genome":
-        obj = get_object_or_404(Genome, genome_id=obj_id)
-    elif obj_type == "sequence":
-        obj = get_object_or_404(Sequence, sequence_id = obj_id)
-    elif obj_type == "annoation":
-        obj = get_object_or_404(Annotation, annotation_id=obj_id)
-    else:
-        return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
-
-    return render(request, "core/visualisation.html", {"obj": obj, "obj_type": obj_type})
-
-
 def inscription(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -85,6 +74,34 @@ def connexion(request):
         else:
             messages.error(request, "Adresse email ou mot de passe incorrect.")
     return render(request, "core/connexion.html")
+
+
+def visualisation(request, obj_type, obj_id):
+    if obj_type == "genome":
+        obj = get_object_or_404(Genome, genome_id=obj_id)
+        associated_sequences = obj.sequences.all()
+        highlighted_sequence = highlight_sequences(
+            obj.genome_sequence, associated_sequences
+        )
+    elif obj_type == "sequence":
+        obj = get_object_or_404(Sequence, sequence_id=obj_id)
+        highlighted_sequence = None
+    elif obj_type == "annotation":
+        obj = get_object_or_404(Annotation, annotation_id=obj_id)
+        highlighted_sequence = None
+    else:
+        return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
+
+    return render(
+        request,
+        "core/visualisation.html",
+        {
+            "obj": obj,
+            "obj_type": obj_type,
+            "highlighted_sequence": highlighted_sequence,
+        },
+    )
+
 
 def genome_list(request):
     genomes = Genome.objects.all()  # Récupère tous les génomes
@@ -152,9 +169,6 @@ def database_view(request):
         "annotations": annotations,
     })
 
-# def annotations(request):
-
-
 def deconnexion(request):
     if request.user.is_authenticated:
         last_conn = ConnectionHistory.objects.filter(
@@ -168,3 +182,28 @@ def deconnexion(request):
 
     logout(request)
     return redirect("home")
+
+
+def highlight_sequences(genome_sequence, associated_sequences):
+    colors = [
+        "#FFB6C1", "#ADD8E6", "#90EE90", "#FFA07A", "#FFD700", "#DDA0DD", "#87CEFA"
+    ] 
+    highlighted = genome_sequence
+    for i, seq in enumerate(associated_sequences):
+        color = colors[i % len(colors)]  
+        pattern = re.escape(seq.dna_sequence) 
+        url = f"/visualisation/sequence/{seq.sequence_id}" 
+        title = f"Gene: {seq.gene_name} ({seq.sequence_start}-{seq.sequence_stop})"
+        highlighted = re.sub(
+            pattern,
+            lambda match: (
+                f'<a href="{url}" title="{title}"'
+                f'style="text-decoration: none; color: inherit;">'
+                f'<mark style="background-color: {color};">{match.group()}</mark>'
+                f'</a>'
+            ),
+            highlighted,
+        )
+    return highlighted
+
+
