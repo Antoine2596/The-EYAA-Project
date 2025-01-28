@@ -151,6 +151,3 @@ def database_view(request):
         "sequences": sequences,
         "annotations": annotations,
     })
-
-# def annotations(request):
-

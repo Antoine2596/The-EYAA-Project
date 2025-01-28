@@ -69,6 +69,11 @@ header {
     border-radius: 5px;
 }
 
+.bx {
+    font-size: 1.5em;
+    color: white;
+}
+
 .connexion-button {
     background-color: darkcyan;
     color: white;

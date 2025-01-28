@@ -13,8 +13,6 @@
 
         <form method="POST">
             {% csrf_token %}
-
-
             {% if form.non_field_errors %}
                 <ul>
                     {% for error in form.non_field_errors %}
@@ -23,13 +21,10 @@
                 </ul>
             {% endif %}
 
-
             {{ form.as_p }}
 
             <button type="submit">S'inscrire</button>
         </form>
-
-
         <p>Déjà inscrit ? <a href="{% url 'connexion' %}">Se connecter</a></p>
     </div>
     </div>
