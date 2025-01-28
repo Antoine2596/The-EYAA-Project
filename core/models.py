@@ -146,7 +146,7 @@ User = get_user_model()
 
 class ConnectionHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    login_time = models.DateTimeField()
+    login_time = models.DateTimeField(default=timezone.now)
     logout_time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
