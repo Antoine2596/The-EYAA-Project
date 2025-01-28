@@ -12,8 +12,9 @@ from .models import CustomUser
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ("email", "role", "is_staff", "is_superuser", "last_login")
-    search_fields = ("email",)
+    list_display = ("email", "first_name", "last_name", "role", "is_staff", "is_superuser", "last_login")
+    search_fields = ("email", "first_name", "last_name", "role")
+
 
 @admin.register(Genome)
 class GenomeAdmin(ImportExportModelAdmin):
