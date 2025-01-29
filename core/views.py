@@ -184,26 +184,32 @@ def deconnexion(request):
     return redirect("home")
 
 
+
+
+STATUS_COLORS = {
+    "Nothing": "#FFB6C1",  # Rose clair
+    "Assigned": "#ADD8E6",  # Bleu clair
+    "Awaiting validation": "#FFD700",  # Jaune doré
+    "Validated": "#90EE90",  # Vert clair
+}
+
+
 def highlight_sequences(genome_sequence, associated_sequences):
-    colors = [
-        "#FFB6C1", "#ADD8E6", "#90EE90", "#FFA07A", "#FFD700", "#DDA0DD", "#87CEFA"
-    ] 
     highlighted = genome_sequence
-    for i, seq in enumerate(associated_sequences):
-        color = colors[i % len(colors)]  
-        pattern = re.escape(seq.dna_sequence) 
-        url = f"/visualisation/sequence/{seq.sequence_id}" 
-        title = f"Gene: {seq.gene_name} ({seq.sequence_start}-{seq.sequence_stop})"
+    for seq in associated_sequences:
+        color = STATUS_COLORS.get(seq.sequence_status, "#D3D3D3")  # Gris par défaut si inconnu
+        pattern = re.escape(seq.dna_sequence)  
+        url = f"/visualisation/sequence/{seq.sequence_id}"  
+        title = f"Gene: {seq.gene_name} ({seq.sequence_start}-{seq.sequence_stop}) - {seq.sequence_status}"
+        
         highlighted = re.sub(
             pattern,
             lambda match: (
                 f'<a href="{url}" title="{title}"'
-                f'style="text-decoration: none; color: inherit;">'
+                f' style="text-decoration: none; color: inherit;">'
                 f'<mark style="background-color: {color};">{match.group()}</mark>'
                 f'</a>'
             ),
             highlighted,
         )
     return highlighted
-
-

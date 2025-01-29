@@ -31,9 +31,11 @@ Visualisation - EYAA
                 {% else %}
                     {{ obj.genome_sequence }}
                 {% endif %}
+                
             </pre>
-        </section>
-        
+        </section>  
+
+
         
     {% elif obj_type == "sequence" %}
         <h1 class="visualisation">On retrouve ici la visualisation de la séquence : {{ obj.sequence_id }}</h1>
@@ -80,4 +82,7 @@ Visualisation - EYAA
     <footer>
         <a href="{% url 'genome_database' %}">Retour à la base de données</a>
     </footer>
+
 {% endblock %}
+
+
