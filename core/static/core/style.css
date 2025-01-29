@@ -3,15 +3,24 @@ body, html {
     padding: 0;
     font-family: Avantgarde, sans-serif;
     height: 100vh;
+    background: rgb(97,81,153);
+    background-image: url("../images/hero-bg.jpg ");
+    
 }
 
 header {
-    background-color: darkslateblue;
+    backdrop-filter: blur(0.5px);
+    /* box-shadow: #333 0 0 10px; */
+    /* border: 1px solid rgba(255, 255, 255, 0); */
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: ease 0.6s;
 }
+
+
+
 
 .bienvenue-container {
     display: flex;
@@ -57,6 +66,7 @@ header {
 .menu a {
     display: block;
     padding: 15px 20px;
+    border-radius: 5px;
     color: white;
     text-decoration: none;
     text-transform: uppercase;
@@ -65,8 +75,7 @@ header {
 }
 
 .menu a:hover {
-    background-color: darkcyan;
-    border-radius: 5px;
+    text-decoration: underline;
 }
 
 .connexion-button {
