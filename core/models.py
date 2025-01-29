@@ -57,6 +57,9 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f"{self.email} ({self.role})"
 
+class Utilisateur(models.Model):
+    email = models.EmailField(unique=True)
+    mot_de_passe = models.CharField(max_length=10)
 
 class Genome(models.Model):
     genome_id = models.CharField(max_length=20, primary_key=True)
