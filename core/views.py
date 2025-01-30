@@ -2,13 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from .models import CustomUser
 
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+
+from django.utils.timezone import now
 
 
 # Page d'accueil
@@ -29,8 +32,6 @@ def profile_informations(request):
 
 @login_required
 def profile_annotations(request):
-    if request.user.role == "lecteur":
-        return HttpResponseForbidden("En tant que lecteur vous n'avez pas accès à cette fonctionnalité.")
     annotations = Annotation.objects.filter(annotation_author=request.user)
     return render(request, 'core/profile_annotations.html', {'annotations': annotations})
 
@@ -49,7 +50,7 @@ def visualisation(request, obj_type, obj_id):
         obj = get_object_or_404(Genome, genome_id=obj_id)
     elif obj_type == "sequence":
         obj = get_object_or_404(Sequence, sequence_id = obj_id)
-    elif obj_type == "annoation":
+    elif obj_type == "annotation":
         obj = get_object_or_404(Annotation, annotation_id=obj_id)
     else:
         return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
@@ -151,3 +152,66 @@ def database_view(request):
         "sequences": sequences,
         "annotations": annotations,
     })
+
+# Vérifier que l'utilisateur est un validateur
+def is_validator(user):
+    return user.role == "validateur"
+
+@user_passes_test(is_validator)
+def annotations_listing(request):
+    non_validated_annotations = Annotation.objects.filter(sequence__sequence_status="Awaiting validation")
+
+    return render(request, "core/annotations_non_validates.html", {"annotations": non_validated_annotations})
+
+@user_passes_test(is_validator)
+def validate_annotation(request, annotation_id):
+    annotation = get_object_or_404(Annotation, annotation_id=annotation_id)
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+        comment = request.POST.get("comment", "").strip()
+
+        if action == "validate":
+            annotation.is_validated = True
+            annotation.validation_date = now()
+            annotation.sequence.sequence_status = "Validated"
+            annotation.sequence.save()
+        elif action == "reject":
+            annotation.is_validated = False
+            annotation.rejected_comment = comment
+            annotation.validation_date = now()
+        
+        annotation.save()
+        return redirect("annotations_listing")
+    
+    return render(request, "core/validation_annotation.html", {"annotation": annotation})
+
+@user_passes_test(is_validator)
+def sequences_non_assigned(request):
+    non_assigned_sequence = Sequence.objects.filter(sequence_status="Nothing")
+    return render(request, "core/sequences_non_assigned.html", {"sequences": non_assigned_sequence})
+
+@user_passes_test(is_validator)
+def attribution_sequence(request, sequence_id):
+    sequence_id = get_object_or_404(Sequence, sequence_id = sequence_id)
+    annotateurs = CustomUser.objects.filter(role__in=["annotateur", "validateur"])
+    
+    if request.method == "POST":
+        annotateur_id = request.POST.get("annotateur")
+        annotateur = get_object_or_404(CustomUser, email = annotateur_id)
+
+        Annotation.objects.create(
+            annotation_id=f"ANN_{sequence_id}",
+            sequence=sequence_id,
+            annotation_author=annotateur,
+            annotation_text="",
+            is_validated=False
+        )
+
+        sequence_id.sequence_status = "Assigned"
+        sequence_id.save()
+
+        messages.success(request,  f"La séquence {sequence_id} a été attribuée à {annotateur.email}.")
+        return redirect("sequences_non_assigned")
+
+    return render(request, "core/attribution_sequence.html", {"sequence": sequence_id, "annotateurs": annotateurs})

@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/style_annotations.css' %}">
+
+<h1>Séquence en attente de validation</h1>
+<div class="annotations-container">
+    {% for annotation in annotations %}
+        <div class="annotation-card">
+            <h2>Sequence ID : {{ annotation.sequence.sequence_id }}</h2>
+            <p><strong>Genome Organism :</strong> {{ annotation.sequence.genome.organism }}</p>
+            <p>{{ annotation.annotation_text|truncatewords:20 }}</p>
+            <a href="{% url 'validate_annotation' annotation.annotation_id %}" class="btn-view">Voir Détails</a>
+        </div>
+            
+    {% empty %}
+        <p>Aucune annotation en attente de validation.</p>
+    {% endfor %}
+</div>
+{% endblock %}

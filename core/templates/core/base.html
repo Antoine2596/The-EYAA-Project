@@ -19,13 +19,19 @@
             <nav class="menu">
                 <ul>
                     <li><a href="{% url 'genome_database' %}">Base de donnée</a></li>
+                    {% if user.role == "validateur" %}
+                    <li><a href="{% url 'annotations_listing' %}">Outil de validation</a></li>
+                    <li><a href="{% url 'sequences_non_assigned' %}">Attributions séquences</a></li>
+                    {% endif %}
                     <li><a href="{% url 'contacts' %}">Contacts</a></li>
                 </ul>
             </nav>
             <div class="menu-right">
+                {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="profile-icon">
                     <i class="bx bxs-user"></i>
                 </a>
+                {% endif %}
                 <button class="connexion-button">
                     {% if user.is_authenticated %}
                         <a href="{% url 'deconnexion' %}">Déconnexion</a>

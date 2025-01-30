@@ -13,7 +13,7 @@ Profil - EYAA
         <ul>
             <li><a href="{% url 'profile_informations' %}" {% if request.resolver_match.url_name == 'profile_informations' %}class="active"{% endif %}>Mes informations</a></li>
             {% if user.role == "annotateur" or "validateur" %}
-            <li><a href="{% url 'profile_annotations' %}" {% if request.resolver_match.url_name == 'profile_annotations' %}class="active"{% endif %}>Mes annotations</a></li>
+                <li><a href="{% url 'profile_annotations' %}" {% if request.resolver_match.url_name == 'profile_annotations' %}class="active"{% endif %}>Mes annotations</a></li>
             {% endif %}
         </ul>
     </nav>

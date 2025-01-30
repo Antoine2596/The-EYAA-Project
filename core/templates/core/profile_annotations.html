@@ -17,6 +17,8 @@
                 </li>
             {% endfor %}
         </ul>
+    {% elif user.role == "lecteur" %}
+    <p>En tant que lecteur vous n'avez pas accès à cette fonctionnalité.</p>
     {% else %}
         <p>Vous n'avez aucune annotation pour le moment.</p>
     {% endif %}
