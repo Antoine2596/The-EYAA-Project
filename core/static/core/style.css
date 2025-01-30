@@ -63,7 +63,96 @@ header {
     margin: 0;
 }
 
-.menu a {
+/* volet */
+.button_volet{
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 3%;
+    cursor: pointer;
+    z-index: 3;
+
+}
+
+.volet {
+    backdrop-filter: blur(1px);
+    background-color: #0b469863;
+    box-shadow: black 0 0 10px;
+    bottom: 0vh;
+    left: 0;
+    position: absolute;
+    width: 30%;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -30%;
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+.contenu_titre h2{
+    color: white;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-shadow: none;
+}
+
+.afficher_volet{
+    margin-left: 0; 
+}
+
+.contenu_volet{
+    height: 90%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.links_volet{
+    height: 80%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.links_volet ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; 
+    align-items: center; 
+    height: 100%;
+}
+
+.links_volet li {
+    width: 100%; 
+    text-align: center; 
+}
+
+.links_volet a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.links_volet a:hover {
+    color: white;
+    text-shadow: white 0 0 1px;
+    transform: scale(1.05);
+}
+
+
+.menu a { 
     display: block;
     padding: 15px 20px;
     border-radius: 5px;
@@ -117,14 +206,13 @@ header {
     font-weight: bold;
 }
 
-/* Conteneur de la base de données */
 .main-content {
     display: flex;
     margin: 20px;
     gap: 20px;
 }
 
-/* Section principale */
+
 .database-section {
     flex: 3;
     background-color: #f9f9f9;
@@ -133,7 +221,7 @@ header {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Menu vertical à droite */
+
 .filter-menu {
     position: static;
     top: 160px;
@@ -377,7 +465,7 @@ h2{
     background-color: orange;
 }
 
-/* Images des fonctionnalités */
+
 
 .fonction_visualiser_genome {
     position: relative;

@@ -29,8 +29,42 @@
                 {% endif %}
         </header>
         <main>
+            <div class="volet">
+                <div class ="contenu_volet">
+                    <div class = "contenu_titre">
+                        <h2>Titre Volet</h2>
+                    </div>
+                    <div class ="links_volet">
+                        <ul>
+                            <li><a href="#1">liens1</a></li>
+                            <li><a href="#1">liens1</a></li>
+                            <li><a href="#1">liens1</a></li>
+                            <li><a href="#1">liens1</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="button_volet">
+                <h1>X</h1>
+            </div>
             {% block content %}
             {% endblock %}
         </main>
+
+        <script>
+            const menuHamburger = document.querySelector(".button_volet")
+            const navLinks = document.querySelector(".volet")
+        
+            menuHamburger.addEventListener('click',()=>{
+            navLinks.classList.toggle('afficher_volet')
+            })
+        </script>
+        <script>
+              const menuBtn = document.querySelector('.button_volet')
+        
+        menuBtn.addEventListener('click', () => {
+          menuBtn.classList.toggle('open')
+        })
+        </script>
     </body>
 </html>
