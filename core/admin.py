@@ -21,7 +21,6 @@ class GenomeImportForm(ImportForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        #Vérifier que l
         genome_id = self.cleaned_data.get("genome_id")
         if Genome.objects.filter(genome_id=genome_id).exists():
             raise forms.ValidationError(f"Un génome avec l'ID '{genome_id}' existe déjà dans la base de données.")
@@ -31,24 +30,23 @@ class GenomeImportForm(ImportForm):
         self.organism = cleaned_data.get('organism')
         self.is_annotated = cleaned_data.get('is_annotated')
         return cleaned_data
+    
 
-
-@admin.register(Genome)
 class GenomeAdmin(ImportMixin, admin.ModelAdmin):
     resource_class = GenomeResource  # Lien avec la ressource
     import_form_class = GenomeImportForm
     
-
-    list_display = ("genome_id", "organism", "genome_sequence", "genome_type", "is_annotated") #Les champs a Monterr
+    list_display = ("genome_id", "organism", "genome_type", "is_annotated") #Les champs a Monterr
     list_filter = ("genome_type", "is_annotated") #Admin peut trier par ces champs les genomes de la base
     search_fields = ("genome_id", "organism") #Admin peut rechercher par ces champs les genomes de la base
     list_editable = ("is_annotated",)   #Champ modifiable par l'admin
 
-     # Empêche l'ajout manuel de génomes
+     # Autorise l'ajout manuel de génomes
     def has_add_permission(self, request):
         return True
 
- 
+
+admin.site.register(Genome, GenomeAdmin)
 
 @admin.register(Sequence)
 class SequenceAdmin(ImportMixin, admin.ModelAdmin):
