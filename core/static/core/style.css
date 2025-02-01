@@ -244,6 +244,21 @@ header {
     background-color: #0056b3;
 }
 
+.results-summary {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.badge-results {
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+    background-color: #444;
+}
 
 /* Conteneur pour les résultats */
 .database-container {
@@ -257,6 +272,7 @@ header {
 
 /* Carte pour chaque séquence */
 .sequence-card {
+    position: relative;
     background-color: white;
     border-radius: 10px;
     width: 100%;
@@ -280,6 +296,31 @@ header {
 
 .sequence-card p strong {
     color: darkslateblue;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #444;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.badge.genome {
+    background-color: #4CAF50;
+}
+
+.badge.sequence {
+    background-color: #2196F3;
+}
+
+.badge.annotation {
+    background-color: #FF9800;
 }
 
 .visualisation-access-button {

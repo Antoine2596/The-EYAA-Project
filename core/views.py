@@ -125,8 +125,8 @@ def database_view(request):
 
         if "annotation" in filter_types or not filter_types:
             annotations = Annotation.objects.filter(
-                Q(annotation_id__icontains=user_request) | Q(annotation_text__icontains=user_request)
-            )
+                (Q(annotation_id__icontains=user_request) | Q(annotation_text__icontains=user_request)) &
+                Q(is_validated=True))
     else:
         # Pas de recherche, afficher tout
         if "genome" in filter_types or not filter_types:
@@ -145,7 +145,7 @@ def database_view(request):
                 sequences = sequences.filter(num_chromosome__iexact=chromosome)
 
         if "annotation" in filter_types or not filter_types:
-            annotations = Annotation.objects.all()
+            annotations = Annotation.objects.filter(Q(is_validated=True))
 
     return render(request, "core/database.html", {
         "genomes": genomes,

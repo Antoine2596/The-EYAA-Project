@@ -15,15 +15,19 @@ Database - EYAA
             </div>
         </form>
     </div>
-
+    <div class="results-summary">
+        <span class="badge-results badge-genome">Génomes : {{ genomes|length }}</span>
+        <span class="badge-results badge-sequence">Séquences : {{ sequences|length }}</span>
+        <span class="badge-results badge-annotation">Annotations : {{ annotations|length }}</span>
+    </div>
+    
     <div class="main-content">
-
-        <div class="database-section">
-            <h2>Génomes entiers</h2>
+    <div class="database-section">
     <div class="database-container">
         {% if genomes %}
             {% for genome in genomes %}
             <div class="sequence-card">
+                <div class="badge genome">Génome</div>
                 <h3>{{ genome.genome_id }}</h3>
                 <p><strong>Organisme :</strong> {{ genome.organism }}&nbsp;
                 <strong>Type :</strong> {{ genome.get_genome_type_display }}&nbsp;
@@ -35,16 +39,13 @@ Database - EYAA
                 {% endif %}
             </div>
             {% endfor %}
-        {% else %}
-            <p>Aucun génome trouvé</p>
         {% endif %}
     </div>
-
-    <h2>Séquences</h2>
     <div class="database-container">
         {% if sequences %}
             {% for sequence in sequences %}
             <div class="sequence-card">
+                <div class="badge sequence">Séquence</div>
                 <h3>{{sequence.sequence_id }}</h3>
                 <p><strong>Gène :</strong> {{sequence.gene_name }}&nbsp;
                 <strong>Statut :</strong> {{ sequence.get_sequence_status_display }}&nbsp;
@@ -57,16 +58,13 @@ Database - EYAA
                 {% endif %}
             </div>
             {% endfor %}
-        {% else %}
-            <p>Aucune séquence trouvée</p>
         {% endif %}
     </div>
-
-    <h2>Annotations</h2>
     <div class="database-container">
         {% if annotations %}
             {% for annotation in annotations %}
             <div class="sequence-card">
+                <div class="badge annotation">Annotation</div>
                 <h3>{{ annotation.annotation_id }}</h3>
                 <p><strong>Auteur :</strong> {{ annotation.annotation_author }}&nbsp;
                 <strong>Séquence associée :</strong> {{ annotation.sequence.sequence_id }}&nbsp;</p>
@@ -77,8 +75,6 @@ Database - EYAA
                 {% endif %}
             </div>
             {% endfor %}
-        {% else %}
-            <p>Aucune annotation trouvée</p>
         {% endif %}
 
     </div>
