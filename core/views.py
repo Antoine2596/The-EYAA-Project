@@ -4,6 +4,8 @@ from .form_inscription import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test
 from .models import CustomUser
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from django.contrib import messages
 from .models import Genome, Sequence, Annotation
@@ -28,12 +30,49 @@ def profile(request):
 
 @login_required
 def profile_informations(request):
-    return render(request, 'core/profile_informations.html')
+    
+    validated_count = Annotation.objects.filter(annotation_author=request.user, is_validated=True).count()
+    awaiting_count = Annotation.objects.filter(annotation_author=request.user, is_validated=False, sequence__sequence_status="Awaiting validation").count()
+    assigned_count = Annotation.objects.filter(annotation_author=request.user, is_validated=False, sequence__sequence_status="Assigned").count()
+
+    return render(request, 'core/profile_informations.html', {
+        'validated_count': validated_count,
+        'awaiting_count': awaiting_count,
+        'assigned_count': assigned_count,
+    })
+
+@login_required
+def profile_change_PSWD(request):
+
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(user=request.user, data=request.POST)
+        if password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)
+            return redirect('profile_informations')
+    else:  
+        password_form = PasswordChangeForm(user=request.user)
+
+    return render(request, 'core/profile_change_PSWD.html', {
+        'password_form': password_form})
 
 @login_required
 def profile_annotations(request):
+    status_filter = request.GET.get("filter", "all")
     annotations = Annotation.objects.filter(annotation_author=request.user)
-    return render(request, 'core/profile_annotations.html', {'annotations': annotations})
+
+    if status_filter == "validated":
+        annotations = annotations.filter(is_validated=True)
+    elif status_filter == "awaiting":
+        annotations = annotations.filter(is_validated=False, sequence__sequence_status = "Awaiting validation")
+    elif status_filter == "assigned":
+        annotations = annotations.filter(is_validated=False, sequence__sequence_status = "Assigned")
+
+    annotations_count = annotations.count()
+
+    return render(request, 'core/profile_annotations.html', {'annotations': annotations,'status_filter': status_filter,
+        'annotations_count': annotations_count})
+
 
 def Pageinscription(request):
     return render(request, "core/inscription.html")
@@ -166,6 +205,7 @@ def annotations_listing(request):
 @user_passes_test(is_validator)
 def validate_annotation(request, annotation_id):
     annotation = get_object_or_404(Annotation, annotation_id=annotation_id)
+    sequence = annotation.sequence
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -174,17 +214,19 @@ def validate_annotation(request, annotation_id):
         if action == "validate":
             annotation.is_validated = True
             annotation.validation_date = now()
-            annotation.sequence.sequence_status = "Validated"
-            annotation.sequence.save()
+            sequence.sequence_status = "Validated"
+            
         elif action == "reject":
             annotation.is_validated = False
             annotation.rejected_comment = comment
-            annotation.validation_date = now()
-        
+            sequence.sequence_status = "Assigned"
+
         annotation.save()
+        sequence.save()
+    
         return redirect("annotations_listing")
     
-    return render(request, "core/validation_annotation.html", {"annotation": annotation})
+    return render(request, "core/validation_annotation.html", {"annotation": annotation, "user": request.user})
 
 @user_passes_test(is_validator)
 def sequences_non_assigned(request):
@@ -202,8 +244,6 @@ def attribution_sequence(request, sequence_id):
 
         Annotation.objects.create(
             annotation_id=f"ANN_{sequence_id}",
-            sequence=sequence_id,
-            annotation_author=annotateur,
             annotation_text="",
             is_validated=False
         )
@@ -215,3 +255,37 @@ def attribution_sequence(request, sequence_id):
         return redirect("sequences_non_assigned")
 
     return render(request, "core/attribution_sequence.html", {"sequence": sequence_id, "annotateurs": annotateurs})
+
+@login_required
+def annoter(request, sequence_id):
+    sequence = get_object_or_404(Sequence, sequence_id=sequence_id)
+    annotation = get_object_or_404(Annotation, sequence=sequence, annotation_author=request.user)
+
+    is_editable = annotation.sequence.sequence_status == "Assigned"
+
+    if request.method == "POST" and is_editable:
+        gene_name = request.POST.get('gene_name')
+        peptide_product = request.POST.get('peptide_product')
+        text = request.POST.get('text')
+
+        sequence.gene_name = gene_name
+        sequence.peptide_product = peptide_product
+        annotation.annotation_text = text
+
+        if 'send_to_validation' in request.POST:
+            sequence.sequence_status = "Awaiting validation"
+        
+        annotation.save()
+        sequence.save()
+        
+        return redirect("profile_annotations")
+
+    return render(
+        request, 
+        "core/annoter_sequence.html", 
+        {
+            "sequence": sequence, 
+            "annotation": annotation, 
+            "is_editable": is_editable
+        }
+    )

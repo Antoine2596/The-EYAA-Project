@@ -3,24 +3,38 @@
 {% block profile_content %}
 <div id="annotations">
     <h2>Mes annotations</h2>
-    {% if annotations.exists %}
-        <ul>
+    <form method="GET" action="">
+        <label for="filter">Filtrer par statut :</label>
+        <select name="filter" id="filter" onchange="this.form.submit()">
+            <option value="all" {% if status_filter == "all" %}selected{% endif %}>Toutes</option>
+            <option value="validated" {% if status_filter == "validated" %}selected{% endif %}>Validées</option>
+            <option value="awaiting" {% if status_filter == "awaiting" %}selected{% endif %}>En attente</option>
+            <option value="assigned" {% if status_filter == "assigned" %}selected{% endif %}>Attribuées</option>
+        </select>
+    </form>
+    <br>
+    <p><strong>{{ annotations_count }}</strong> annotation(s) trouvée(s).</p>
+    
+    <div class="database-container">
+        {% if annotations.exists %}
             {% for annotation in annotations %}
-                <li>
-                    <strong>ID :</strong> {{ annotation.annotation_id }} - 
-                    <strong>Texte :</strong> {{ annotation.annotation_text }}
-                    {% if annotation.sequence.sequence_status %}
-                        <span class ="badge status-{{ annotation.sequence.sequence_status|lower|slugify }}">
-                            {{ annotation.sequence.get_sequence_status_display }}
-                        </span>
-                    {% endif %}
-                </li>
+
+                <div class="annotation-card">
+                    <div class="badge status-{{ annotation.sequence.sequence_status|lower|slugify }}">{{ annotation.sequence.get_sequence_status_display }}</div>
+                    <h3> ID : {{ annotation.annotation_id }} </h3>
+                    <strong>Séquence associée :</strong> {{ annotation.sequence.sequence_id }}</p>
+                    <br> 
+                    {{ annotation.annotation_text }}
+                    <a href="{% url 'annoter' annotation.sequence.sequence_id %}" class="btn-view">Voir Détails/Modifier</a>
+                </div>
+
             {% endfor %}
-        </ul>
-    {% elif user.role == "lecteur" %}
-    <p>En tant que lecteur vous n'avez pas accès à cette fonctionnalité.</p>
-    {% else %}
-        <p>Vous n'avez aucune annotation pour le moment.</p>
-    {% endif %}
+
+        {% elif user.role == "lecteur" %}
+            <p>En tant que lecteur vous n'avez pas accès à cette fonctionnalité.</p>
+        {% endif %}
+
+    </div>
+
 </div>
 {% endblock %}

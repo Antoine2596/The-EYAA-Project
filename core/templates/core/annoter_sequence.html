@@ -1,0 +1,79 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'core/style_annoter.css' %}">
+
+    <div class="annoter-container">
+        <h1>Annoter {{ sequence.sequence_id }}</h1>
+
+        <div class="sequence-details">
+            <h2>Séquence ID : {{ sequence.sequence_id }}</h2>
+            <p><strong>Genome Organism :</strong> {{ sequence.genome.organism }}</p>
+            <p><strong>START :</strong>{{ sequence.sequence_start }}&nbsp;
+                <strong>STOP :</strong>{{ sequence.sequence_stop }}&nbsp;
+                <strong>Longueur :</strong>{{ sequence.sequence_length }}</p>
+            <p><strong>Position sur le génome (chromosome) :</strong>{{ sequence.num_chromosome }}</p>
+            
+            <h3>ADN :</h3>
+            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 50px;">
+                {{ sequence.dna_sequence }}
+            </textarea>
+            <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button>
+
+            <h3>Protéine :</h3>
+            <textarea id="protein_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 50px;">
+                {{ sequence.aa_sequence }}
+            </textarea>
+            <button onclick="copyToClipboard('protein_sequence')">Copier Protéine</button>
+
+        </div>
+
+        <div class="annotation-actions">
+            <h3>Texte descriptif/annotation fonctionnelle :</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="text-section">
+                    <textarea id="text" name="text" rows="4" placeholder="Descriptif fonctionnel de la séquence."
+                            {% if not is_editable %}readonly style="background: #f4f4f4;"{% endif %}>{{ annotation.annotation_text }}></textarea>
+                </div>
+                <br>
+                <div class="text-section">
+                    <label for="gene_name">Nom du gène :</label>
+                    <input type="text" id="gene_name" name="gene_name" placeholder="Nom du gène"value="{{ sequence.gene_name }}" {% if not is_editable %}readonly style="background: #f4f4f4;"{% endif %}>
+                </div>
+                <br>
+                <div class="text-section">
+                    <label for="peptide_product">Produit peptidique :</label>
+                    <input type="text" id="peptide_product" name="peptide_product" placeholder="Produit peptidique"value="{{ sequence.peptide_product }}" {% if not is_editable %}readonly style="background: #f4f4f4;"{% endif %}>
+                </div>
+                <br>
+
+                {% if is_editable %}
+                    <button type="submit" name="send_to_validation">Envoyer pour validation</button>
+                    <button type="submit" name="save">Sauvegarder les modifications</button>
+                {% else %}
+                    <p style="color: red;"><strong>Cette annotation est en attente de validation et ne peut pas être modifiée.</strong></p>
+                {% endif %}
+                </form>
+        </div>
+    </div>
+        <script>
+            function copyToClipboard(id) {
+                var copyText = document.getElementById(id);
+
+                // Selectionner le texte du textarea
+                copyText.select();
+                copyText.setSelectionRange(0, 99999); // Pour les appareils mobiles
+
+                // Copier dans le presse-papiers
+                navigator.clipboard.writeText(copyText.value).then(function() {
+                alert('Séquence copiée dans le presse-papiers');
+                }).catch(function(error) {
+                console.error('Erreur lors de la copie dans le presse-papiers: ', error);
+                });
+            }
+    </script>
+{% endblock %}

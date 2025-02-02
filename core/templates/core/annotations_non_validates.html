@@ -8,7 +8,9 @@
 <div class="annotations-container">
     {% for annotation in annotations %}
         <div class="annotation-card">
-            <h2>Sequence ID : {{ annotation.sequence.sequence_id }}</h2>
+            <h2>Annotation ID : {{ annotation.annotation_id }}</h2>
+            <p>Auteur : {{ annotation.annotation_author }}</p>
+            <p><strong>Sequence ID :</strong> {{ annotation.sequence.sequence_id }}</p>
             <p><strong>Genome Organism :</strong> {{ annotation.sequence.genome.organism }}</p>
             <p>{{ annotation.annotation_text|truncatewords:20 }}</p>
             <a href="{% url 'validate_annotation' annotation.annotation_id %}" class="btn-view">Voir Détails</a>

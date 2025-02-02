@@ -6,8 +6,13 @@
     <p><strong>Email :</strong> {{ user.email }}</p>
     <p><strong>Nom :</strong> {{ user.first_name }} {{ user.last_name }}</p>
     <p><strong>Rôle :</strong> {{ user.role }}</p>
-    {% if user.role == "annotateur" %}
-        <p class="annotateur-message">Ce message s'affiche uniquement si vous êtes annotateur.</p>
-    {% endif %}
+
+    <h3>Récapitulatif des annotations</h3>
+    <div class="annotations-summary">
+        <span class="badge-annotations badge-validated">{{ validated_count }} Validée(s)</span>
+        <span class="badge-annotations badge-awaiting">{{ awaiting_count }} En attente de validation</span>
+        <span class="badge-annotations badge-assigned">{{ assigned_count }} Attribuée(s)</span>
+    </div>
+
 </div>
 {% endblock %}

@@ -88,12 +88,14 @@ class Sequence(models.Model):
     sequence_length = models.IntegerField()
     
     # On peut ajouter une def() pour calculer automatiquement
-    gene_name = models.CharField(max_length=20)
+    gene_name = models.CharField(max_length=20, blank=True, null=True)
+    peptide_product = models.CharField(max_length=20, blank=True, null=True)
 
     STATUS_CHOICES = [("Nothing", "Non-annotée"),
                       ("Assigned", "Attribuée"),
                       ("Awaiting validation", "En attente de validation"),
                       ("Validated", "Validée")]
+    
     sequence_status = models.CharField(max_length=50, choices=STATUS_CHOICES)
 
     # Relation One-to-Many avec genome

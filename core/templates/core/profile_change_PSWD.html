@@ -1,0 +1,12 @@
+{% extends "core/base_profile.html" %}
+
+{% block profile_content %}
+<div id="change_PSWD">
+    <h3>Modifier mon mot de passe</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <button type="submit" class="btn">Changer le mot de passe</button>
+    </form>
+</div>
+{% endblock %}
