@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'core/style_attribution.css' %}">
+
+    <div class="attribution-container">
+        <h1>Attribution de la séquence</h1>
+
+        <div class="sequence-details">
+            <h2>Séquence ID : {{ sequence.sequence_id }}</h2>
+            <p><strong>Genome Organism :</strong> {{ sequence.genome.organism }}</p>
+            <p><strong>START :</strong>{{ sequence.sequence_start }}&nbsp;
+                <strong>STOP :</strong>{{ sequence.sequence_stop }}&nbsp;
+                <strong>Longueur :</strong>{{ sequence.sequence_length }}</p>
+            <p><strong>Position sur le génome (chromosome) :</strong>{{ sequence.num_chromosome }}</p>
+            
+            <h3>ADN :</h3>
+            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ sequence.dna_sequence }}
+            </pre>
+            <h3>Protéine :</h3>
+            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ sequence.aa_sequence }}
+            </pre>
+
+        </div>
+
+        <div class="attribution-actions">
+            <h3>Choisir un annotateur :</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label for="annotateur">Sélectionner un annotateur :</label>
+                <select id="annotateur" name="annotateur" required>
+                    <option value="" disabled selected>-- Choisir un annotateur --</option>
+                    {% for annotateur in annotateurs %}
+                        <option value="{{ annotateur.email }}">{{ annotateur.email }}({{ annotateur.role }}) </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Attribuer</button>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

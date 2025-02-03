@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/style_annotations.css' %}">
+
+<h1>Séquences Non-attribuées</h1>
+<div class="annotations-container">
+    {% for sequence in sequences %}
+        <div class="annotation-card">
+            <h2>Sequence ID : {{ sequence.sequence_id }}</h2>
+            <p><strong>Genome Organism :</strong> {{ sequence.genome.organism }}&nbsp;
+            <strong>Génome associé :</strong> {{ sequence.genome.genome_id }}&nbsp; <a href="{% url 'visualisation' 'genome' sequence.genome.genome_id %}">Accès génome entier</a></p>
+            <a href="{% url 'attribution' sequence.sequence_id %}" class="btn-view">Voir Détails</a>
+        </div>
+            
+    {% empty %}
+        <p>Aucune séquence non attribuée.</p>
+    {% endfor %}
+</div>
+{% endblock %}

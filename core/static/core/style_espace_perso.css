@@ -49,7 +49,7 @@
 }
 
 /* Cadre intérieur pour l'affichage des éléments Mes informations et Mes annotations */
-#informations, #annotations {
+#informations, #annotations, #change_PSWD {
     margin-bottom: 40px;
 }
 
@@ -63,7 +63,7 @@
 }
 
 /* Bordures */
-#informations, #annotations {
+#informations, #annotations, #change_PSWD {
     border: 1px solid #ddd;
     padding: 20px;
     border-radius: 8px;
@@ -87,31 +87,101 @@
     color: #333;
 }
 
+
 /* Message réservé à l'annotateur */
 .annotateur-message {
     color: #ff4500;
     font-weight: bold;
 }
 
-/* Pour le badge statut de l'annotation */
-.badge {
-    display: inline-block;
-    padding: 0.2em 0.5em;
-    font-size: 0.9em;
-    font-weight: bold;
-    border-radius: 0.25em;
-    color: white;
-    margin-left: 10px;
+/* Summary annotations (page Mes informations) */
+.annotations-summary {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
 }
 
+.badge-annotations {
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+}
+
+.badge-annotations.badge-validated {
+    background-color: #4CAF50;
+}
+
+.badge-annotations.badge-assigned {
+    background-color: #2196F3;
+}
+
+.badge-annotations.badge-awaiting {
+    background-color: #FF9800;
+}
+
+.database-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    width: 98%;
+}
+
+.annotation-card {
+    position: relative;
+    background-color: white;
+    border-radius: 10px;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    max-height: max-content;
+}
+
+.annotation-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.annotation-card p {
+    margin: 10px 0;
+    font-size: 1em;
+    color: black;
+}
+
+.annotation-card p strong {
+    color: darkslateblue;
+}
+
+
+/* Pour le badge statut de l'annotation */
+.badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #444;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+
 .status-assigned {
-    background-color: blue;
+    background-color: #2196F3;
 }
 
 .status-awaiting-validation {
-    background-color: orange;
+    background-color: #FF9800;
 }
 
 .status-validated {
-    background-color: green;
+    background-color: #4CAF50;
 }

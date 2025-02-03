@@ -90,13 +90,16 @@ class Sequence(models.Model):
     sequence_start = models.IntegerField()
     sequence_stop = models.IntegerField()
     sequence_length = models.IntegerField()
+    
     # On peut ajouter une def() pour calculer automatiquement
-    gene_name = models.CharField(max_length=20)
+    gene_name = models.CharField(max_length=20, blank=True, null=True)
+    peptide_product = models.CharField(max_length=20, blank=True, null=True)
 
     STATUS_CHOICES = [("Nothing", "Non-annotée"),
                       ("Assigned", "Attribuée"),
                       ("Awaiting validation", "En attente de validation"),
                       ("Validated", "Validée")]
+    
     sequence_status = models.CharField(max_length=50, choices=STATUS_CHOICES)
 
     # Relation One-to-Many avec genome
@@ -116,6 +119,9 @@ class Annotation(models.Model):
     annotation_author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="annotations")
     # On pourrait possiblement ajouter
     # un attribut "date de création" ou de "validation"
+    is_validated = models.BooleanField(default=False)
+    rejected_comment = models.TextField(blank=True, null=True)
+    validation_date = models.DateTimeField(blank=True, null=True)
 
     # Relation One-to-zero-or-one avec sequence
     sequence = models.OneToOneField(Sequence, on_delete=models.CASCADE,
