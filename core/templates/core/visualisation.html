@@ -6,6 +6,50 @@ Visualisation - EYAA
 {% endblock %}
 
 {% block content %}
+
+<style>
+
+    .sequence-container {
+        word-wrap: break-word;
+        max-height: 30em; 
+        overflow-x: auto;
+        overflow-y: auto; 
+        white-space: normal; 
+        background: #f4f4f4;
+        padding: 10px;
+        font-family: monospace;
+        display: block;
+        margin: 10px;
+        line-height: 2;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center; /* Centrer les boutons horizontalement */
+        gap: 10px; /* Espacement entre les boutons */
+        margin: 20px 0;
+    }
+
+    .blast-button, .uniprot-button, .copy-button {
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+    }
+
+    .blast-button:hover, .uniprot-button:hover, .copy-button:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+
 <div class="visualisation-container">
     {% if obj_type == "genome" %}
         <h1 class="visualisation">On retrouve ici la visualisation du génome : {{ obj.genome_id }}</h1>
@@ -25,17 +69,15 @@ Visualisation - EYAA
         
         <section>
             <h2>Séquence</h2>
-            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+            <pre class="sequence-container">
                 {% if highlighted_sequence %}
                     {{ highlighted_sequence|safe }}
                 {% else %}
                     {{ obj.genome_sequence }}
                 {% endif %}
-                
             </pre>
-        </section>  
-
-
+    
+        </section>
         
     {% elif obj_type == "sequence" %}
         <h1 class="visualisation">On retrouve ici la visualisation de la séquence : {{ obj.sequence_id }}</h1>
@@ -77,11 +119,19 @@ Visualisation - EYAA
     {% else %}
         <p>Type d'objet non reconnu.</p>
     {% endif %}
+
+    
+    <div class="button-container">
+        <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" class="blast-button" target="_blank">Recherche sur BLAST NCBI</a>
+        <a href="https://www.uniprot.org/" class="uniprot-button" target="_blank">Recherche sur UniProt</a>
+    </div>
+   
     </div>
 
     <footer>
         <a href="{% url 'genome_database' %}">Retour à la base de données</a>
     </footer>
+
 
 {% endblock %}
 

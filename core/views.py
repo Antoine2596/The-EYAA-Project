@@ -194,22 +194,26 @@ STATUS_COLORS = {
 }
 
 
+import re
+
 def highlight_sequences(genome_sequence, associated_sequences):
-    highlighted = genome_sequence
+    highlighted = list(genome_sequence)  # Transformer en liste pour modification in-place
+    annotations = []  # Stocker les annotations pour les insérer après
+
     for seq in associated_sequences:
-        color = STATUS_COLORS.get(seq.sequence_status, "#D3D3D3")  # Gris par défaut si inconnu
-        pattern = re.escape(seq.dna_sequence)  
-        url = f"/visualisation/sequence/{seq.sequence_id}"  
+        color = STATUS_COLORS.get(seq.sequence_status, "#D3D3D3")  # Couleur par défaut gris
+        url = f"/visualisation/sequence/{seq.sequence_id}"
         title = f"Gene: {seq.gene_name} ({seq.sequence_start}-{seq.sequence_stop}) - {seq.sequence_status}"
-        
-        highlighted = re.sub(
-            pattern,
-            lambda match: (
-                f'<a href="{url}" title="{title}"'
-                f' style="text-decoration: none; color: inherit;">'
-                f'<mark style="background-color: {color};">{match.group()}</mark>'
-                f'</a>'
-            ),
-            highlighted,
-        )
-    return highlighted
+
+        # Ajouter l'annotation HTML dans les positions spécifiées
+        start, stop = seq.sequence_start, seq.sequence_stop
+        annotations.append((start, f'<a href="{url}" title="{title}" style="text-decoration: none; color: inherit;">'
+                                   f'<mark style="background-color: {color};">'))
+        annotations.append((stop, '</mark></a>'))
+
+    # Insérer les balises HTML aux positions respectives
+    for pos, tag in sorted(annotations, reverse=True):
+        highlighted.insert(pos, tag)
+
+    return "".join(highlighted)  # Reconvertir en chaîne
+
