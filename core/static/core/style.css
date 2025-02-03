@@ -5,50 +5,48 @@ body, html {
     height: 100vh;
     background: rgb(97,81,153);
     background-image: url("../images/hero-bg.jpg ");
-    
 }
 
 header {
-    backdrop-filter: blur(0.5px);
-    /* box-shadow: #333 0 0 10px; */
-    /* border: 1px solid rgba(255, 255, 255, 0); */
-    padding: 10px 20px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    transition: ease 0.6s;
+    padding: 10px 20px;
+    backdrop-filter: blur(1px);
+    height: 70px; 
 }
 
 
-
-
-.bienvenue-container {
+.site-name {
+    margin-right: auto; 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: center; 
     height: 100%;
-}
-
-.bienvenue {
-    text-align: center;
-    color: black;
-    font-size: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 32px;
     font-weight: bold;
+    font-family: "Audiowide", serif;
+    text-transform: uppercase;
 }
 
 .site-name a {
     color: white;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: bold;
     font-family: "Audiowide", serif;
     text-transform: uppercase;
     text-decoration: none;
 }
 
-.site-name a:hover,
-.site-name a:focus {
-    color: white;
-    text-decoration: none;
+
+.menu {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%;
 }
 
 .menu ul {
@@ -56,22 +54,41 @@ header {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
 }
 
 .menu li {
-    margin: 0;
+    margin: 0 15px; 
 }
 
-/* volet */
-.button_volet{
+.connexion-button {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.connexion-button a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: darkcyan;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.connexion-button a:hover {
+    background-color: teal;
+}
+
+/* Volet */
+.button_volet {
     color: white;
     position: absolute;
     top: 50%;
     left: 3%;
     cursor: pointer;
     z-index: 3;
-
 }
 
 .volet {
@@ -82,7 +99,7 @@ header {
     left: 0;
     position: absolute;
     width: 30%;
-    height: 85vh;
+    height: 89vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -91,18 +108,18 @@ header {
     z-index: 2;
 }
 
-.contenu_titre h2{
+.contenu_titre h2 {
     color: white;
     font-size: 2em;
     margin-bottom: 20px;
     text-shadow: none;
 }
 
-.afficher_volet{
+.afficher_volet {
     margin-left: 0; 
 }
 
-.contenu_volet{
+.contenu_volet {
     height: 90%;
     width: 90%;
     display: flex;
@@ -111,7 +128,7 @@ header {
     align-items: center;
 }
 
-.links_volet{
+.links_volet {
     height: 80%;
     width: 80%;
     display: flex;
@@ -151,7 +168,6 @@ header {
     transform: scale(1.05);
 }
 
-
 .menu a { 
     display: block;
     padding: 15px 20px;
@@ -167,6 +183,7 @@ header {
     text-decoration: underline;
 }
 
+
 .connexion-button {
     background-color: darkcyan;
     color: white;
@@ -178,6 +195,7 @@ header {
     text-transform: uppercase;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-left: auto;
 }
 
 .connexion-button:hover {
@@ -465,7 +483,7 @@ h2{
     background-color: orange;
 }
 
-
+/* Images des fonctionnalités */
 
 .fonction_visualiser_genome {
     position: relative;

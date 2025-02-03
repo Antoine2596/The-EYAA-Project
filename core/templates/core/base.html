@@ -11,9 +11,8 @@
     </head>
     <body>
         <header>
-            <div class="site-name">
-                <a href="{% url 'home' %}">EYAA</a>
-            </div>
+            <a href="#" class="site-name">EYAA</a>
+
             <nav class="menu">
                 <ul>
                     <li><a href="{% url 'genome_database' %}">Base de donnée</a></li>
@@ -21,18 +20,21 @@
                     <li><a href="{% url 'profile' %}">Profile</a></li>
                 </ul>
             </nav>
-            <button class="connexion-button">
+
+            <div class="connexion-button">
                 {% if user.is_authenticated %}
                     <a href="{% url 'deconnexion' %}">Déconnexion</a>
                 {% else %}
                     <a href="{% url 'connexion' %}">Connexion</a>
                 {% endif %}
+            </div>
         </header>
+
         <main>
             <div class="volet">
                 <div class ="contenu_volet">
                     <div class = "contenu_titre">
-                        <h2>Titre Volet</h2>
+                        <h2>Volet de navigation</h2>
                     </div>
                     <div class ="links_volet">
                         <ul>
@@ -44,27 +46,18 @@
                     </div>
                 </div>
             </div>
-            <div class="button_volet">
-                <h1>X</h1>
-            </div>
+
             {% block content %}
             {% endblock %}
         </main>
 
         <script>
-            const menuHamburger = document.querySelector(".button_volet")
+            const menuButton = document.querySelector(".site-name")
             const navLinks = document.querySelector(".volet")
-        
-            menuHamburger.addEventListener('click',()=>{
-            navLinks.classList.toggle('afficher_volet')
+
+            menuButton.addEventListener('click', () => {
+                navLinks.classList.toggle('afficher_volet')
             })
-        </script>
-        <script>
-              const menuBtn = document.querySelector('.button_volet')
-        
-        menuBtn.addEventListener('click', () => {
-          menuBtn.classList.toggle('open')
-        })
         </script>
     </body>
 </html>
