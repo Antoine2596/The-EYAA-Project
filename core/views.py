@@ -91,18 +91,60 @@ def deconnexion(request):
     logout(request)
     return redirect("page_non_connecte")
 
+
+STATUS_COLORS = {
+    "Nothing": "#FFB6C1",  # Rose clair
+    "Assigned": "#ADD8E6",  # Bleu clair
+    "Awaiting validation": "#FFD700",  # Jaune doré
+    "Validated": "#90EE90",  # Vert clair
+}
+
+def highlight_sequences(genome_sequence, associated_sequences):
+    highlighted = list(genome_sequence)  
+    annotations = [] 
+
+    for seq in associated_sequences:
+        color = STATUS_COLORS.get(seq.sequence_status, "#D3D3D3")  
+        url = f"/visualisation/sequence/{seq.sequence_id}"
+        title = f"Gene: {seq.gene_name} ({seq.sequence_start}-{seq.sequence_stop}) - {seq.sequence_status}"
+
+        start, stop = seq.sequence_start, seq.sequence_stop
+        annotations.append((start, f'<a href="{url}" title="{title}" style="text-decoration: none; color: inherit;">'
+                                   f'<mark style="background-color: {color};">'))
+        annotations.append((stop, '</mark></a>'))
+
+    for pos, tag in sorted(annotations, reverse=True):
+        highlighted.insert(pos, tag)
+
+    return "".join(highlighted) 
+
+
 @login_required
 def visualisation(request, obj_type, obj_id):
     if obj_type == "genome":
         obj = get_object_or_404(Genome, genome_id=obj_id)
+        associated_sequences = obj.sequences.all()
+        highlighted_sequence = highlight_sequences(
+            obj.genome_sequence, associated_sequences
+        )
     elif obj_type == "sequence":
-        obj = get_object_or_404(Sequence, sequence_id = obj_id)
+        obj = get_object_or_404(Sequence, sequence_id=obj_id)
+        highlighted_sequence = None
     elif obj_type == "annotation":
         obj = get_object_or_404(Annotation, annotation_id=obj_id)
+        highlighted_sequence = None
     else:
         return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
 
-    return render(request, "core/visualisation.html", {"obj": obj, "obj_type": obj_type})
+    return render(
+        request,
+        "core/visualisation.html",
+        {
+            "obj": obj,
+            "obj_type": obj_type,
+            "highlighted_sequence": highlighted_sequence,
+        },
+    )
 
 
 def inscription(request):
