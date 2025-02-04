@@ -119,7 +119,8 @@ class Sequence(models.Model):
 class Annotation(models.Model):
     annotation_id = models.CharField(max_length=20, primary_key=True)
     annotation_text = models.TextField()  # Définir un max ?
-    annotation_author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="annotations")
+    annotation_author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="annotations",
+                                          blank=True, null=True)
     # On pourrait possiblement ajouter
     # un attribut "date de création" ou de "validation"
     is_validated = models.BooleanField(default=False)

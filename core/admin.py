@@ -7,7 +7,7 @@ from import_export.formats.base_formats import DEFAULT_FORMATS
 
 from import_export.admin import ImportMixin
 from .resources import GenomeResource, SequenceResource, AnnotationResource  
-from .models import CustomUser
+from .models import CustomUser, ConnectionHistory
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 

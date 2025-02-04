@@ -6,5 +6,6 @@ django_env/
 venv/
 *.dot
 *.sqlite3
+*/migrations/
 
 

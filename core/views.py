@@ -197,7 +197,7 @@ def database_view(request):
     is_annotated = request.GET.get("is_annotated") == "true"
     min_length = request.GET.get("min_length")
     max_length = request.GET.get("max_length")
-    chromosome = request.GET.get("information_support", "").strip()
+    chromosome = request.GET.get("chromosome", "").strip()
 
     genomes = sequences = annotations = None
 

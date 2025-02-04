@@ -211,6 +211,7 @@ class Command(BaseCommand):
                 annotation_text =v["annotation"],
                 #annotation_author = None,
                 sequence_id = k,
+                is_validated = True,
             )
             for k, v in dic.items() if "annotation" in v and v["annotation"]
         ]
