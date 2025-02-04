@@ -33,7 +33,6 @@ class Sequence(models.Model):
     sequence_id = models.CharField(max_length=20, primary_key=True)
     dna_sequence = models.TextField()
     aa_sequence = models.TextField()
-    num_chromosome = models.IntegerField()
     sequence_start = models.IntegerField()
     sequence_stop = models.IntegerField()
     sequence_length = models.IntegerField()
@@ -45,6 +44,11 @@ class Sequence(models.Model):
                       ("Awaiting validation", "En attente de validation"),
                       ("Validated", "Validée")]
     sequence_status = models.CharField(max_length=50, choices=STATUS_CHOICES)
+
+    SUPPORT_CHOICES = [("Chromosome", "Chromosome"),
+                       ("Plasmide", "Plasmide")]
+    
+    information_support = models.CharField(max_length=50, choices=SUPPORT_CHOICES)
 
     # Relation One-to-Many avec genome
     genome = models.ForeignKey(Genome, on_delete=models.CASCADE,

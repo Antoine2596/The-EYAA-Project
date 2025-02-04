@@ -52,9 +52,9 @@ admin.site.register(Genome, GenomeAdmin)
 class SequenceAdmin(ImportMixin, admin.ModelAdmin):
     resource_class = SequenceResource  # Lien avec la ressource
 
-    list_display = ("sequence_id", "dna_sequence", "aa_sequence", "num_chromosome",
+    list_display = ("sequence_id", "information_support",
                     "sequence_start", "sequence_stop", "sequence_length", "gene_name", "sequence_status") 
-    list_filter = ("num_chromosome", "sequence_start", "sequence_stop", "sequence_length", "sequence_status") 
+    list_filter = ("information_support", "sequence_start", "sequence_stop", "sequence_length", "sequence_status") 
     search_fields = ("sequence_id", "dna_sequence","aa_sequence", "gene_name") 
 
      # Empêche l'ajout manuel de génomes
