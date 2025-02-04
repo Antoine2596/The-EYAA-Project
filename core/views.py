@@ -24,6 +24,10 @@ def page_non_connecte(request):
     return render(request, "core/non_connecte.html")
 
 @login_required
+def page_non_connecte(request):
+    return render(request, "core/non_connecte.html")
+
+@login_required
 def home(request):
     return render(request,"core/home.html")
 
@@ -101,8 +105,9 @@ def database(request):
 
 def deconnexion(request):
     logout(request)
-    return redirect("home")
+    return redirect("page_non_connecte")
 
+@login_required
 @login_required
 def visualisation(request, obj_type, obj_id):
     if obj_type == "genome":
@@ -150,6 +155,7 @@ def genome_list(request):
     genomes = Genome.objects.all()  # Récupère tous les génomes
     return render(request, "test.html", {"genomes": genomes})
 
+@login_required
 @login_required
 def database_view(request):
     user_request = request.GET.get("user_request", "").strip()
