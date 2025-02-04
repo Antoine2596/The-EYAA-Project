@@ -13,7 +13,7 @@
     </head>
     <body>
         <header>
-            <div class="site-name">
+            <!-- <div class="site-name">
                 <a href="{% url 'home' %}">EYAA</a>
             </div>
             <nav class="menu">
@@ -39,11 +39,61 @@
                         <a href="{% url 'connexion' %}">Connexion</a>
                     {% endif %}
                 </button>
-            </div>
+            </div> -->
+            <a href="#" class="site-name">EYAA</a><i class='bx bx-dna'></i>
+
+            <nav class="menu">
+                <ul>
+                    <li><a href="{% url 'genome_database' %}">Base de donnée</a></li>
+                    <li><a href="{% url 'contacts' %}">Contacts</a></li>
+                </ul>
+            </nav>
+
+            <div class="menu-right" style="display: contents;">
+                {% if user.is_authenticated %}
+                <a href="{% url 'profile_informations' %}" class="profile-icon">
+                    <i class="bx bxs-user"></i>
+                </a>
+                {% endif %}
+                <button class="connexion-button">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'deconnexion' %}">Déconnexion</a>
+                    {% else %}
+                        <a href="{% url 'connexion' %}">Connexion</a>
+                    {% endif %}
+                </button>
+            </div> -->
+
         </header>
         <main>
+            <div class="volet">
+                <div class ="contenu_volet">
+                    <div class = "contenu_titre">
+                        <h2>Volet de navigation</h2>
+                    </div>
+                    <div class ="links_volet">
+                        <ul>
+                            <li><a href="{% url 'home' %}">EYAA</a></li>
+                            <li><a href="{% url 'genome_database' %}">Base de donnée</a></li>
+                            {% if user.role == "validateur" %}
+                                <li><a href="{% url 'annotations_listing' %}">Outil de validation</a></li>
+                                <li><a href="{% url 'sequences_non_assigned' %}">Attributions séquences</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'contacts' %}">Contacts</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             {% block content %}
             {% endblock %}
         </main>
+        <script>
+            const menuButton = document.querySelector(".site-name")
+            const navLinks = document.querySelector(".volet")
+
+            menuButton.addEventListener('click', () => {
+                navLinks.classList.toggle('afficher_volet')
+            })
+        </script>
     </body>
 </html>

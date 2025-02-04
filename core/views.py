@@ -17,9 +17,12 @@ from django.utils.timezone import now
 
 
 # Page d'accueil
+def page_non_connecte(request):
+    return render(request, "core/non_connecte.html")
+
+@login_required
 def home(request):
     return render(request,"core/home.html")
-
 
 def contacts(request):
     return render(request,"core/contacts.html")
@@ -77,13 +80,11 @@ def profile_annotations(request):
 def Pageinscription(request):
     return render(request, "core/inscription.html")
 
-def database(request):
-    return render(request, "core/database.html")
-
 def deconnexion(request):
     logout(request)
-    return redirect("home")
+    return redirect("page_non_connecte")
 
+@login_required
 def visualisation(request, obj_type, obj_id):
     if obj_type == "genome":
         obj = get_object_or_404(Genome, genome_id=obj_id)
@@ -130,7 +131,7 @@ def genome_list(request):
     genomes = Genome.objects.all()  # Récupère tous les génomes
     return render(request, "test.html", {"genomes": genomes})
 
-
+@login_required
 def database_view(request):
     user_request = request.GET.get("user_request", "").strip()
     filter_types = request.GET.getlist("filter_type")

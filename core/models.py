@@ -41,6 +41,7 @@ ROLE_CHOICES = [
     ("lecteur", "Lecteur"),
     ("annotateur", "Annotateur"),
     ("validateur", "Validateur"),
+    ("visiteur", "Visiteur"),
 ]
 
 class CustomUser(AbstractUser):

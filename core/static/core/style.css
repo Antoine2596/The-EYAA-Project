@@ -3,43 +3,50 @@ body, html {
     padding: 0;
     font-family: Avantgarde, sans-serif;
     height: 100vh;
+    background: rgb(97,81,153);
+    background-image: url("../images/hero-bg.jpg ");
 }
 
 header {
-    background-color: darkslateblue;
-    padding: 10px 20px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
+    padding: 10px 20px;
+    backdrop-filter: blur(1px);
+    height: 70px; 
 }
 
-.bienvenue-container {
+
+
+.site-name {
+    margin-right: auto; 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: center; 
     height: 100%;
-}
-
-.bienvenue {
-    text-align: center;
-    color: black;
-    font-size: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 32px;
     font-weight: bold;
+    font-family: "Audiowide", serif;
+    text-transform: uppercase;
 }
 
 .site-name a {
     color: white;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: bold;
     font-family: "Audiowide", serif;
     text-transform: uppercase;
     text-decoration: none;
 }
 
-.site-name a:hover,
-.site-name a:focus {
-    color: white;
-    text-decoration: none;
+.menu {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%;
 }
 
 .menu ul {
@@ -47,16 +54,16 @@ header {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
 }
 
 .menu li {
-    margin: 0;
+    margin: 0 15px; 
 }
 
-.menu a {
+.menu a { 
     display: block;
     padding: 15px 20px;
+    border-radius: 5px;
     color: white;
     text-decoration: none;
     text-transform: uppercase;
@@ -65,12 +72,11 @@ header {
 }
 
 .menu a:hover {
-    background-color: darkcyan;
-    border-radius: 5px;
+    text-decoration: underline;
 }
 
 .bx {
-    font-size: 1.5em;
+    font-size: 2em;
     color: white;
 }
 
@@ -85,21 +91,108 @@ header {
     text-transform: uppercase;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-.connexion-button:hover {
-    background-color: teal;
+    margin-left: auto;
 }
 
 .connexion-button a {
     color: white;
     text-decoration: none;
-    display: inline-block;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: darkcyan;
+    border-radius: 5px;
+    transition: background 0.3s ease;
 }
 
-.connexion-button a:hover{
+.connexion-button a:hover {
+    background-color: teal;
+}
+
+/* Volet */
+.button_volet {
     color: white;
+    position: absolute;
+    top: 50%;
+    left: 3%;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.volet {
+    backdrop-filter: blur(1px);
+    background-color: #0b469863;
+    box-shadow: black 0 0 10px;
+    bottom: 0vh;
+    left: 0;
+    position: absolute;
+    width: 30%;
+    height: 89vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -30%;
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+.contenu_titre h2 {
+    color: white;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-shadow: none;
+}
+
+.afficher_volet {
+    margin-left: 0; 
+}
+
+.contenu_volet {
+    height: 90%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.links_volet {
+    height: 80%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.links_volet ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; 
+    align-items: center; 
+    height: 100%;
+}
+
+.links_volet li {
+    width: 100%; 
+    text-align: center; 
+}
+
+.links_volet a {
     text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.links_volet a:hover {
+    color: white;
+    text-shadow: white 0 0 1px;
+    transform: scale(1.05);
 }
 
 .contacts ul {
@@ -111,4 +204,78 @@ header {
     margin-bottom: 10px;
     font-size: 1.5em;
     font-weight: bold;
+}
+
+
+.zone-fonctions{
+    margin-top: 15px;
+    padding-left: 15%;
+    padding-right: 15%;
+    display: flex;
+    height: 40vh;
+    z-index: 0;
+    /* transform: translate(-50%,0); */
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.lien_function{
+    height: 20vh;
+    width: 20vw;
+    min-height: 100px;
+    min-width: 100px;
+    cursor: pointer;
+    margin: 10px;
+    display: flex;
+    justify-content: center;  
+    align-items: center;     
+    float: left;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    border-radius: 15px;
+    transition: 0.5 ease; 
+    background-color: orange;
+    text-decoration: none;
+    /* transform: scale(1.0); */
+    transition: ease-in-out 0.6s;
+}
+
+.lien_function:hover{
+    transform: scale(1.05);
+    transition: 0.6s ease;
+}
+
+
+.filtre{
+    backdrop-filter: blur(0.5px);
+    height: 100%;
+    width: 100% ;
+    background-color: #33333320;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+
+}
+
+h2{
+    text-shadow: black 0 0 3px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.cours1{
+    background-color: orange;
+}
+
+/* Images des fonctionnalités */
+
+.fonction_visualiser_genome {
+    position: relative;
+    background-image: url("../images/dna_function.png");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
 }
