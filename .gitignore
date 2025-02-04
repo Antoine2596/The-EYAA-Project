@@ -4,4 +4,7 @@ __pycache__/*
 *.pyc
 django_env/
 venv/
-db.sqlite3
+*.dot
+*.sqlite3
+
+

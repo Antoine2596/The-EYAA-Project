@@ -16,6 +16,11 @@ from django.http import HttpResponseForbidden
 from django.utils.timezone import now
 
 
+from django.http import HttpResponse
+#from import_export.formats.base import BaseFormat
+from .resources import GenomeResource
+from .admin import GenomeImportForm
+
 # Page d'accueil
 def page_non_connecte(request):
     return render(request, "core/non_connecte.html")
@@ -192,7 +197,7 @@ def database_view(request):
     is_annotated = request.GET.get("is_annotated") == "true"
     min_length = request.GET.get("min_length")
     max_length = request.GET.get("max_length")
-    chromosome = request.GET.get("chromosome", "").strip()
+    chromosome = request.GET.get("information_support", "").strip()
 
     genomes = sequences = annotations = None
 
@@ -215,7 +220,7 @@ def database_view(request):
             if max_length:
                 sequences = sequences.filter(sequence_length__lte=int(max_length))
             if chromosome:
-                sequences = sequences.filter(num_chromosome__iexact=chromosome)
+                sequences = sequences.filter(information_support__iexact=chromosome)
 
         if "annotation" in filter_types or not filter_types:
             annotations = Annotation.objects.filter(
@@ -236,7 +241,7 @@ def database_view(request):
             if max_length:
                 sequences = sequences.filter(sequence_length__lte=int(max_length))
             if chromosome:
-                sequences = sequences.filter(num_chromosome__iexact=chromosome)
+                sequences = sequences.filter(information_support__iexact=chromosome)
 
         if "annotation" in filter_types or not filter_types:
             annotations = Annotation.objects.filter(Q(is_validated=True))

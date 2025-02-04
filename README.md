@@ -16,3 +16,12 @@ pip install django-extensions
 
 sudo apt install graphviz
 python manage.py graph_models -a --dot -o myapp_models.dot dot -Tpng myapp_models.dot -omyapp_models.png
+
+
+Importation des donnees : 
+python manage.py import_my_data {Repertoire} {mode}
+
+Repertoire : Le repertroie dans lequel on les fichiers a importer. Il faut respecter un format de nom : Genre_Espece_Id_suite_id.fa. etr eventuelelment rajouter _pep ou _cds a la fin
+Chaque genome doit etre accompagne d un fichier cds comportant lescds du genome et un foichoer pep comportant les sequance aa des cds du genome 
+
+Mode: Comportement a adopter si l id du genome existe deja : k = garde les deux, r = remplace le genome existant, i = ignore le nouveau genome 

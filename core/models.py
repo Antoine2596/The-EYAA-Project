@@ -67,9 +67,8 @@ class Genome(models.Model):
     # Only ACGT or ACGU
     # peut être mettre quelque chose pour vérifier la condition plus tard
     genome_sequence = models.TextField(validators=[RegexValidator(
-        regex=r"^[ACGTU]*$",
-        message="La séquence doit être uniquement "
-        "composée des caractères ACGT ou U.")])
+         regex=r"^[ACGTURYKMSWBDHVN]*$",
+         message="La séquence doit être composée uniquement des caractères ACGTURYKMSWBDHVN (norme IUPAC).")])
 
     TYPE_CHOICES = [("DNA", "ADN"), ("RNA", "ARN")]
     genome_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
@@ -86,7 +85,6 @@ class Sequence(models.Model):
     sequence_id = models.CharField(max_length=20, primary_key=True)
     dna_sequence = models.TextField()
     aa_sequence = models.TextField()
-    num_chromosome = models.IntegerField()
     sequence_start = models.IntegerField()
     sequence_stop = models.IntegerField()
     sequence_length = models.IntegerField()
@@ -101,6 +99,11 @@ class Sequence(models.Model):
                       ("Validated", "Validée")]
     
     sequence_status = models.CharField(max_length=50, choices=STATUS_CHOICES)
+
+    SUPPORT_CHOICES = [("Chromosome", "Chromosome"),
+                       ("Plasmide", "Plasmide")]
+    
+    information_support = models.CharField(max_length=50, choices=SUPPORT_CHOICES)
 
     # Relation One-to-Many avec genome
     genome = models.ForeignKey(Genome, on_delete=models.CASCADE,
