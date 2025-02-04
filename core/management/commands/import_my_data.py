@@ -200,12 +200,33 @@ class Command(BaseCommand):
             for k, v in dic.items()
         ]
 
-        Sequence.objects.bulk_create(sequence_objects)  # Une seule requête SQL
+        Sequence.objects.bulk_create(sequence_objects) 
+
+        # 4 -Creation des annotations en bulk
+
+
+        annotation_objects = [
+            Annotation(
+                annotation_id = k,
+                annotation_text =v["annotation"],
+                #annotation_author = None,
+                sequence_id = k,
+            )
+            for k, v in dic.items() if "annotation" in v and v["annotation"]
+        ]
+
+        Annotation.objects.bulk_create(annotation_objects)
+
+        # 5 - Mise a jour du genome s il est annoté : 
+
+
+        if all("annotation" in v and v["annotation"] for v in dic.values()):
+            genome.is_annotated = True
+            genome.save()
+
+
 
 
 
                 
 
-    
-    def Create_Annotation(self):
-        return 0

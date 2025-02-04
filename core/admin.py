@@ -54,8 +54,8 @@ class SequenceAdmin(ImportMixin, admin.ModelAdmin):
 
     list_display = ("sequence_id", "information_support",
                     "sequence_start", "sequence_stop", "sequence_length", "gene_name", "sequence_status") 
-    list_filter = ("information_support", "sequence_start", "sequence_stop", "sequence_length", "sequence_status") 
-    search_fields = ("sequence_id", "dna_sequence","aa_sequence", "gene_name") 
+    list_filter = ("information_support", "sequence_status") 
+    search_fields = ("sequence_id", "dna_sequence","aa_sequence", "gene_name",) 
 
      # Empêche l'ajout manuel de génomes
     def has_add_permission(self, request):
