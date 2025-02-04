@@ -3,5 +3,5 @@
 *.pyc
 django_env/
 venv/
-db.sqlite3
+# db.sqlite3
 
