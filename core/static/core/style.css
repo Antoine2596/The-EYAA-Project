@@ -3,43 +3,50 @@ body, html {
     padding: 0;
     font-family: Avantgarde, sans-serif;
     height: 100vh;
+    background: rgb(97,81,153);
+    background-image: url("../images/hero-bg.jpg ");
 }
 
 header {
-    background-color: darkslateblue;
-    padding: 10px 20px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
+    padding: 10px 20px;
+    backdrop-filter: blur(1px);
+    height: 70px; 
 }
 
-.bienvenue-container {
+
+.site-name {
+    margin-right: auto; 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: center; 
     height: 100%;
-}
-
-.bienvenue {
-    text-align: center;
-    color: black;
-    font-size: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 32px;
     font-weight: bold;
+    font-family: "Audiowide", serif;
+    text-transform: uppercase;
 }
 
 .site-name a {
     color: white;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: bold;
     font-family: "Audiowide", serif;
     text-transform: uppercase;
     text-decoration: none;
 }
 
-.site-name a:hover,
-.site-name a:focus {
-    color: white;
-    text-decoration: none;
+
+.menu {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%;
 }
 
 .menu ul {
@@ -47,16 +54,125 @@ header {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
 }
 
 .menu li {
-    margin: 0;
+    margin: 0 15px; 
 }
 
-.menu a {
+.connexion-button {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.connexion-button a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: darkcyan;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.connexion-button a:hover {
+    background-color: teal;
+}
+
+/* Volet */
+.button_volet {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 3%;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.volet {
+    backdrop-filter: blur(1px);
+    background-color: #0b469863;
+    box-shadow: black 0 0 10px;
+    bottom: 0vh;
+    left: 0;
+    position: absolute;
+    width: 30%;
+    height: 89vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -30%;
+    transition: all 0.5s ease;
+    z-index: 2;
+    position: fixed;
+}
+
+.contenu_titre h2 {
+    color: white;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-shadow: none;
+}
+
+.afficher_volet {
+    margin-left: 0; 
+}
+
+.contenu_volet {
+    height: 90%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.links_volet {
+    height: 80%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.links_volet ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; 
+    align-items: center; 
+    height: 100%;
+}
+
+.links_volet li {
+    width: 100%; 
+    text-align: center; 
+}
+
+.links_volet a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.links_volet a:hover {
+    color: white;
+    text-shadow: white 0 0 1px;
+    transform: scale(1.05);
+}
+
+.menu a { 
     display: block;
     padding: 15px 20px;
+    border-radius: 5px;
     color: white;
     text-decoration: none;
     text-transform: uppercase;
@@ -65,8 +181,7 @@ header {
 }
 
 .menu a:hover {
-    background-color: darkcyan;
-    border-radius: 5px;
+    text-decoration: underline;
 }
 
 .bx {
@@ -85,6 +200,7 @@ header {
     text-transform: uppercase;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-left: auto;
 }
 
 .connexion-button:hover {
@@ -113,14 +229,13 @@ header {
     font-weight: bold;
 }
 
-/* Conteneur de la base de données */
 .main-content {
     display: flex;
     margin: 20px;
     gap: 20px;
 }
 
-/* Section principale */
+
 .database-section {
     flex: 3;
     background-color: #f9f9f9;
@@ -129,7 +244,7 @@ header {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Menu vertical à droite */
+
 .filter-menu {
     position: static;
     top: 160px;

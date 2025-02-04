@@ -13,9 +13,8 @@
     </head>
     <body>
         <header>
-            <div class="site-name">
-                <a href="{% url 'home' %}">EYAA</a>
-            </div>
+            <a href="#" class="site-name">EYAA</a>
+
             <nav class="menu">
                 <ul>
                     <li><a href="{% url 'genome_database' %}">Base de donnée</a></li>
@@ -41,9 +40,46 @@
                 </button>
             </div>
         </header>
+
         <main>
+            <div class="volet">
+                <div class="contenu_volet">
+                    <div class="contenu_titre">
+                        <h2>Navigation rapide</h2>
+                    </div>
+                    <div class="links_volet">
+                        <ul>
+                            <li><a href="{% url 'home' %}">Accueil</a></li>
+                            <li><a href="{% url 'genome_database' %}">Base de Données</a></li>
+                            <li><a href="{% url 'profile_informations' %}">Profil</a></li>
+                            <li><a href="{% url 'profile_annotations' %}">Mes Annotations</a></li>
+                            {% if user.role == "validateur" %}
+                                <li><a href="{% url 'annotations_listing' %}">Outil de Validation</a></li>
+                                <li><a href="{% url 'sequences_non_assigned' %}">Attribution Séquences</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'contacts' %}">Contacts</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'deconnexion' %}">Déconnexion</a></li>
+                            {% else %}
+                                <li><a href="{% url 'connexion' %}">Connexion</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+
             {% block content %}
             {% endblock %}
         </main>
+
+        <script>
+            const menuButton = document.querySelector(".site-name")
+            const navLinks = document.querySelector(".volet")
+
+            menuButton.addEventListener('click', () => {
+                navLinks.classList.toggle('afficher_volet')
+            })
+        </script>
     </body>
 </html>

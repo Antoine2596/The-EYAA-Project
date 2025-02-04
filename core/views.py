@@ -28,9 +28,15 @@ def home(request):
     return render(request,"core/home.html")
 
 @login_required
+def home(request):
+    if request.user.role == "visiteur":
+        return HttpResponseForbidden("Vous êtes visiteurs : vous n’avez accès à rien.")
+    return render(request, "core/home.html") 
+
+@login_required
 def profile(request):
     if request.user.role == "visiteur":
-        return HttpResponseForbidden("En tant que visiteur, vous n’avez accès à rien.")
+        return HttpResponseForbidden("Vous êtes visiteurs : vous n’avez accès à rien.")
     return render(request, "core/base_profile.html")
 
 def contacts(request):
@@ -319,3 +325,8 @@ def annoter(request, sequence_id):
             "is_editable": is_editable
         }
     )
+
+def page_non_connecte(request):
+    if request.user.is_authenticated:
+        logout(request)  # C'est pour forcer la déconnexion
+    return render(request, "core/non_connecte.html")
