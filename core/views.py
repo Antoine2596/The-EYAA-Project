@@ -211,4 +211,3 @@ def highlight_sequences(genome_sequence, associated_sequences):
         highlighted.insert(pos, tag)
 
     return "".join(highlighted) 
-
