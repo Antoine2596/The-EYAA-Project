@@ -4,9 +4,4 @@ __pycache__/*
 *.pyc
 django_env/
 venv/
-<<<<<<< HEAD
-
-=======
-# db.sqlite3
->>>>>>> youna
-
+db.sqlite3
