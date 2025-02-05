@@ -103,7 +103,7 @@ class Sequence(models.Model):
                        (-1, "Indirect"),
                         (0, "Unknown")]
     
-    sequence_brin = models.IntegerField( choices=SUPPORT_CHOICES, blank=0)
+    sequence_brin = models.IntegerField( choices=SUPPORT_CHOICES, default=0)
     sequence_status = models.CharField(max_length=50, choices=STATUS_CHOICES)
     
     information_support = models.TextField()
