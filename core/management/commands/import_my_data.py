@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from core.models import Genome, Sequence, Annotation
+from core.models import Genome, Sequence, Annotation, CustomUser, CustomUserManager, Utilisateur
 import os 
 import math
 
@@ -51,6 +51,33 @@ class Command(BaseCommand):
             
             if created:
                 self.Create_Sequence(v["cds"], v["pep"], created)
+
+        # 3 - Creation des comptes
+
+        CustomUser.objects.create_user(email = "lecteur@gmail.fr", 
+                                       role= "lecteur",
+                                       first_name="Prenom",
+                                       last_name="Nom",
+                                       password = "lecteur")
+        CustomUser.objects.create_user(email = "annotateur@gmail.fr", 
+                                       role= "annotateur",
+                                       first_name="Prenom",
+                                       last_name="Nom",
+                                       password="annotateur")
+        CustomUser.objects.create_user(email = "validateur@gmail.fr", 
+                                       role= "validateur",
+                                       first_name="Prenom",
+                                       last_name="Nom",
+                                       password="validateur")
+        CustomUser.objects.create_user(email = "visiteur@gmail.fr", 
+                                       role= "visiteur",
+                                       first_name="Prenom",
+                                       last_name="Nom",
+                                       password="visiteur")
+        CustomUser.objects.create_superuser(email= "admin@gmail.fr", 
+                                            password="admin")
+
+
 
 
     def Create_Genome(self, file, Genra, Species, id, mode):

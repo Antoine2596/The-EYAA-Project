@@ -1,14 +1,34 @@
 # The-EYAA-Project
 
+Quand on recupere le projet il faut faire :
 
+pyhton manager.py makemigrations
+python manager.py migrate
+python manager.py import_my_data {Repertoire/des/donnees} {mode}
+    Mode: Comportement a adopter si l id du genome existe deja : k = garde les deux, r = remplace le genome existant, i = ignore le nouveau genome 
+Cela cree automatiquement les comptes suivants :
 
+lecteur : 
+    email = "lecteur@gmail.fr", 
+    password = "lecteur"
 
-Pour importer les donnees : transforme le fasta en .csv avec les bonnes categories. Ensuite on utilise la bibliotheque import export de django qui supporte les csv pour l import de donnees
+annotateur :
+    email = "annotateur@gmail.fr", 
+    password="annotateur"
 
-En plus  cette bibliotheque permettra l export de donnees plus tard
+validateur:
+email = "validateur@gmail.fr", 
+password="validateur"
 
+visiteur:
+email = "visiteur@gmail.fr", 
+password="visiteur"
 
-Etapes pour tracer le diagramme de classe: 
+admin:
+email= "admin@gmail.fr", 
+password="admin"
+
+Etapes pour tracer le diagramme de classe du modele: 
 
 pip install django-extensions
 
@@ -18,10 +38,6 @@ sudo apt install graphviz
 python manage.py graph_models -a --dot -o myapp_models.dot dot -Tpng myapp_models.dot -omyapp_models.png
 
 
-Importation des donnees : 
-python manage.py import_my_data {Repertoire} {mode}
 
-Repertoire : Le repertroie dans lequel on les fichiers a importer. Il faut respecter un format de nom : Genre_Espece_Id_suite_id.fa. etr eventuelelment rajouter _pep ou _cds a la fin
-Chaque genome doit etre accompagne d un fichier cds comportant lescds du genome et un foichoer pep comportant les sequance aa des cds du genome 
 
-Mode: Comportement a adopter si l id du genome existe deja : k = garde les deux, r = remplace le genome existant, i = ignore le nouveau genome 
+
