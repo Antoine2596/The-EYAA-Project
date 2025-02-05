@@ -492,3 +492,19 @@ h2{
     background-position: center;
     transition: opacity 0.5s ease; 
 }
+
+.function_gene_protein_vizu {
+    position: relative;
+    background-image: url("../images/gene_dna_visualization.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+    
+.function_dna_alignement {
+    position: relative;
+    background-image: url("../images/gene_protein_alignment.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
