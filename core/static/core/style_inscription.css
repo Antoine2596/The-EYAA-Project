@@ -23,6 +23,7 @@ body {
     justify-content: center;
     align-items: center;
     background: url("./images/connexion_inscription_wall.jpg") no-repeat;
+    /* background-image: url("../images/hero-bg.jpg "); */
     background-size: cover;
     background-position: center;
 }
@@ -32,7 +33,7 @@ body {
     background: transparent;
     backdrop-filter: blur(30px);
     border-radius: 7px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.532);
 }
 
 

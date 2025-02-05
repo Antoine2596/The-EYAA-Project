@@ -156,11 +156,13 @@ def inscription(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.role = "visiteur"
+            user.save()
             return redirect('connexion')
     else:
         form = CustomUserCreationForm()
-        
+
     return render(request, "core/inscription.html", {"form": form})
 
 
