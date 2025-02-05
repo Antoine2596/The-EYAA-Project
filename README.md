@@ -2,9 +2,10 @@
 
 Quand on recupere le projet il faut faire :
 
-pyhton manager.py makemigrations
-python manager.py migrate
-python manager.py import_my_data {Repertoire/des/donnees} {mode}
+pyhton manage.py makemigrations
+python manage.py makemigrations core
+python manage.py migrate
+python manage.py import_my_data {Repertoire/des/donnees} {mode}
     Mode: Comportement a adopter si l id du genome existe deja : k = garde les deux, r = remplace le genome existant, i = ignore le nouveau genome 
 Cela cree automatiquement les comptes suivants :
 
