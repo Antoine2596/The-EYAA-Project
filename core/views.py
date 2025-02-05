@@ -308,7 +308,9 @@ def attribution_sequence(request, sequence_id):
         Annotation.objects.create(
             annotation_id=f"ANN_{sequence_id}",
             annotation_text="",
-            is_validated=False
+            sequence=sequence_id,
+            is_validated=False,
+            annotation_author=annotateur
         )
 
         sequence_id.sequence_status = "Assigned"
