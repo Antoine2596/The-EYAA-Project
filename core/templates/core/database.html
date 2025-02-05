@@ -147,9 +147,13 @@ Database - EYAA
             <input type="number" name="max_length" placeholder="Max">
             <hr>
 
-            <!-- Numéro de chromosome -->
-            <label for="chromosome">Numéro de chromosome :</label>
-            <input type="text" name="chromosome" placeholder="Ex : 1, X, Y">
+            <!-- Support génétique -->
+            <label for="chromosome">Support génétique :</label>
+            <select name="sequence_type">
+                <option value="">Tous</option>
+                <option value="chromosome">Chromosome</option>
+                <option value="plasmid">Plasmide</option>
+            </select>
             <hr>
 
             <!-- Type ADN ou ARN -->
@@ -158,6 +162,15 @@ Database - EYAA
                 <option value="">Tous</option>
                 <option value="ADN">ADN</option>
                 <option value="ARN">ARN</option>
+            </select>
+
+            <!-- Brin Direct ou Indirect -->
+            <label for="sequence_type">Brin :</label>
+            <select name="sequence_type">
+                <option value="">Tous</option>
+                <option value=1>Direct</option>
+                <option value=-1>Indirect</option>
+                <option value=0>Inconnu</option>
             </select>
 
             <hr>
