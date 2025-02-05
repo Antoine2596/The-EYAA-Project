@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
-from core.models import Genome, Sequence, Annotation, CustomUser, CustomUserManager, Utilisateur
+from core.models import Genome, Sequence, Annotation, CustomUser
 import os 
-import math
+
 
 
 class Command(BaseCommand):
@@ -42,7 +42,21 @@ class Command(BaseCommand):
                     dic[id]["Genome"] = options['data_folder']+ "/" + f
 
             else:
-                print("Erreur avec le fichier ", f , "\n Les noms de fichiers doivent respecter le format suivant : Genre_Espece_id \n Pour les fichiers de cds ou de proteines ils doivent finir par _pep ou _cds ")
+
+                id = (name.split(".")[0]).split("_")[0]
+
+                if id not in dic.keys():
+                    dic[id] = {}
+                    dic[id]["Genra"] = "Unknown"
+                    dic[id]["Species"] = "Unknown"
+
+                if name.split(".")[0].endswith("cds"):
+                    dic[id]["cds"] = options['data_folder']+ "/" +f
+                elif name.split(".")[0].endswith("pep"):
+                    dic[id]["pep"] = options['data_folder']+ "/" + f
+                else:
+                    dic[id]["Genome"] = options['data_folder']+ "/" + f
+
             
         # 2-Creation des organismes dans la base de données : Genome, puis sequence et annotation
 
@@ -251,10 +265,3 @@ class Command(BaseCommand):
         if all("annotation" in v and v["annotation"] for v in dic.values()):
             genome.is_annotated = True
             genome.save()
-
-
-
-
-
-                
-
