@@ -49,7 +49,7 @@ ROLE_CHOICES = [
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(unique=True, primary_key=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="lecteur")
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="visiteur")
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]

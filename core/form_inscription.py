@@ -9,7 +9,6 @@ class CustomUserCreationForm(UserCreationForm):
             "email",
             "first_name",
             "last_name",
-            "role",      # faudra l'enlever hein
             "password1",
             "password2",
         ]
@@ -17,7 +16,6 @@ class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["email"].label = "Adresse email"
-        self.fields["role"].label = "Rôle"
         self.fields["password1"].label = "Mot de passe"
         self.fields["password2"].label = "Confirmation du mot de passe"
         # https://stackoverflow.com/questions/46945449/how-to-edit-usercreationform-password-help-text
