@@ -34,9 +34,9 @@ class Command(BaseCommand):
                     dic[id]["Genra"] = name.split("_")[0]
                     dic[id]["Species"] = name.split("_")[1]
                 
-                if f.split("_")[-1] == "cds.fa":
+                if f.split(".")[0].endswith("cds"):
                     dic[id]["cds"] = options['data_folder']+ "/" +f
-                elif f.split("_")[-1] == "pep.fa":
+                elif f.split(".")[0].endswith("pep"):
                     dic[id]["pep"] = options['data_folder']+ "/" + f
                 else:
                     dic[id]["Genome"] = options['data_folder']+ "/" + f
@@ -50,9 +50,9 @@ class Command(BaseCommand):
                     dic[id]["Genra"] = "Unknown"
                     dic[id]["Species"] = "Unknown"
 
-                if name.split(".")[0].endswith("cds"):
+                if f.split(".")[0].endswith("cds"):
                     dic[id]["cds"] = options['data_folder']+ "/" +f
-                elif name.split(".")[0].endswith("pep"):
+                elif f.split(".")[0].endswith("pep"):
                     dic[id]["pep"] = options['data_folder']+ "/" + f
                 else:
                     dic[id]["Genome"] = options['data_folder']+ "/" + f
