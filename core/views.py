@@ -157,13 +157,15 @@ def inscription(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.role = "visiteur"
+            user.role = "visiteur"  
+            user.requested_role = form.cleaned_data.get('requested_role') 
             user.save()
             return redirect('connexion')
     else:
         form = CustomUserCreationForm()
 
     return render(request, "core/inscription.html", {"form": form})
+
 
 
 def connexion(request):

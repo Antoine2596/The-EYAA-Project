@@ -14,9 +14,10 @@ from django.dispatch import receiver
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ("email", "first_name", "last_name", "role", "is_staff", "is_superuser", "last_login")
-    search_fields = ("email", "first_name", "last_name", "role")
-    list_editable = ("role",)  # Permet la modification du rôle directement depuis la liste des utilisateurs
+    list_display = ("email", "first_name", "last_name", "role", "requested_role", "is_staff", "is_superuser", "last_login")
+    search_fields = ("email", "first_name", "last_name", "role", "requested_role")
+    list_editable = ("role",) 
+
 
 
 # Formulaire pour recuperer manuellement l id et le nom du genome 

@@ -30,7 +30,7 @@ header {
     font-weight: bold;
     font-family: "Audiowide", serif;
     text-transform: uppercase;
-}
+}   
 
 .site-name a {
     color: white;
@@ -108,6 +108,9 @@ header {
     background-color: teal;
 }
 
+.profile-icon{
+    text-decoration: none;
+}
 /* Volet */
 .button_volet {
     color: white;
@@ -270,6 +273,10 @@ header {
 }
 
 h2{
+    text-align: center;
+}
+
+.filtre h2{
     text-shadow: black 0 0 3px;
     text-align: center;
     font-size: 15px;
@@ -287,4 +294,53 @@ h2{
     background-size: cover;
     background-position: center;
     transition: opacity 0.5s ease; 
+}
+
+.function_gene_protein_vizu {
+    position: relative;
+    background-image: url("../images/gene_dna_visualization.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.function_dna_alignement {
+    position: relative;
+    background-image: url("../images/gene_protein_alignment.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.BD_info {
+    position: relative;
+    background-image: url("../images/BD_image.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.requete_genome {
+    position: relative;
+    background-image: url("../images/requete_genome.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.validation_annotation{
+    position: relative;
+    background-image: url("../images/validation_annotation.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+
+.list_annotation{
+    position: relative;
+    background-image: url("../images/list_annotation.jpg");
+    background-size: cover; 
+    background-position: center;
+    transition: opacity 0.5s ease;   
 }
