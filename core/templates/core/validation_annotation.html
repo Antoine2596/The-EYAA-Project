@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'core/style_validation.css' %}">
+
+    <div class="validation-container">
+        <h1>Validation de l'Annotation</h1>
+
+        <div class="annotation-details">
+            <h2>Annotation ID : {{ annotation.annotation_id }}</h2>
+            <p>Auteur : {{ annotation.annotation_author }} </p>
+            <p><strong>Sequence ID :</strong> {{ annotation.sequence.sequence_id }}</p>
+            <p><strong>Genome Organism :</strong> {{ annotation.sequence.genome.organism }}</p>
+            <br>
+            <p><strong>Texte de l'annotation :</strong><br> 
+            {{ annotation.annotation_text }}</p>
+        </div>
+
+        {% if annotation.annotation_author.email != user.email %}
+
+            <div class="validation-actions">
+                <h3>Souhaitez-vous valider ou rejeter cette annotation ?</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="comment-section">
+                        <label for="comment">Commentaire (facultatif en cas de rejet) :</label>
+                        <textarea id="comment" name="comment" rows="4" placeholder="Expliquez pourquoi vous rejetez l'annotation (facultatif)"></textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" name="action" value="validate" class="btn-validate">Valider</button>
+                        <button type="submit" name="action" value="reject" class="btn-reject">Rejeter</button>
+                    </div>
+
+                </form>
+            </div>
+        {% else %}
+            <h3>En tant que propre annotateur, vous ne pouvez vous-même valider cette annotation.</h3>
+        {% endif %}
+
+    </div>
+{% endblock %}

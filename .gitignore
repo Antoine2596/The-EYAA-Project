@@ -5,4 +5,3 @@ __pycache__/*
 django_env/
 venv/
 db.sqlite3
-

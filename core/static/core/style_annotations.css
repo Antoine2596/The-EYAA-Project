@@ -1,0 +1,70 @@
+/* annotations.css */
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+    color: #444;
+}
+
+/* Container for the cards */
+.annotations-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Individual annotation card */
+.annotation-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.annotation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.annotation-card h2 {
+    font-size: 18px;
+    margin: 0 0 10px;
+    color: #007BFF;
+}
+
+.annotation-card p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 5px 0;
+}
+
+/* View Details button */
+.btn-view {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.btn-view:hover {
+    background-color: #0056b3;
+}

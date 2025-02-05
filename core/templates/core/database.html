@@ -6,6 +6,7 @@ Database - EYAA
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'core/style_database.css' %}">
 
     <div class="search-bar-container">
         <form method="GET" action="{% url 'genome_database' %}">
@@ -15,19 +16,23 @@ Database - EYAA
             </div>
         </form>
     </div>
-
+    <div class="results-summary">
+        <span class="badge-results badge-genome">Génomes : {{ genomes|length }}</span>
+        <span class="badge-results badge-sequence">Séquences : {{ sequences|length }}</span>
+        <span class="badge-results badge-annotation">Annotations : {{ annotations|length }}</span>
+    </div>
+    
     <div class="main-content">
-
-        <div class="database-section">
-            <h2>Génomes entiers</h2>
+    <div class="database-section">
     <div class="database-container">
         {% if genomes %}
             {% for genome in genomes %}
             <div class="sequence-card">
+                <div class="badge genome">Génome</div>
                 <h3>{{ genome.genome_id }}</h3>
-                <p><strong>Organisme :</strong> {{ genome.organism }}</p>
-                <p><strong>Type :</strong> {{ genome.get_genome_type_display }}</p>
-                <p><strong>Annoté :</strong> {{ genome.is_annotated }}</p>
+                <p><strong>Organisme :</strong> {{ genome.organism }}&nbsp;
+                <strong>Type :</strong> {{ genome.get_genome_type_display }}&nbsp;
+                <strong>Annoté :</strong> {{ genome.is_annotated }}</p>
                 {% if genome.genome_id %}
                     <a href="{% url 'visualisation' 'genome' genome.genome_id %}" class="visualisation-access-button">Visualiser</a>
                 {% else %}
@@ -35,21 +40,18 @@ Database - EYAA
                 {% endif %}
             </div>
             {% endfor %}
-        {% else %}
-            <p>Aucun génome trouvé</p>
         {% endif %}
     </div>
-
-    <h2>Séquences</h2>
     <div class="database-container">
         {% if sequences %}
             {% for sequence in sequences %}
             <div class="sequence-card">
+                <div class="badge sequence">Séquence</div>
                 <h3>{{sequence.sequence_id }}</h3>
-                <p><strong>Gène :</strong> {{sequence.gene_name }}</p>
-                <p><strong>Statut :</strong> {{ sequence.get_sequence_status_display }}</p>
-                <p><strong>Organisme :</strong> {{ sequence.genome.organism }}</p>
-                <p><strong>Génome associé :</strong> {{ sequence.genome.genome_id }} <a href="{% url 'visualisation' 'genome' sequence.genome.genome_id %}">Accès génome entier</a></p>
+                <p><strong>Gène :</strong> {{sequence.gene_name }}&nbsp;
+                <strong>Statut :</strong> {{ sequence.get_sequence_status_display }}&nbsp;
+                <strong>Organisme :</strong> {{ sequence.genome.organism }}&nbsp;
+                <strong>Génome associé :</strong> {{ sequence.genome.genome_id }}&nbsp; <a href="{% url 'visualisation' 'genome' sequence.genome.genome_id %}">Accès génome entier</a></p>
                 {% if sequence.sequence_id %}
                     <a href="{% url 'visualisation' 'sequence' sequence.sequence_id %}" class="visualisation-access-button">Visualiser</a>
                 {% else %}
@@ -57,19 +59,16 @@ Database - EYAA
                 {% endif %}
             </div>
             {% endfor %}
-        {% else %}
-            <p>Aucune séquence trouvée</p>
         {% endif %}
     </div>
-
-    <h2>Annotations</h2>
     <div class="database-container">
         {% if annotations %}
             {% for annotation in annotations %}
             <div class="sequence-card">
+                <div class="badge annotation">Annotation</div>
                 <h3>{{ annotation.annotation_id }}</h3>
-                <p><strong>Auteur :</strong> {{ annotation.annotation_author }}</p>
-                <p><strong>Séquence associée :</strong> {{ annotation.sequence.sequence_id }}</p>
+                <p><strong>Auteur :</strong> {{ annotation.annotation_author }}&nbsp;
+                <strong>Séquence associée :</strong> {{ annotation.sequence.sequence_id }}&nbsp;</p>
                 {% if annotation.annotation_id %}
                     <a href="{% url 'visualisation' 'annotation' annotation.annotation_id %}" class="visualisation-access-button">Visualiser</a>
                 {% else %}
@@ -77,8 +76,6 @@ Database - EYAA
                 {% endif %}
             </div>
             {% endfor %}
-        {% else %}
-            <p>Aucune annotation trouvée</p>
         {% endif %}
 
     </div>
