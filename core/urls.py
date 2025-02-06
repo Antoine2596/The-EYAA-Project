@@ -17,5 +17,6 @@ urlpatterns = [
     path("outil_validation/", views.annotations_listing, name="annotations_listing"),
     path("outil_validation/annotation_detail/<str:annotation_id>/", views.validate_annotation, name="validate_annotation"),
     path("attribution_sequence/", views.sequences_non_assigned, name="sequences_non_assigned"),
-    path("attribution_sequence/sequence_detail/<str:sequence_id>/", views.attribution_sequence, name="attribution"),
+    path("attribution_sequence/sequence_detail/<str:sequence_id>/", views.attribution_sequence, name="attribution_manuelle"),
+    path('attribution_sequence/attribution_auto', views.attribution_auto, name='attribution_auto'),
 ]

@@ -76,7 +76,7 @@ class AnnotationAdmin(ImportMixin, admin.ModelAdmin):
     resource_class = AnnotationResource  # Lien avec la ressource
 
     list_display = ("annotation_id", "annotation_text", "annotation_author")
-    search_fields = ("annotation_id", "annotation_text", "annotation_author")
+    search_fields = ("annotation_id", "annotation_text", "annotation_author__email")
 
      # Empêche l'ajout manuel de génomes
     def has_add_permission(self, request):

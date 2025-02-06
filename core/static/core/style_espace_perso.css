@@ -7,6 +7,7 @@
 
 /* Menu de navigation entre Mes informations et Mes annotations */
 .vertical-menu {
+    height: fit-content;
     width: 250px;
     background-color: #f4f4f4;
     padding: 20px;
@@ -184,4 +185,39 @@
 
 .status-validated {
     background-color: #4CAF50;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 8px;
+}
+
+.pagination a, .pagination span {
+    padding: 8px 12px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a {
+    background-color: #007BFF;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #0056b3;
+}
+
+.pagination span {
+    background-color: #E3F2FD;
+    color: #007BFF;
+}
+
+.pagination a:disabled {
+    background-color: #B0C4DE;
+    cursor: not-allowed;
 }
