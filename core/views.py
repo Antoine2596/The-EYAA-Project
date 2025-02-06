@@ -15,31 +15,50 @@ from django.http import HttpResponseForbidden
 
 from django.utils.timezone import now
 
+from django.shortcuts import redirect
+
+
 
 from django.http import HttpResponse
 #from import_export.formats.base import BaseFormat
 from .resources import GenomeResource
 from .admin import GenomeImportForm
 
+##############
+# Fonction pour accès
+#############
+# Fonction pour gérer l'accès
+def role_required(role1, role2=None, role3=None):
+    def decorator(view_func):
+        def wrapper(request):
+            if request.user.is_authenticated:  # Vérifie si l'utilisateur est connecté
+                user_role = request.user.role
+                if user_role in [role1, role2, role3]:  # Vérifie le rôle
+                    return view_func(request)
+            return redirect('access_denied')  # Redirection si non connecté ou mauvais rôle
+        return wrapper
+    return decorator
+
+# Page pour les accès refusés
+def access_denied(request):
+    return render(request, "core/access_denied.html")
+
 # Page d'accueil
 def page_non_connecte(request):
     return render(request, "core/non_connecte.html")
 
-@login_required
+# Accès public (pas de restriction)
 def home(request):
-    return render(request,"core/home.html")
+    return render(request, "core/home.html")
+
+# Accès restreint à certains rôles
+@role_required("lecteur", "annotateur", "validateur")
+def contacts(request):
+    return render(request, "core/contacts.html")
+
 
 # @login_required
-# def home(request):
-#     if request.user.role == "visiteur":
-#         return HttpResponseForbidden("Vous êtes visiteurs : vous n’avez accès à rien.")
-#     return render(request, "core/home.html") 
-
-
-def contacts(request):
-    return render(request,"core/contacts.html")
-
-@login_required
+@role_required(["lecteur", "annotateur", "validateur"])
 def profile(request):
     return render(request, "core/base_profile.html")
 
@@ -185,6 +204,7 @@ def connexion(request):
             messages.error(request, "Adresse email ou mot de passe incorrect.")
     return render(request, "core/connexion.html")
 
+@role_required(["lecteur", "annotateur", "validateur"])
 def genome_list(request):
     genomes = Genome.objects.all()  # Récupère tous les génomes
     return render(request, "test.html", {"genomes": genomes})
@@ -193,8 +213,8 @@ def genome_list(request):
 def is_not_visitor(user):
     return user.role != "visiteur"
 
-@login_required
-@user_passes_test(is_not_visitor)
+
+@role_required("lecteur", "annotateur", "validateur")
 def database_view(request):
     user_request = request.GET.get("user_request", "").strip()
     filter_types = request.GET.getlist("filter_type")
@@ -261,13 +281,13 @@ def is_validator(user):
     return user.role == "validateur"
 
 
-@user_passes_test(is_validator)
+@role_required("validateur")
 def annotations_listing(request):
     non_validated_annotations = Annotation.objects.filter(sequence__sequence_status="Awaiting validation")
 
     return render(request, "core/annotations_non_validates.html", {"annotations": non_validated_annotations})
 
-@user_passes_test(is_validator)
+@role_required(["validateur"])
 def validate_annotation(request, annotation_id):
     annotation = get_object_or_404(Annotation, annotation_id=annotation_id)
     sequence = annotation.sequence

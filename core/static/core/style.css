@@ -220,11 +220,11 @@ header {
 
 
 .zone-fonctions{
-    margin-top: 15px;
+    margin-top: 5%;
     padding-left: 15%;
     padding-right: 15%;
     display: flex;
-    height: 40vh;
+    height: 60vh;
     z-index: 0;
     /* transform: translate(-50%,0); */
     align-items: flex-start;

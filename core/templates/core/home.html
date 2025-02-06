@@ -7,34 +7,40 @@ Accueil - EYAA
 
 {% block content %}
 <div class="zone-fonctions">
-    <a class="lien_function function_gene_protein_vizu" href="#1">
-            <div class="filtre">
-                <h2>Visualisation Gene-Proteine</h2>
-            </div>
-    </a>
-    <a class="lien_function function_dna_alignement" href="#1">
-            <div class="filtre">
-                <h2>Do Alignement</h2>
+    <a class="lien_function function_gene_protein_vizu" href="{% url 'genome_database' %}">
+        <div class="filtre">
+            <h2>Visualisation Gene-Proteine</h2>
         </div>
     </a>
-    <a class="lien_function requete_genome" href="#1">
-            <div class="filtre">
-                <h2>requête génome</h2>
-            </div>
+
+    <a class="lien_function function_dna_alignement" href="{% url 'attribution' sequence_id='1' %}">
+        <div class="filtre">
+            <h2>Do Alignement</h2>
+        </div>
     </a>
-    <a class="lien_function BD_info" href="#1">
-            <div class="filtre">
-                <h2>Accès info BD</h2>
-            </div>
+
+    <a class="lien_function requete_genome" href="{% url 'genome_database' %}">
+        <div class="filtre">
+            <h2>Requête Génome</h2>
+        </div>
     </a>
-    <a class="lien_function list_annotation" href="#1">
-            <div class="filtre">
-                <h2>View annotation list</h2>
-            </div>
-    <a class="lien_function validation_annotation" href="#1">
-            <div class="filtre">
-                <h2>Validation annotation</h2>
-            </div>
+
+    <a class="lien_function BD_info" href="{% url 'profile_informations' %}">
+        <div class="filtre">
+            <h2>Accès Info BD</h2>
+        </div>
+    </a>
+
+    <a class="lien_function list_annotation" href="{% url 'profile_annotations' %}">
+        <div class="filtre">
+            <h2>View Annotation List</h2>
+        </div>
+    </a>
+
+    <a class="lien_function validation_annotation" href="{% url 'annotations_listing' %}">
+        <div class="filtre">
+            <h2>Validation Annotation</h2>
+        </div>
     </a>
 </div>
 {% endblock %}
