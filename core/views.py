@@ -195,17 +195,33 @@ def is_not_visitor(user):
 @login_required
 @user_passes_test(is_not_visitor)
 def database_view(request):
+
     user_request = request.GET.get("user_request", "").strip()
     filter_types = request.GET.getlist("filter_type")
     is_annotated = request.GET.get("is_annotated") == "true"
     min_length = request.GET.get("min_length")
     max_length = request.GET.get("max_length")
-    chromosome = request.GET.get("chromosome", "").strip()
+    chromosome = request.GET.get("chromosome")
+    sequence_type = request.GET.get("sequence_type")
+    Brin = request.GET.get("Brin")
+
+    print(f"""
+    User Request: {user_request}
+    Filter Types: {', '.join(filter_types) if filter_types else 'None'}
+    Is Annotated: {is_annotated}
+    Min Length: {min_length if min_length else 'Not specified'}
+    Max Length: {max_length if max_length else 'Not specified'}
+    Chromosome: {chromosome if chromosome else 'Not specified'}
+    Sequence Type: {sequence_type if sequence_type else 'Not specified'}
+    Brin: {Brin if Brin else 'Not specified'}
+    """)
+
 
     genomes = sequences = annotations = None
     
     # Si l'utilisateur n'a pas fait de recherche, afficher le dashboard
     dashboard = not bool(user_request)
+
 
     if dashboard:
         
@@ -250,26 +266,31 @@ def database_view(request):
                 (Q(annotation_id__icontains=user_request) | Q(annotation_text__icontains=user_request)) &
                 Q(is_validated=True))
         
-        combined_results = [
-            {"obj": obj, "type": "Genome"} for obj in genomes
-        ] + [
-            {"obj": obj, "type": "Sequence"} for obj in sequences
-        ] + [
-            {"obj": obj, "type": "Annotation"} for obj in annotations
-        ]
+        combined_results = []
+
+        if genomes:
+            combined_results += [{"obj": obj, "type": "Genome"} for obj in genomes]
+
+        if sequences:
+            combined_results += [{"obj": obj, "type": "Sequence"} for obj in sequences]
+
+        if annotations:
+            combined_results += [{"obj": obj, "type": "Annotation"} for obj in annotations]
+
         
         # Pagination
-        paginator = Paginator(combined_results, 3)  # 10 résultats par page
+        paginator = Paginator(combined_results, 10)  # 10 résultats par page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         
         context = {
             "dashboard": False,
             "page_obj": page_obj,
-            "total_genomes": len(genomes),
-            "total_sequences": len(sequences),
-            "total_annotations": len(annotations),
+            "total_genomes": len(genomes) if genomes is not None else 0,
+            "total_sequences": len(sequences) if sequences is not None else 0,
+            "total_annotations": len(annotations) if annotations is not None else 0,
         }
+
 
     return render(request, "core/database.html", context)
 

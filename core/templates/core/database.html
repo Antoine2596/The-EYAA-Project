@@ -11,7 +11,7 @@ Database - EYAA
     <div class="search-bar-container">
         <form method="GET" action="{% url 'genome_database' %}">
             <div class="search-bar">
-                <input type="text" name="user_request" placeholder="ID, organisme, gène" value="{{ request.GET.user_request }}">
+                <input type="text" name="user_request" placeholder="ID, organisme, gène" value="{{ request.GET.user_request|default_if_none:'' }}">
                 <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
             </div>
         </form>
@@ -122,55 +122,65 @@ Database - EYAA
 
             <h3>Type</h3>
             <label>
-                <input type="checkbox" name="filter_type" value="genome"> Génomes
+                <input type="checkbox" name="filter_type" value="genome"
+                    {% if "genome" in request.GET.filter_type %}checked{% endif %}> Génomes
             </label><br>
             <label>
-                <input type="checkbox" name="filter_type" value="sequence"> Séquences
+                <input type="checkbox" name="filter_type" value="sequence"
+                    {% if "sequence" in request.GET.filter_type %}checked{% endif %}> Séquences
             </label><br>
             <label>
-                <input type="checkbox" name="filter_type" value="annotation"> Annotations
+                <input type="checkbox" name="filter_type" value="annotation"
+                    {% if "annotation" in request.GET.filter_type %}checked{% endif %}> Annotations
             </label>
-
+            
+            
+            
             <hr>
 
             <h3>Statut</h3>
             <label>
-                <input type="checkbox" name="is_annotated" value="true"> Annoté uniquement
+                <input type="checkbox" name="is_annotated" value="true"
+                    {% if "true" in request.GET.is_annotated %}checked{% endif %}> Annoté uniquement
+            </label>
             </label>
             <hr>
             
             <h3> Avancés</h3>
             <!-- Longueur de séquence -->
             <label for="min_length">Longueur minimale :</label>
-            <input type="number" name="min_length" placeholder="Min">
+                <input type="number" name="min_length" placeholder="Min" value="{{ request.GET.min_length }}">
             <label for="max_length">Longueur maximale :</label>
-            <input type="number" name="max_length" placeholder="Max">
+                <input type="number" name="max_length" placeholder="Max" value="{{ request.GET.max_length }}">
             <hr>
+
+            
+            
 
             <!-- Support génétique -->
             <label for="chromosome">Support génétique :</label>
-            <select name="sequence_type">
-                <option value="">Tous</option>
-                <option value="chromosome">Chromosome</option>
-                <option value="plasmid">Plasmide</option>
+            <select name="chromosome">
+                <option value="" {% if not request.GET.chromosome %}selected{% endif %} >Tous</option>
+                <option value="chromosome" {% if request.GET.chromosome == "chromosome" %}selected{% endif %}>Chromosome</option>
+                <option value="plasmid" {% if request.GET.chromosome == "plasmid" %}selected{% endif %}>Plasmide</option>
             </select>
             <hr>
 
             <!-- Type ADN ou ARN -->
             <label for="sequence_type">Type :</label>
             <select name="sequence_type">
-                <option value="">Tous</option>
-                <option value="ADN">ADN</option>
-                <option value="ARN">ARN</option>
+                <option value="" {% if not request.GET.sequence_type %}selected{% endif %}>Tous</option>
+                <option value="ADN" {% if request.GET.sequence_type == "ADN" %}selected{% endif %}>ADN</option>
+                <option value="ARN" {% if request.GET.sequence_type == "ARN" %}selected{% endif %}>ARN</option>
             </select>
 
             <!-- Brin Direct ou Indirect -->
-            <label for="sequence_type">Brin :</label>
-            <select name="sequence_type">
-                <option value="">Tous</option>
-                <option value=1>Direct</option>
-                <option value=-1>Indirect</option>
-                <option value=0>Inconnu</option>
+            <label for="Brin">Brin :</label>
+            <select name="Brin">
+                <option value="" {% if not request.GET.Brin %}selected{% endif %} >Tous</option>
+                <option value=1 {% if request.GET.Brin == 1 %}selected{% endif %}>Direct</option>
+                <option value=-1 {% if request.GET.Brin == -1 %}selected{% endif %}>Indirect</option>
+                <option value=0 {% if request.GET.Brin == 0 %}selected{% endif %}>Inconnu</option>
             </select>
 
             <hr>
