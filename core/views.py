@@ -259,7 +259,9 @@ def database_view(request):
             if max_length:
                 sequences = sequences.filter(sequence_length__lte=int(max_length))
             if chromosome:
-                sequences = sequences.filter(num_chromosome__iexact=chromosome)
+                sequences = sequences.filter(information_support__iexact=chromosome)
+            if Brin:
+                sequences = sequences.filter(sequence_brin__iexact=chromosome)
 
         if "annotation" in filter_types or not filter_types:
             annotations = Annotation.objects.filter(
