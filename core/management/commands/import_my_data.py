@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
-from core.models import Genome, Sequence, Annotation, CustomUser, CustomUserManager, Utilisateur
-import os 
-import math
+from core.models import Genome, Sequence, Annotation, CustomUser
+import os, time
+
 
 
 class Command(BaseCommand):
@@ -34,15 +34,29 @@ class Command(BaseCommand):
                     dic[id]["Genra"] = name.split("_")[0]
                     dic[id]["Species"] = name.split("_")[1]
                 
-                if f.split("_")[-1] == "cds.fa":
+                if f.split(".")[0].endswith("cds"):
                     dic[id]["cds"] = options['data_folder']+ "/" +f
-                elif f.split("_")[-1] == "pep.fa":
+                elif f.split(".")[0].endswith("pep"):
                     dic[id]["pep"] = options['data_folder']+ "/" + f
                 else:
                     dic[id]["Genome"] = options['data_folder']+ "/" + f
 
             else:
-                print("Erreur avec le fichier ", f , "\n Les noms de fichiers doivent respecter le format suivant : Genre_Espece_id \n Pour les fichiers de cds ou de proteines ils doivent finir par _pep ou _cds ")
+
+                id = (name.split(".")[0]).split("_")[0]
+
+                if id not in dic.keys():
+                    dic[id] = {}
+                    dic[id]["Genra"] = "Unknown"
+                    dic[id]["Species"] = "Unknown"
+
+                if f.split(".")[0].endswith("cds"):
+                    dic[id]["cds"] = options['data_folder']+ "/" +f
+                elif f.split(".")[0].endswith("pep"):
+                    dic[id]["pep"] = options['data_folder']+ "/" + f
+                else:
+                    dic[id]["Genome"] = options['data_folder']+ "/" + f
+
             
         # 2-Creation des organismes dans la base de données : Genome, puis sequence et annotation
 
@@ -165,10 +179,14 @@ class Command(BaseCommand):
                             dic[id]["status"] = "Validated"
                         elif len(value.split(":"))>1 :
                             chr = value.split(":")
-                            dic[id]["information_support"] = str(chr[1])
+                            dic[id]["information_support"] = key
                             dic[id]["start"] = int(chr[2])
                             dic[id]["stop"] = int(chr[3])
                             dic[id]["length"] = abs(int(chr[3])-int(chr[2]))
+                            dic[id]["brin"] = int(chr[-1])
+                            if abs(dic[id]["brin"]) != 1:
+                                dic[id]["brin"] = 0
+
                         
                         if not "gene_name" in dic[id].keys():
                             dic[id]["gene_name"] = "None"
@@ -210,6 +228,7 @@ class Command(BaseCommand):
 
         # 3 - Creation des sequences en bulk
 
+        #print(dic)
         genome = Genome.objects.get(genome_id=genome_id)
         sequence_objects = [
             Sequence(
@@ -222,7 +241,8 @@ class Command(BaseCommand):
                 sequence_length=v.get("length", None),
                 gene_name=v.get("gene_name", "None"),
                 sequence_status=v.get("status", "Nothing"),
-                genome=genome
+                genome=genome,
+                sequence_brin=v["brin"]
             )
             for k, v in dic.items()
         ]
@@ -231,12 +251,10 @@ class Command(BaseCommand):
 
         # 4 -Creation des annotations en bulk
 
-
         annotation_objects = [
             Annotation(
-                annotation_id = k,
+                annotation_id = "ANN_"+ str(k),
                 annotation_text =v["annotation"],
-                #annotation_author = None,
                 sequence_id = k,
                 is_validated = True,
             )
@@ -251,10 +269,3 @@ class Command(BaseCommand):
         if all("annotation" in v and v["annotation"] for v in dic.values()):
             genome.is_annotated = True
             genome.save()
-
-
-
-
-
-                
-

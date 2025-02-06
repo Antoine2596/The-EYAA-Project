@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
 from django.utils.timezone import now
+from django.core.paginator import Paginator
 
 from django.shortcuts import redirect
 
@@ -224,9 +225,29 @@ def database_view(request):
     chromosome = request.GET.get("chromosome", "").strip()
 
     genomes = sequences = annotations = None
+    
+    # Si l'utilisateur n'a pas fait de recherche, afficher le dashboard
+    dashboard = not bool(user_request)
 
-    # Recherche filtrée
-    if user_request:
+    if dashboard:
+        
+        total_genomes = Genome.objects.count()
+        total_species = Genome.objects.values("organism").distinct().count()
+        total_sequences = Sequence.objects.count()
+        annotated_sequences = Annotation.objects.filter(is_validated=True).values("sequence").distinct().count()
+        
+        # Calcul de la proportion des séquences annotées
+        annotation_ratio = (annotated_sequences / total_sequences * 100) if total_sequences > 0 else 0
+
+        context = {
+            "dashboard": True,
+            "total_genomes": total_genomes,
+            "total_species": total_species,
+            "total_sequences": total_sequences,
+            "annotation_ratio": annotation_ratio
+        }
+
+    else:
         query = Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)
         if "genome" in filter_types or not filter_types:
             genomes = Genome.objects.filter(query)
@@ -244,37 +265,35 @@ def database_view(request):
             if max_length:
                 sequences = sequences.filter(sequence_length__lte=int(max_length))
             if chromosome:
-                sequences = sequences.filter(information_support__iexact=chromosome)
+                sequences = sequences.filter(num_chromosome__iexact=chromosome)
 
         if "annotation" in filter_types or not filter_types:
             annotations = Annotation.objects.filter(
                 (Q(annotation_id__icontains=user_request) | Q(annotation_text__icontains=user_request)) &
                 Q(is_validated=True))
-    else:
-        # Pas de recherche, afficher tout
-        if "genome" in filter_types or not filter_types:
-            genomes = Genome.objects.all()
-            if is_annotated:
-                genomes = genomes.filter(is_annotated=True)
-        if "sequence" in filter_types or not filter_types:
-            sequences = Sequence.objects.all()
+        
+        combined_results = [
+            {"obj": obj, "type": "Genome"} for obj in genomes
+        ] + [
+            {"obj": obj, "type": "Sequence"} for obj in sequences
+        ] + [
+            {"obj": obj, "type": "Annotation"} for obj in annotations
+        ]
+        
+        # Pagination
+        paginator = Paginator(combined_results, 3)  # 10 résultats par page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        context = {
+            "dashboard": False,
+            "page_obj": page_obj,
+            "total_genomes": len(genomes),
+            "total_sequences": len(sequences),
+            "total_annotations": len(annotations),
+        }
 
-            # Appliquer les filtres sur les résultats
-            if min_length:
-                sequences = sequences.filter(sequence_length__gte=int(min_length))
-            if max_length:
-                sequences = sequences.filter(sequence_length__lte=int(max_length))
-            if chromosome:
-                sequences = sequences.filter(information_support__iexact=chromosome)
-
-        if "annotation" in filter_types or not filter_types:
-            annotations = Annotation.objects.filter(Q(is_validated=True))
-
-    return render(request, "core/database.html", {
-        "genomes": genomes,
-        "sequences": sequences,
-        "annotations": annotations,
-    })
+    return render(request, "core/database.html", context)
 
 # Vérifier que l'utilisateur est un validateur
 def is_validator(user):
@@ -330,7 +349,9 @@ def attribution_sequence(request, sequence_id):
         Annotation.objects.create(
             annotation_id=f"ANN_{sequence_id}",
             annotation_text="",
-            is_validated=False
+            sequence=sequence_id,
+            is_validated=False,
+            annotation_author=annotateur
         )
 
         sequence_id.sequence_status = "Assigned"
