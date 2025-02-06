@@ -197,7 +197,7 @@ def is_not_visitor(user):
 def database_view(request):
 
     user_request = request.GET.get("user_request", "").strip()
-    filter_types = request.GET.getlist("filter_type")
+    selected_type = request.GET.get("type", "genome") 
     is_annotated = request.GET.get("is_annotated") == "true"
     min_length = request.GET.get("min_length")
     max_length = request.GET.get("max_length")
@@ -207,7 +207,7 @@ def database_view(request):
 
     print(f"""
     User Request: {user_request}
-    Filter Types: {', '.join(filter_types) if filter_types else 'None'}
+    Filter Types: {', '.join(selected_type) if selected_type else 'None'}
     Is Annotated: {is_annotated}
     Min Length: {min_length if min_length else 'Not specified'}
     Max Length: {max_length if max_length else 'Not specified'}
@@ -242,18 +242,18 @@ def database_view(request):
         }
 
     else:
-        query = Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)
-        if "genome" in filter_types or not filter_types:
-            genomes = Genome.objects.filter(query)
+        if selected_type == "genome":
+            genomes = Genome.objects.filter(
+                Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)
+            )
             if is_annotated:
                 genomes = genomes.filter(is_annotated=True)
+            
 
-        if "sequence" in filter_types or not filter_types:
+        elif selected_type == "sequence":
             sequences = Sequence.objects.filter(
                 Q(sequence_id__icontains=user_request) | Q(gene_name__icontains=user_request)
             )
-
-            # Appliquer les filtres sur les résultats
             if min_length:
                 sequences = sequences.filter(sequence_length__gte=int(min_length))
             if max_length:
@@ -261,38 +261,26 @@ def database_view(request):
             if chromosome:
                 sequences = sequences.filter(information_support__iexact=chromosome)
             if Brin:
-                sequences = sequences.filter(sequence_brin__iexact=chromosome)
+                sequences = sequences.filter(sequence_brin__iexact=Brin)
 
-        if "annotation" in filter_types or not filter_types:
-            annotations = Annotation.objects.filter(
-                (Q(annotation_id__icontains=user_request) | Q(annotation_text__icontains=user_request)) &
-                Q(is_validated=True))
-        
-        combined_results = []
 
-        if genomes:
-            combined_results += [{"obj": obj, "type": "Genome"} for obj in genomes]
+        combined_results = (
+            [{"obj": obj, "type": "Genome"} for obj in genomes] if genomes else []
+        ) + (
+            [{"obj": obj, "type": "Sequence"} for obj in sequences] if sequences else []
+        )
 
-        if sequences:
-            combined_results += [{"obj": obj, "type": "Sequence"} for obj in sequences]
-
-        if annotations:
-            combined_results += [{"obj": obj, "type": "Annotation"} for obj in annotations]
-
-        
-        # Pagination
-        paginator = Paginator(combined_results, 10)  # 10 résultats par page
+        paginator = Paginator(combined_results, 3)  
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        
+
         context = {
             "dashboard": False,
             "page_obj": page_obj,
-            "total_genomes": len(genomes) if genomes is not None else 0,
-            "total_sequences": len(sequences) if sequences is not None else 0,
-            "total_annotations": len(annotations) if annotations is not None else 0,
+            "total_genomes": len(genomes) if genomes else 0,
+            "total_sequences": len(sequences) if sequences else 0,
+            "selected_type": selected_type,  # Garde la sélection active
         }
-
 
     return render(request, "core/database.html", context)
 

@@ -8,186 +8,195 @@ Database - EYAA
 {% block content %}
 <link rel="stylesheet" href="{% static 'core/style_database.css' %}">
 
-    <div class="search-bar-container">
-        <form method="GET" action="{% url 'genome_database' %}">
-            <div class="search-bar">
-                <input type="text" name="user_request" placeholder="ID, organisme, gène" value="{{ request.GET.user_request|default_if_none:'' }}">
-                <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
-            </div>
-        </form>
-    </div>
-    
-    <div class="main-content">
-        <div class="database-section">
-            {% if dashboard %}
-                <div class="dashboard">
-                    <h2>Statistiques de la Base de Données</h2>
-                    <div class="dashboard-cards">
-                        <div class="card">
-                            <h3>Total Génomes</h3>
-                            <p>{{ total_genomes }}</p>
-                        </div>
-                        <div class="card">
-                            <h3>Espèces Distinctes</h3>
-                            <p>{{ total_species }}</p>
-                        </div>
-                        <div class="card">
-                            <h3>Total Séquences</h3>
-                            <p>{{ total_sequences }}</p>
-                        </div>
-                        <div class="card">
-                            <h3>Proportion Annotée</h3>
-                            <p>{{ annotation_ratio|floatformat:2 }}%</p>
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="results-summary">
-                    <span class="badge-results badge-genome">Génomes : {{ total_genomes }}</span>
-                    <span class="badge-results badge-sequence">Séquences : {{ total_sequences }}</span>
-                    <span class="badge-results badge-annotation">Annotations : {{ total_annotations }}</span>
-                </div>
+<div class="search-bar-container">
+    <form method="GET" action="{% url 'genome_database' %}">
+        <div class="search-bar">
+            <input type="text" name="user_request" placeholder="ID, organisme, gène" value="{{ request.GET.user_request|default_if_none:'' }}">
+            <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
+        </div>
+    </form>
+</div>
 
-                {% for result in page_obj %}
-                    <div class="database-container">
-                        {% if result.type == 'Genome' %}
-                            <div class="sequence-card">
-                                <div class="badge genome">Génome</div>
-                                <h3>{{ result.obj.genome_id }}</h3>
-                                <p><strong>Organisme :</strong> {{ result.obj.organism }}&nbsp;
-                                <strong>Type :</strong> {{ result.obj.get_genome_type_display }}&nbsp;
-                                <strong>Annoté :</strong> {{ result.obj.is_annotated }}</p>
-                                {% if result.obj.genome_id %}
-                                    <a href="{% url 'visualisation' 'genome' result.obj.genome_id %}" class="visualisation-access-button">Visualiser</a>
-                                {% else %}
-                                    <p>Aucun accès de visualisation disponible pour ce génome</p>
-                                {% endif %}
-                            </div>
-                        {% elif result.type == 'Sequence' %}
-                            <div class="sequence-card">
-                                <div class="badge sequence">Séquence</div>
-                                <h3>{{result.obj.sequence_id }}</h3>
-                                <p><strong>Gène :</strong> {{result.obj.gene_name }}&nbsp;
-                                <strong>Statut :</strong> {{ result.obj.get_sequence_status_display }}&nbsp;
-                                <strong>Organisme :</strong> {{ result.obj.genome.organism }}&nbsp;
-                                <strong>Génome associé :</strong> {{ result.obj.genome.genome_id }}&nbsp; <a href="{% url 'visualisation' 'genome' result.obj.genome.genome_id %}">Accès génome entier</a></p>
-                                {% if result.obj.sequence_id %}
-                                    <a href="{% url 'visualisation' 'sequence' result.obj.sequence_id %}" class="visualisation-access-button">Visualiser</a>
-                                {% else %}
-                                    <p>Aucun accès de visualisation disponible pour cette séquence</p>
-                                {% endif %}
-                            </div>
-                        {% elif result.type == 'Annotation' %}
-                            <div class="sequence-card">
-                                <div class="badge annotation">Annotation</div>
-                                <h3>{{ result.obj.annotation_id }}</h3>
-                                <p><strong>Auteur :</strong> {{ result.obj.annotation_author }}&nbsp;
-                                <strong>Séquence associée :</strong> {{ result.obj.sequence.sequence_id }}&nbsp;</p>
-                                {% if result.obj.annotation_id %}
-                                    <a href="{% url 'visualisation' 'annotation' result.obj.annotation_id %}" class="visualisation-access-button">Visualiser</a>
-                                {% else %}
-                                    <p>Aucun accès de visualisation disponible pour cette annotation</p>
-                                {% endif %}
-                            </div>
-                        {% endif %}
+<div class="main-content">
+    <div class="database-section">
+        {% if dashboard %}
+            <div class="dashboard">
+                <h2>Statistiques de la Base de Données</h2>
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>Total Génomes</h3>
+                        <p>{{ total_genomes }}</p>
                     </div>
-                {% endfor %}
-                <div class="pagination">
-                    <span class="step-links">
-                        {% if page_obj.has_previous %}
-                            <a href="?page=1{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Premier</a>
-                            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Précédent</a>
-                        {% endif %}
-                        
-                        <span class="current">
-                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                        </span>
-                
-                        {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Suivant</a>
-                            <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Dernier</a>
-                        {% endif %}
-                    </span>
+                    <div class="card">
+                        <h3>Espèces Distinctes</h3>
+                        <p>{{ total_species }}</p>
+                    </div>
+                    <div class="card">
+                        <h3>Total Séquences</h3>
+                        <p>{{ total_sequences }}</p>
+                    </div>
+                    <div class="card">
+                        <h3>Proportion Annotée</h3>
+                        <p>{{ annotation_ratio|floatformat:2 }}%</p>
+                    </div>
                 </div>
-                
-            {% endif %}
+            </div>
+        {% else %}
+            <div class="results-summary">
+                <span class="badge-results badge-genome">Génomes : {{ total_genomes }}</span>
+                <span class="badge-results badge-sequence">Séquences : {{ total_sequences }}</span>
+            </div>
+
+            {% for result in page_obj %}
+                <div class="database-container">
+                    {% if result.type == 'Genome' %}
+                        <div class="sequence-card">
+                            <div class="badge genome">Génome</div>
+                            <h3>{{ result.obj.genome_id }}</h3>
+                            <p><strong>Organisme :</strong> {{ result.obj.organism }}&nbsp;
+                            <strong>Type :</strong> {{ result.obj.get_genome_type_display }}&nbsp;
+                            <strong>Annoté :</strong> {{ result.obj.is_annotated }}</p>
+                            {% if result.obj.genome_id %}
+                                <a href="{% url 'visualisation' 'genome' result.obj.genome_id %}" class="visualisation-access-button">Visualiser</a>
+                            {% else %}
+                                <p>Aucun accès de visualisation disponible pour ce génome</p>
+                            {% endif %}
+                        </div>
+                    {% elif result.type == 'Sequence' %}
+                        <div class="sequence-card">
+                            <div class="badge sequence">Séquence</div>
+                            <h3>{{result.obj.sequence_id }}</h3>
+                            <p><strong>Gène :</strong> {{result.obj.gene_name }}&nbsp;
+                            <strong>Statut :</strong> {{ result.obj.get_sequence_status_display }}&nbsp;
+                            <strong>Organisme :</strong> {{ result.obj.genome.organism }}&nbsp;
+                            <strong>Génome associé :</strong> {{ result.obj.genome.genome_id }}&nbsp; <a href="{% url 'visualisation' 'genome' result.obj.genome.genome_id %}">Accès génome entier</a></p>
+                            {% if result.obj.sequence_id %}
+                                <a href="{% url 'visualisation' 'sequence' result.obj.sequence_id %}" class="visualisation-access-button">Visualiser</a>
+                            {% else %}
+                                <p>Aucun accès de visualisation disponible pour cette séquence</p>
+                            {% endif %}
+                        </div>
+                    {% elif result.type == 'Annotation' %}
+                        <div class="sequence-card">
+                            <div class="badge annotation">Annotation</div>
+                            <h3>{{ result.obj.annotation_id }}</h3>
+                            <p><strong>Auteur :</strong> {{ result.obj.annotation_author }}&nbsp;
+                            <strong>Séquence associée :</strong> {{ result.obj.sequence.sequence_id }}&nbsp;</p>
+                            {% if result.obj.annotation_id %}
+                                <a href="{% url 'visualisation' 'annotation' result.obj.annotation_id %}" class="visualisation-access-button">Visualiser</a>
+                            {% else %}
+                                <p>Aucun accès de visualisation disponible pour cette annotation</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Premier</a>
+                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Précédent</a>
+                    {% endif %}
+                    
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+            
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Suivant</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Dernier</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
     </div>
 
     <div class="filter-menu">
         <h2>Filtres</h2>
         <form method="GET" action="{% url 'genome_database' %}">
             <input type="hidden" name="user_request" value="{{ request.GET.user_request }}">
-
+    
             <hr>
-
+    
             <h3>Type</h3>
-            <label>
-                <input type="checkbox" name="filter_type" value="genome"
-                    {% if "genome" in request.GET.filter_type %}checked{% endif %}> Génomes
-            </label><br>
-            <label>
-                <input type="checkbox" name="filter_type" value="sequence"
-                    {% if "sequence" in request.GET.filter_type %}checked{% endif %}> Séquences
-            </label><br>
-            <label>
-                <input type="checkbox" name="filter_type" value="annotation"
-                    {% if "annotation" in request.GET.filter_type %}checked{% endif %}> Annotations
-            </label>
-            
-            
-            
+            <label for="type">Choix des sortie:</label>
+            <select name="type" id="type" onchange="this.form.submit()">
+                <option value="genome" {% if request.GET.type == "genome" %}selected{% endif %}>Genome</option>
+                <option value="sequence" {% if request.GET.type == "sequence" %}selected{% endif %}>Sequence</option>
+            </select>
+    
             <hr>
 
             <h3>Statut</h3>
-            <label>
-                <input type="checkbox" name="is_annotated" value="true"
-                    {% if "true" in request.GET.is_annotated %}checked{% endif %}> Annoté uniquement
-            </label>
-            </label>
-            <hr>
-            
-            <h3> Avancés</h3>
-            <!-- Longueur de séquence -->
-            <label for="min_length">Longueur minimale :</label>
+                <label>
+                    <input type="checkbox" name="is_annotated" value="true"
+                        {% if "true" in request.GET.is_annotated %}checked{% endif %}> Annoté uniquement
+                </label>
+                <hr>
+    
+            {% if request.GET.type == "sequence" %}
+                
+        
+                <h3>Avancés</h3>
+                <!-- Longueur de séquence -->
+                <label for="min_length">Longueur minimale :</label>
                 <input type="number" name="min_length" placeholder="Min" value="{{ request.GET.min_length }}">
-            <label for="max_length">Longueur maximale :</label>
+                <label for="max_length">Longueur maximale :</label>
                 <input type="number" name="max_length" placeholder="Max" value="{{ request.GET.max_length }}">
-            <hr>
-
-            
-            
-
-            <!-- Support génétique -->
-            <label for="chromosome">Support génétique :</label>
-            <select name="chromosome">
-                <option value="" {% if not request.GET.chromosome %}selected{% endif %} >Tous</option>
-                <option value="chromosome" {% if request.GET.chromosome == "chromosome" %}selected{% endif %}>Chromosome</option>
-                <option value="plasmid" {% if request.GET.chromosome == "plasmid" %}selected{% endif %}>Plasmide</option>
-            </select>
-            <hr>
-
-            <!-- Type ADN ou ARN -->
-            <label for="sequence_type">Type :</label>
-            <select name="sequence_type">
-                <option value="" {% if not request.GET.sequence_type %}selected{% endif %}>Tous</option>
-                <option value="ADN" {% if request.GET.sequence_type == "ADN" %}selected{% endif %}>ADN</option>
-                <option value="ARN" {% if request.GET.sequence_type == "ARN" %}selected{% endif %}>ARN</option>
-            </select>
-
-            <!-- Brin Direct ou Indirect -->
-            <label for="Brin">Brin :</label>
-            <select name="Brin">
-                <option value="" {% if not request.GET.Brin %}selected{% endif %} >Tous</option>
-                <option value=1 {% if request.GET.Brin == 1 %}selected{% endif %}>Direct</option>
-                <option value=-1 {% if request.GET.Brin == -1 %}selected{% endif %}>Indirect</option>
-                <option value=0 {% if request.GET.Brin == 0 %}selected{% endif %}>Inconnu</option>
-            </select>
-
-            <hr>
-
+                <hr>
+    
+                <!-- Support génétique -->
+                <label for="chromosome">Support génétique :</label>
+                <select name="chromosome">
+                    <option value="" {% if not request.GET.chromosome %}selected{% endif %}>Tous</option>
+                    <option value="chromosome" {% if request.GET.chromosome == "chromosome" %}selected{% endif %}>Chromosome</option>
+                    <option value="plasmid" {% if request.GET.chromosome == "plasmid" %}selected{% endif %}>Plasmide</option>
+                </select>
+                <hr>
+    
+                <!-- Type ADN ou ARN -->
+                <label for="sequence_type">Type :</label>
+                <select name="sequence_type">
+                    <option value="" {% if not request.GET.sequence_type %}selected{% endif %}>Tous</option>
+                    <option value="ADN" {% if request.GET.sequence_type == "ADN" %}selected{% endif %}>ADN</option>
+                    <option value="ARN" {% if request.GET.sequence_type == "ARN" %}selected{% endif %}>ARN</option>
+                </select>
+    
+                <!-- Brin Direct ou Indirect -->
+                <label for="Brin">Brin :</label>
+                <select name="Brin">
+                    <option value="" {% if not request.GET.Brin %}selected{% endif %}>Tous</option>
+                    <option value="1" {% if request.GET.Brin == "1" %}selected{% endif %}>Direct</option>
+                    <option value="-1" {% if request.GET.Brin == "-1" %}selected{% endif %}>Indirect</option>
+                    <option value="0" {% if request.GET.Brin == "0" %}selected{% endif %}>Inconnu</option>
+                </select>
+                <hr>
+            {% endif %}
+    
             <button type="submit" class="filter-button">Appliquer les filtres</button>
         </form>
     </div>
 </div>
+
+{% block scripts %}
+<script>
+    const typeSelector = document.getElementById('type-selector');
+    const sequenceFilters = document.getElementById('sequence-filters');
+
+    // Initialement, cacher les filtres de séquence
+    if (typeSelector.value !== 'sequence') {
+        sequenceFilters.style.display = 'none';
+    }
+
+    // Afficher ou cacher les filtres de séquence en fonction de la sélection
+    typeSelector.addEventListener('change', function() {
+        if (typeSelector.value === 'sequence') {
+            sequenceFilters.style.display = 'block';
+        } else {
+            sequenceFilters.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}
 
 {% endblock %}
