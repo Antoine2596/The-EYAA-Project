@@ -16,7 +16,7 @@
     <p><strong>{{ annotations_count }}</strong> annotation(s) trouvée(s).</p>
     
     <div class="database-container">
-        {% if annotations.exists %}
+        {% if annotations %}
             {% for annotation in annotations %}
 
                 <div class="annotation-card">
@@ -29,6 +29,25 @@
                 </div>
 
             {% endfor %}
+            
+            <!-- pagination -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if annotations.has_previous %}
+                        <a href="?page=1&filter={{ status_filter }}">&laquo; Première</a>
+                        <a href="?page={{ annotations.previous_page_number }}&filter={{ status_filter }}">Précédent</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ annotations.number }} sur {{ annotations.paginator.num_pages }}
+                    </span>
+
+                    {% if annotations.has_next %}
+                        <a href="?page={{ annotations.next_page_number }}&filter={{ status_filter }}">Suivant</a>
+                        <a href="?page={{ annotations.paginator.num_pages }}&filter={{ status_filter }}">Dernière &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
 
         {% elif user.role == "lecteur" %}
             <p>En tant que lecteur vous n'avez pas accès à cette fonctionnalité.</p>

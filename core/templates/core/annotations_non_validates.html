@@ -5,8 +5,42 @@
 <link rel="stylesheet" href="{% static 'core/style_annotations.css' %}">
 
 <h1>Séquence en attente de validation</h1>
-<div class="annotations-container">
-    {% for annotation in annotations %}
+
+<div class="form-container">
+    <form method="GET" action="{% url 'annotations_listing' %}">
+        <div>
+            <label for="search">Rechercher :</label>
+            <input type="text" name="search" id="search" placeholder="Search Sequence ID or Annotation Text" value="{{ request.GET.search }}">
+        </div>
+        
+        <div>
+            <label for="genome">Choisir un génome :</label>
+            <select name="genome" id="genome">
+                <option value="">Tous les génomes</option>
+                {% for genome in genomes %}
+                    <option value="{{ genome.genome_id }}" {% if genome.genome_id == request.GET.genome %}selected{% endif %}>{{ genome.organism }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    
+        <div>
+            <label for="min_length">Longueur min :</label>
+            <input type="range" id="min_length" name="min_length" min="0" max="1000" value="{{ request.GET.min_length|default:0 }}">
+            <span id="min_length_value">{{ request.GET.min_length|default:0 }}</span>
+        </div>
+    
+        <div>
+            <label for="max_length">Longueur max :</label>
+            <input type="range" id="max_length" name="max_length" min="0" max="1000" value="{{ request.GET.max_length|default:1000 }}">
+            <span id="max_length_value">{{ request.GET.max_length|default:1000 }}</span>
+        </div>
+    
+        <button type="submit">Filtrer</button>
+    </form>
+</div>
+<p style="text-align: center; color: white; font-size: larger;"><strong>{{ annotations_count }}</strong> annotation(s) trouvée(s).</p>
+<div class="annotations-container" style="display: flex; flex-direction: column;">
+    {% for annotation in page_obj %}
         <div class="annotation-card">
             <h2>Annotation ID : {{ annotation.annotation_id }}</h2>
             <p>Auteur : {{ annotation.annotation_author }}</p>
@@ -19,5 +53,31 @@
     {% empty %}
         <p>Aucune annotation en attente de validation.</p>
     {% endfor %}
+
 </div>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">« Premier</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+    {% endif %}
+
+    <span>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Suivant</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Dernier »</a>
+    {% endif %}
+</div>
+
+<script>
+    // Script pour afficher les valeurs des sliders
+    document.getElementById("min_length").oninput = function() {
+        document.getElementById("min_length_value").textContent = this.value;
+    };
+    document.getElementById("max_length").oninput = function() {
+        document.getElementById("max_length_value").textContent = this.value;
+    };
+</script>
+
 {% endblock %}

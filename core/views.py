@@ -15,6 +15,7 @@ from django.http import HttpResponseForbidden
 
 from django.utils.timezone import now
 from django.core.paginator import Paginator
+from django.db.models import Count
 
 
 from django.http import HttpResponse
@@ -76,6 +77,7 @@ def profile_change_PSWD(request):
 def profile_annotations(request):
     status_filter = request.GET.get("filter", "all")
     annotations = Annotation.objects.filter(annotation_author=request.user)
+    page_number = request.GET.get("page", 1)
 
     if status_filter == "validated":
         annotations = annotations.filter(is_validated=True)
@@ -86,7 +88,10 @@ def profile_annotations(request):
 
     annotations_count = annotations.count()
 
-    return render(request, 'core/profile_annotations.html', {'annotations': annotations,'status_filter': status_filter,
+    paginator = Paginator(annotations, 2)
+    annotations_page = paginator.get_page(page_number)
+
+    return render(request, 'core/profile_annotations.html', {'annotations': annotations_page,'status_filter': status_filter,
         'annotations_count': annotations_count})
 
 
@@ -280,9 +285,35 @@ def is_validator(user):
 
 @user_passes_test(is_validator)
 def annotations_listing(request):
-    non_validated_annotations = Annotation.objects.filter(sequence__sequence_status="Awaiting validation")
+    genomes = Genome.objects.all()
 
-    return render(request, "core/annotations_non_validates.html", {"annotations": non_validated_annotations})
+    search = request.GET.get("search", "")
+    genome_filter = request.GET.get("genome", "")
+    min_length = int(request.GET.get("min_length", 0))
+    max_length = int(request.GET.get("max_length", 10000))
+    
+    filter_conditions = Q(sequence__sequence_status="Awaiting validation")
+    
+    if search:
+        filter_conditions &= Q(sequence__sequence_id__icontains=search)
+    
+    if genome_filter:
+        filter_conditions &= Q(sequence__genome__genome_id=genome_filter)
+    
+    if min_length:
+        filter_conditions &= Q(sequence__sequence_length__gte=min_length)
+    
+    if max_length:
+        filter_conditions &= Q(sequence__sequence_length__lte=max_length)
+
+    non_validated_annotations = Annotation.objects.filter(filter_conditions)
+    annotations_count = non_validated_annotations.count()
+
+    paginator = Paginator(non_validated_annotations, 50)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "core/annotations_non_validates.html",  {"page_obj": page_obj, "genomes": genomes, "annotations_count": annotations_count})
 
 @user_passes_test(is_validator)
 def validate_annotation(request, annotation_id):
@@ -312,8 +343,38 @@ def validate_annotation(request, annotation_id):
 
 @user_passes_test(is_validator)
 def sequences_non_assigned(request):
-    non_assigned_sequence = Sequence.objects.filter(sequence_status="Nothing")
-    return render(request, "core/sequences_non_assigned.html", {"sequences": non_assigned_sequence})
+
+    genomes = Genome.objects.all()
+
+    search = request.GET.get("search", "")
+    genome_filter = request.GET.get("genome", "")
+    min_length = int(request.GET.get("min_length", 0))
+    max_length = int(request.GET.get("max_length", 10000))
+    
+    filter_conditions = Q(sequence_status="Nothing")
+    
+    if search:
+        filter_conditions &= Q(sequence_id__icontains=search)
+    
+    if genome_filter:
+        filter_conditions &= Q(genome__genome_id=genome_filter)
+    
+    if min_length:
+        filter_conditions &= Q(sequence_length__gte=min_length)
+    
+    if max_length:
+        filter_conditions &= Q(sequence_length__lte=max_length)
+    
+    # Appliquer le filtrage
+    non_assigned_sequences = Sequence.objects.filter(filter_conditions)
+    sequences_count = non_assigned_sequences.count()
+    
+    # Pagination
+    paginator = Paginator(non_assigned_sequences, 50)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "core/sequences_non_assigned.html", {"page_obj": page_obj, "genomes": genomes, "sequences_count": sequences_count})
 
 @user_passes_test(is_validator)
 def attribution_sequence(request, sequence_id):
@@ -327,7 +388,9 @@ def attribution_sequence(request, sequence_id):
         Annotation.objects.create(
             annotation_id=f"ANN_{sequence_id}",
             annotation_text="",
-            is_validated=False
+            is_validated=False,
+            annotation_author=annotateur,
+            sequence=sequence_id,
         )
 
         sequence_id.sequence_status = "Assigned"
@@ -337,6 +400,38 @@ def attribution_sequence(request, sequence_id):
         return redirect("sequences_non_assigned")
 
     return render(request, "core/attribution_sequence.html", {"sequence": sequence_id, "annotateurs": annotateurs})
+
+@user_passes_test(is_validator)
+def attribution_auto(request):
+    non_assigned_sequences = Sequence.objects.filter(sequence_status="Nothing")
+
+    annotateurs = CustomUser.objects.annotate(annotation_count=Count('annotations', filter=Q(annotations__is_validated=False))).filter(role__in=["annotateur", "validateur"], annotation_count__lt=5)
+
+    if not annotateurs:
+        messages.warning(request, "Aucun annotateur disponible pour l'attribution automatique.")
+        return redirect("sequences_non_assigned")
+
+    attribution_done = 0
+    for sequence in non_assigned_sequences:
+        annotateur = annotateurs.order_by("annotation_count").first()
+
+        if not annotateur:
+            break 
+
+        Annotation.objects.create(
+            annotation_id=f"ANN_{sequence.sequence_id}",
+            annotation_text="",
+            is_validated=False,
+            annotation_author=annotateur,
+            sequence=sequence
+        )
+
+        sequence.sequence_status = "Assigned"
+        sequence.save()
+        attribution_done += 1
+
+    messages.success(request, f"{attribution_done} séquences ont été attribuées automatiquement.")
+    return redirect("sequences_non_assigned")
 
 @login_required
 def annoter(request, sequence_id):
