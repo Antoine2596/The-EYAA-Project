@@ -100,6 +100,8 @@ def deconnexion(request):
 
 @login_required
 def visualisation(request, obj_type, obj_id):
+    page_obj = None  # Définition par défaut
+    search_query = None  # Définition par défaut
     if obj_type == "genome":
         obj = get_object_or_404(Genome, genome_id=obj_id)
         # récupère les CDS associées au génome
@@ -118,6 +120,13 @@ def visualisation(request, obj_type, obj_id):
         paginator = Paginator(associated_sequences, 20)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+
+
+    elif obj_type == "sequence":
+        obj = get_object_or_404(Sequence, sequence_id = obj_id)
+    elif obj_type == "annotation":
+        obj = get_object_or_404(Annotation, annotation_id=obj_id)
+
         
     else:
         return render(request, "core/404.html", {"message": "Type d'objet non reconnu."})
