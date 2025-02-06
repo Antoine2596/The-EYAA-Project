@@ -1,140 +1,113 @@
 {% extends "core/base.html" %}
 {% load static %}
 
-{% block title %}
-Visualisation - EYAA
-{% endblock %}
+{% block title %}Visualisation - EYAA{% endblock %}
 
 {% block content %}
 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
 <style>
-    .visualisation-container{
-        max-width: 90%;
-        margin: 0 auto;
-        padding: 30px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .status-red {
+        color: white !important;
+        background-color: red !important;
     }
 
-    .sequence-container {
-        word-wrap: break-word;
-        max-height: 30em; 
-        overflow-x: auto;
-        overflow-y: auto; 
-        white-space: normal; 
-        background: #f4f4f4;
-        padding: 10px;
-        font-family: monospace;
-        display: block;
-        margin: 10px;
-        line-height: 2;
+    .status-orange {
+        color: white !important;
+        background-color: orange !important;
     }
 
-    .button-container {
-        display: flex;
-        justify-content: center; /* Centrer les boutons horizontalement */
-        gap: 10px; /* Espacement entre les boutons */
-        margin: 20px 0;
+    .status-yellow {
+        color: black !important;
+        background-color: yellow !important;
     }
 
-    .blast-button, .uniprot-button, .copy-button {
-        background-color: #007BFF;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        text-decoration: none;
-        display: inline-block;
-        transition: background-color 0.3s;
+    .status-green {
+        color: white !important;
+        background-color: green !important;
     }
 
-    .blast-button:hover, .uniprot-button:hover, .copy-button:hover {
-        background-color: #0056b3;
+    .btn-gray {
+        background-color: #6c757d !important; 
+        color: white !important;
     }
-
 </style>
 
-<div class="visualisation-container">
-    {% if obj_type == "genome" %}
-        <h1 class="visualisation">On retrouve ici la visualisation du génome : {{ obj.genome_id }}</h1>
-        <section>
-            <h2>Détails</h2>
+
+<div class="container mt-4">
+    <h1 class="text-center text-white">Génome : {{ obj.genome_id }}</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header">Détails du génome</div>
+        <div class="card-body">
             <p><strong>ID du génome :</strong> {{ obj.genome_id }}</p>
             <p><strong>Organisme :</strong> {{ obj.organism }}</p>
             <p><strong>Type :</strong> {{ obj.get_genome_type_display }}</p>
-            <p><strong>Séquence annotée :</strong> 
-                {% if obj.is_annotated %}
-                    Oui
-                {% else %}
-                    Non
-                {% endif %}
-            </p>
-        </section>
-
-        <section>
-            <h2>Séquence</h2>
-            <pre class="sequence-container">
-                {% if highlighted_sequence %}
-                    {{ highlighted_sequence|safe }}
-                {% else %}
-                    {{ obj.genome_sequence }}
-                {% endif %}
-            </pre>
-        </section>
-
-    {% elif obj_type == "sequence" %}
-        <h1 class="visualisation">On retrouve ici la visualisation de la séquence : {{ obj.sequence_id }}</h1>
-        <section>
-            <h2>Détails</h2>
-            <p><strong>ID de la séquence :</strong> {{ obj.sequence_id }}</p>
-            <p><strong>Nom du gène :</strong> {{ obj.gene_name }}</p>
-            <p><strong>Statut :</strong> {{ obj.get_sequence_status_display }}</p>
-            <p><strong>Génome associé :</strong> {{ obj.genome.genome_id }}</p>
-            <p><strong>Longueur :</strong> {{ obj.sequence_length }}</p>
-        </section>
-        <section>
-            <h2>Séquences</h2>
-            <h3>ADN :</h3>
-            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
-                {{ obj.dna_sequence }}
-            </pre>
-            <h3>Protéine :</h3>
-            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
-                {{ obj.aa_sequence }}
-            </pre>
-        </section>
-
-    {% elif obj_type == "annotation" %}
-        <h1 class="visualisation">On retrouve ici la visualisation de l'annotation : {{ obj.annotation_id }}</h1>
-        <section>
-            <h2>Détails</h2>
-            <p><strong>ID de l'annotation :</strong> {{ obj.annotation_id }}</p>
-            <p><strong>Auteur :</strong> {{ obj.annotation_author }}</p>
-            <p><strong>Séquence associée :</strong> {{ obj.sequence.sequence_id }}</p>
-        </section>
-        <section>
-            <h2>Texte de l'annotation</h2>
-            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
-                {{ obj.annotation_text }}
-            </pre>
-        </section>
-
-    {% else %}
-        <p>Type d'objet non reconnu.</p>
-    {% endif %}
-
-
-     <div class="button-container">
-        <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" class="blast-button" target="_blank">Effectuer un blast</a>
-        <a href="https://www.uniprot.org/" class="uniprot-button" target="_blank">Recherche sur UniProt</a>
+            <p><strong>Génome annotée :</strong> {% if obj.is_annotated %}Oui{% else %}Non{% endif %}</p>
+        </div>
     </div>
 
-    <footer>
-        <a href="{% url 'genome_database' %}">Retour à la base de données</a>
-    </footer>
+    
+    <h2 class="text-white">CDS associées</h2>
 
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" value="{{ search_query }}" placeholder="Rechercher par nom du gène">
+            <button class="btn btn-secondary" type="submit">Rechercher</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom du gène</th>
+                <th>Position</th>
+                <th>Statut</th>
+                <th>Séquence</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for seq in page_obj %}
+            <tr>
+                <td>{{ seq.sequence_id }}</td>
+                <td>{{ seq.gene_name }}</td>
+                <td>{{ seq.sequence_start }} - {{ seq.sequence_stop }}</td>
+                <td class="{% if seq.get_sequence_status_display == 'Non-annotée' %}status-red{% elif seq.get_sequence_status_display == 'Attribuée' %}status-orange{% elif seq.get_sequence_status_display == 'En attente de validation' %}status-yellow{% elif seq.get_sequence_status_display == 'Validée' %}status-green{% endif %}">
+                    {{ seq.get_sequence_status_display }}
+                </td>
+
+                <td><button class="btn btn-secondary btn-sm" onclick="toggleSequence('{{ seq.sequence_id }}')">Voir séquence</button></td>
+            </tr>
+            <tr id="seq-{{ seq.sequence_id }}" class="d-none">
+                <td colspan="5">
+                    <pre class="bg-light p-3" style="width: 100%; word-wrap: break-word; overflow-x: auto;">{{ seq.dna_sequence }}</pre>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}">Précédente</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}">Suivante</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<script>
+    function toggleSequence(seqId) {
+        let element = document.getElementById("seq-" + seqId);
+        element.classList.toggle("d-none");
+    }
+</script>
 {% endblock %}
