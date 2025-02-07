@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from core.models import Genome, Sequence, Annotation, CustomUser
-import os 
+import os, time
 
 
 
@@ -179,10 +179,14 @@ class Command(BaseCommand):
                             dic[id]["status"] = "Validated"
                         elif len(value.split(":"))>1 :
                             chr = value.split(":")
-                            dic[id]["information_support"] = str(chr[1])
+                            dic[id]["information_support"] = key
                             dic[id]["start"] = int(chr[2])
                             dic[id]["stop"] = int(chr[3])
                             dic[id]["length"] = abs(int(chr[3])-int(chr[2]))
+                            dic[id]["brin"] = int(chr[-1])
+                            if abs(dic[id]["brin"]) != 1:
+                                dic[id]["brin"] = 0
+
                         
                         if not "gene_name" in dic[id].keys():
                             dic[id]["gene_name"] = "None"
@@ -224,6 +228,7 @@ class Command(BaseCommand):
 
         # 3 - Creation des sequences en bulk
 
+        #print(dic)
         genome = Genome.objects.get(genome_id=genome_id)
         sequence_objects = [
             Sequence(
@@ -236,7 +241,8 @@ class Command(BaseCommand):
                 sequence_length=v.get("length", None),
                 gene_name=v.get("gene_name", "None"),
                 sequence_status=v.get("status", "Nothing"),
-                genome=genome
+                genome=genome,
+                sequence_brin=v["brin"]
             )
             for k, v in dic.items()
         ]
@@ -245,12 +251,10 @@ class Command(BaseCommand):
 
         # 4 -Creation des annotations en bulk
 
-
         annotation_objects = [
             Annotation(
-                annotation_id = k,
+                annotation_id = "ANN_"+ str(k),
                 annotation_text =v["annotation"],
-                #annotation_author = None,
                 sequence_id = k,
                 is_validated = True,
             )

@@ -1,47 +1,108 @@
 {% extends "core/base.html" %}
 {% load static %}
 
-{% block title %}
-Accueil - EYAA
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Profil</li>
 {% endblock %}
+
+
 {% block content %}
-<link rel="stylesheet" href="{% static 'core/style_espace_perso.css' %}">
-<div class="profile-page">
-    <!-- Menu vertical -->
-    <nav class="vertical-menu">
-        <ul>
-            <li><a href="#informations">Mes informations</a></li>
-            <li><a href="#annotations">Mes annotations</a></li>
-        </ul>
-    </nav>
-
-    <!-- Contenu principal -->
-    <div class="profile-content">
-        <div id="informations" class="content-section">
-            <h2>Mes informations</h2>
-            <p><strong>Email :</strong> {{ user.email }}</p>
-            <p><strong>Nom :</strong> {{ user.first_name }} {{ user.last_name }}</p>
-            <p><strong>Rôle :</strong> {{ user.role }}</p>
-            {% if user.role == "annotateur" %}
-                <p class="special-message">Ce message s'affiche uniquement si vous êtes annotateur.</p>
-            {% endif %}
+<div class="zone-fonctions">
+    <a class="lien_function profile_informations" href="{% url 'profile_informations' %}">
+            <div class="filtre">
+                <h2>Mes Informations</h2>
+            </div>
+    </a>
+    <a class="lien_function profile_change_PSWD" href="{% url 'profile_change_PSWD' %}">
+            <div class="filtre">
+                <h2>Options de connexion</h2>
+            </div>
+    </a>
+    <a class="lien_function profile_annotations" href="{% url 'profile_annotations' %}">
+            <div class="filtre">
+                <h2>Mes Annotations</h2>
         </div>
+    </a>
 
-        <div id="annotations" class="content-section">
-            <h2>Mes annotations</h2>
-            {% if annotations.exists %}
-                <ul>
-                    {% for annotation in annotations %}
-                        <li>
-                            <strong>ID :</strong> {{ annotation.annotation_id }} - 
-                            <strong>Texte :</strong> {{ annotation.annotation_text }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>Vous n'avez aucune annotation pour le moment.</p>
-            {% endif %}
-        </div>
-    </div>
+    <style>
+                
+        .zone-fonctions{
+            margin-top: 15px;
+            padding-left: 15%;
+            padding-right: 15%;
+            display: flex;
+            height: 40vh;
+            z-index: 0;
+            /* transform: translate(-50%,0); */
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .lien_function{
+            height: 20vh;
+            width: 20vw;
+            min-height: 100px;
+            min-width: 100px;
+            cursor: pointer;
+            margin: 10px;
+            display: flex;
+            justify-content: center;  
+            align-items: center;     
+            float: left;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border-radius: 15px;
+            transition: 0.5 ease; 
+            background-color: teal;
+            text-decoration: none;
+            /* transform: scale(1.0); */
+            transition: ease-in-out 0.6s;
+        }
+
+        .lien_function:hover{
+            transform: scale(1.05);
+            transition: 0.6s ease;
+        }
+
+
+        .filtre{
+            backdrop-filter: blur(0.5px);
+            height: 100%;
+            width: 100% ;
+            background-color: #33333320;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+
+        }
+
+        .profile_informations {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 0.5s ease; 
+        }
+
+        .profile_change_PSWD {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 0.5s ease; 
+        }
+
+        .profile_annotations {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 0.5s ease; 
+        }
+
+    </style>
+    
 </div>
 {% endblock %}

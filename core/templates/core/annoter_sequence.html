@@ -1,6 +1,15 @@
 {% extends "core/base.html" %}
 {% load static %}
 
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'profile' %}">Profil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'profile_annotations' %}">Mes Annotations</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ annotation.annotation_id }}</li>
+{% endblock %}
+
+
 {% block content %}
     <link rel="stylesheet" href="{% static 'core/style_annoter.css' %}">
 
@@ -60,6 +69,7 @@
                 </form>
         </div>
     </div>
+    
         <script>
             function copyToClipboard(id) {
                 var copyText = document.getElementById(id);

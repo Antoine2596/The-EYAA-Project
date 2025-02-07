@@ -10,6 +10,7 @@ urlpatterns = [
     path("database/", views.database_view, name="genome_database"),
     path("visualisation/<str:obj_type>/<str:obj_id>/", views.visualisation, name="visualisation"),
     path("deconnexion/", views.deconnexion, name="deconnexion"),
+    path("profil/", views.profile, name="profile"),
     path('profil/informations/', views.profile_informations, name='profile_informations'),
     path("profil/change_PSWD/", views.profile_change_PSWD, name="profile_change_PSWD"),
     path('profil/annotations/', views.profile_annotations, name='profile_annotations'),

@@ -63,8 +63,8 @@ class SequenceAdmin(ImportMixin, admin.ModelAdmin):
     resource_class = SequenceResource  # Lien avec la ressource
 
     list_display = ("sequence_id", "information_support",
-                    "sequence_start", "sequence_stop", "sequence_length", "gene_name", "sequence_status") 
-    list_filter = ("information_support", "sequence_status") 
+                    "sequence_start", "sequence_stop", "sequence_length", "gene_name", "sequence_status", "sequence_brin") 
+    list_filter = ("information_support", "sequence_status", "sequence_brin") 
     search_fields = ("sequence_id", "dna_sequence","aa_sequence", "gene_name",) 
 
      # Empêche l'ajout manuel de génomes
@@ -75,8 +75,11 @@ class SequenceAdmin(ImportMixin, admin.ModelAdmin):
 class AnnotationAdmin(ImportMixin, admin.ModelAdmin):
     resource_class = AnnotationResource  # Lien avec la ressource
 
-    list_display = ("annotation_id", "annotation_text", "annotation_author")
-    search_fields = ("annotation_id", "annotation_text", "annotation_author__email")
+    list_display = ("annotation_id", "annotation_text", "annotation_author", "sequence","is_validated", "validation_date", "rejected_comment")
+    search_fields = ("annotation_id", "annotation_text", "annotation_author", "sequence","rejected_comment")
+    list_filter = ("is_validated",) 
+
+    list_editable = ("is_validated",)  
 
      # Empêche l'ajout manuel de génomes
     def has_add_permission(self, request):
