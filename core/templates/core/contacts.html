@@ -5,6 +5,11 @@
 Contacts - EYAA
 {% endblock %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Contacts</li>
+{% endblock %}
+
 {% block content %}
 <div class="contacts">
     <ul style="color: black;">

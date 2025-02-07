@@ -14,6 +14,7 @@ h1 {
     margin-bottom: 20px;
 }
 
+
 .sequence-details {
     background-color: #fff;
     padding: 20px;
@@ -96,3 +97,5 @@ textarea:focus {
     outline: none;
     border-color: #0056b3;
 }
+
+

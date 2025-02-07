@@ -1,0 +1,39 @@
+/* Navigation pages précédentes */
+.breadcrumb {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 15px;
+    margin: 10px 5%;
+    background: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    color: #b0b0b0;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: #ffcc00;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: #ff9900;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    margin: 0 8px;
+    color: #666;
+}
+
+.breadcrumb-item.active {
+    font-weight: bold;
+    color: #ffffff;
+}
+

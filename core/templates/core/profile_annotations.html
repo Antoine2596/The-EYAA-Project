@@ -1,5 +1,13 @@
 {% extends "core/base_profile.html" %}
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'profile' %}">Profil</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Mes Annotations</li>
+{% endblock %}
+
 {% block profile_content %}
 <div id="annotations">
     <h2>Mes annotations</h2>
@@ -16,7 +24,7 @@
     <p><strong>{{ annotations_count }}</strong> annotation(s) trouvée(s).</p>
     
     <div class="database-container">
-        {% if annotations.exists %}
+        {% if annotations %}
             {% for annotation in annotations %}
 
                 <div class="annotation-card">
@@ -29,6 +37,25 @@
                 </div>
 
             {% endfor %}
+            
+            <!-- pagination -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if annotations.has_previous %}
+                        <a href="?page=1&filter={{ status_filter }}">&laquo; Première</a>
+                        <a href="?page={{ annotations.previous_page_number }}&filter={{ status_filter }}">Précédent</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ annotations.number }} sur {{ annotations.paginator.num_pages }}
+                    </span>
+
+                    {% if annotations.has_next %}
+                        <a href="?page={{ annotations.next_page_number }}&filter={{ status_filter }}">Suivant</a>
+                        <a href="?page={{ annotations.paginator.num_pages }}&filter={{ status_filter }}">Dernière &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
 
         {% elif user.role == "lecteur" %}
             <p>En tant que lecteur vous n'avez pas accès à cette fonctionnalité.</p>
@@ -37,4 +64,33 @@
     </div>
 
 </div>
+<!-- Toast Notification -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="annotationToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMessage">
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var params = new URLSearchParams(window.location.search);
+    var toastElement = document.getElementById("annotationToast");
+    var toastMessage = document.getElementById("toastMessage");
+    var toast = new bootstrap.Toast(toastElement);
+
+    if (params.has("success")) {
+        toastMessage.innerText = "L'annotation a été envoyée pour validation !";
+        toast.show();
+    } else if (params.has("saved")) {
+        toastMessage.innerText = "L'annotation a été sauvegardée avec succès.";
+        toast.show();
+    }
+});
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 {% endblock %}

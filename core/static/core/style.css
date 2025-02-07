@@ -16,8 +16,6 @@ header {
     height: 70px; 
 }
 
-
-
 .site-name {
     margin-right: auto; 
     display: flex;
@@ -122,10 +120,10 @@ header {
 }
 
 .volet {
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(20px);
     background-color: #0b469863;
     box-shadow: black 0 0 10px;
-    bottom: 0vh;
+    bottom: 3vh;
     left: 0;
     position: fixed;
     width: 30%;
@@ -136,6 +134,7 @@ header {
     margin-left: -30%;
     transition: all 0.5s ease;
     z-index: 2;
+    font-weight: bold ;
 }
 
 .contenu_titre h2 {
