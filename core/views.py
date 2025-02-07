@@ -204,20 +204,9 @@ def database_view(request):
     chromosome = request.GET.get("chromosome")
     sequence_type = request.GET.get("sequence_type")
     Brin = request.GET.get("Brin")
+    Annotation = request.GET.get("Annotation")
 
-    print(f"""
-    User Request: {user_request}
-    Filter Types: {', '.join(selected_type) if selected_type else 'None'}
-    Is Annotated: {is_annotated}
-    Min Length: {min_length if min_length else 'Not specified'}
-    Max Length: {max_length if max_length else 'Not specified'}
-    Chromosome: {chromosome if chromosome else 'Not specified'}
-    Sequence Type: {sequence_type if sequence_type else 'Not specified'}
-    Brin: {Brin if Brin else 'Not specified'}
-    """)
-
-
-    genomes = sequences = annotations = None
+    genomes = sequences = None
     
     # Si l'utilisateur n'a pas fait de recherche, afficher le dashboard
     dashboard = not bool(user_request)
@@ -244,7 +233,7 @@ def database_view(request):
     else:
         if selected_type == "genome":
             genomes = Genome.objects.filter(
-                Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)
+                (Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)) | Q(genome_sequence__icontains=user_request) 
             )
             if is_annotated:
                 genomes = genomes.filter(is_annotated=True)
@@ -252,7 +241,8 @@ def database_view(request):
 
         elif selected_type == "sequence":
             sequences = Sequence.objects.filter(
-                Q(sequence_id__icontains=user_request) | Q(gene_name__icontains=user_request)
+                (Q(sequence_id__icontains=user_request) | Q(gene_name__icontains=user_request)) | (
+                    Q(dna_sequence__icontains=user_request) | Q(aa_sequence__icontains=user_request)) 
             )
             if min_length:
                 sequences = sequences.filter(sequence_length__gte=int(min_length))
@@ -262,6 +252,10 @@ def database_view(request):
                 sequences = sequences.filter(information_support__iexact=chromosome)
             if Brin:
                 sequences = sequences.filter(sequence_brin__iexact=Brin)
+            if sequence_type:
+                sequences = sequences.filter(selected_type_iexact=sequence_type)
+            if Annotation:
+                sequences = Sequence.objects.filter(annotation__annotation_text__icontains=user_request)
 
 
         combined_results = (

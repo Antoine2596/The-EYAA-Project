@@ -100,8 +100,8 @@ class Sequence(models.Model):
     
 
     BRIN_CHOICES = [(1, "Direct"),
-                       (-1, "Indirect"),
-                        (0, "Unknown")]
+                    (-1, "Indirect"),
+                    (0, "Unknown")]
     
     SUPPORT_CHOICES = [("plasmid","Plasmide"),
                        ("chromosome","Chromosome")]

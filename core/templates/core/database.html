@@ -11,10 +11,7 @@ Database - EYAA
 <div class="search-bar-container">
     <form method="GET" action="{% url 'genome_database' %}">
         <div class="search-bar">
-            <input type="text" name="user_request" placeholder="ID, gène" value="{{ request.GET.user_request|default_if_none:'' }}">
-            <input type="text" name="sequence_motif" placeholder="Motif de séquence (ex: %ATGC%)" value="{{ request.GET.sequence_motif|default_if_none:'' }}">
-            <input type="text" name="species" placeholder="Espèce (ex: eColi)" value="{{ request.GET.species|default_if_none:'' }}">
-            <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
+            <input type="text" name="user_request" placeholder="ID, Espèce, séquence" value="{{ request.GET.user_request|default_if_none:'' }}">
         </div>
     </form>
 </div>
@@ -145,6 +142,11 @@ Database - EYAA
                 <input type="number" name="min_length" placeholder="Min" value="{{ request.GET.min_length }}">
                 <label for="max_length">Longueur maximale :</label>
                 <input type="number" name="max_length" placeholder="Max" value="{{ request.GET.max_length }}">
+                <hr>
+
+                <!-- Annotations -->
+                <label for="Annotation">Annotation :</label>
+                <input type="text" name="Annotation" placeholder="Annotation" value="{{ request.GET.Annotation }}">
                 <hr>
     
                 <!-- Support génétique -->
