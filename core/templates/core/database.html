@@ -11,7 +11,9 @@ Database - EYAA
 <div class="search-bar-container">
     <form method="GET" action="{% url 'genome_database' %}">
         <div class="search-bar">
-            <input type="text" name="user_request" placeholder="ID, organisme, gène" value="{{ request.GET.user_request|default_if_none:'' }}">
+            <input type="text" name="user_request" placeholder="ID, gène" value="{{ request.GET.user_request|default_if_none:'' }}">
+            <input type="text" name="sequence_motif" placeholder="Motif de séquence (ex: %ATGC%)" value="{{ request.GET.sequence_motif|default_if_none:'' }}">
+            <input type="text" name="species" placeholder="Espèce (ex: eColi)" value="{{ request.GET.species|default_if_none:'' }}">
             <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
         </div>
     </form>
