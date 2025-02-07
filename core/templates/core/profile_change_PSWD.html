@@ -1,5 +1,11 @@
 {% extends "core/base_profile.html" %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'profile' %}">Profil</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Changer mon mot de passe</li>
+{% endblock %}
+
 {% block profile_content %}
 <div id="change_PSWD">
     <h3>Modifier mon mot de passe</h3>

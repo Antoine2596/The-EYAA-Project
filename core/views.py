@@ -43,7 +43,7 @@ def contacts(request):
 
 @login_required
 def profile(request):
-    return render(request, "core/base_profile.html")
+    return render(request, "core/profile.html")
 
 @login_required
 def profile_informations(request):
@@ -328,11 +328,13 @@ def validate_annotation(request, annotation_id):
             annotation.is_validated = True
             annotation.validation_date = now()
             sequence.sequence_status = "Validated"
-            
+            messages.success(request, "L'annotation a été validée avec succès.")
+
         elif action == "reject":
             annotation.is_validated = False
             annotation.rejected_comment = comment
             sequence.sequence_status = "Assigned"
+            messages.warning(request, "L'annotation a été rejetée.")
 
         annotation.save()
         sequence.save()
@@ -451,9 +453,18 @@ def annoter(request, sequence_id):
 
         if 'send_to_validation' in request.POST:
             sequence.sequence_status = "Awaiting validation"
+            annotation.save()
+            sequence.save()
+
+            messages.success(request, "L'annotation a été envoyée pour validation !")
+            return redirect("/profil/annotations/?success=1")
         
-        annotation.save()
-        sequence.save()
+        
+        elif "save" in request.POST:
+            annotation.save()
+            sequence.save()
+            messages.success(request, "L'annotation a été sauvegardée avec succès.")
+            return redirect("/profil/annotations/?saved=1")
         
         return redirect("profile_annotations")
 

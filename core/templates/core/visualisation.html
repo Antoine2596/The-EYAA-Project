@@ -5,6 +5,17 @@
 Visualisation - EYAA
 {% endblock %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'genome_database' %}">Base de Données</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+        {% if obj.sequence_id %}
+            {{ obj.sequence_id }}
+        {% elif obj.genome_id %}
+            {{ obj.genome_id }}
+        {% endif %}</li>
+{% endblock %}
+
 {% block content %}
 
 <style>
