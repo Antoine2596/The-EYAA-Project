@@ -241,8 +241,12 @@ def database_view(request):
 
         elif selected_type == "sequence":
             sequences = Sequence.objects.filter(
-                (Q(sequence_id__icontains=user_request) | Q(gene_name__icontains=user_request)) | (
-                    Q(dna_sequence__icontains=user_request) | Q(aa_sequence__icontains=user_request)) 
+                (Q(sequence_id__icontains=user_request) | 
+                 Q(gene_name__icontains=user_request) | 
+                 Q(dna_sequence__icontains=user_request) |
+                 Q(aa_sequence__icontains=user_request) |
+                 Q(genome__genome_id__icontains=user_request) |  # Filtrer par genome_id
+                 Q(genome__organism__icontains=user_request) )
             )
             if min_length:
                 sequences = sequences.filter(sequence_length__gte=int(min_length))
