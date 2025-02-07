@@ -10,15 +10,91 @@ body {
 }
 
 
+
+/* Form */
+
+.form-container {
+    display: flex;
+    width: 88%;
+    margin: auto;
+}
+
+form {
+    display: flex;
+    background-color: white;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    justify-content: space-evenly;
+}
+
+form div {
+    position: relative;
+    margin-bottom: 15px;
+    margin: 5px;
+}
+
+label {
+    font-weight: bold;
+    margin: 10px;
+}
+
+input[type="text"], select, input[type="range"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+input[type="range"] {
+    width: calc(100% - 20px);
+}
+
+button[type="submit"] {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: fit-content;
+    height: 5%;
+    align-self: center;
+    height: fit-content;
+}
+
+button[type="submit"]:hover {
+    background-color: #007BFF;
+}
+
+/* Style du bouton "Attribuer automatiquement" */
+.btn-auto {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-auto:hover {
+    background-color: #0056b3;
+}
+
+
 /* Container for the cards */
 .annotations-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
     gap: 20px;
     padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    color: white;
+    max-width: 90%;
+    margin: auto;
+    color: black;
 }
 
 /* Individual annotation card */
@@ -63,4 +139,50 @@ body {
 
 .btn-view:hover {
     background-color: #0056b3;
+}
+
+/* pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 8px;
+}
+
+.pagination a, .pagination span {
+    padding: 8px 12px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a {
+    background-color: #007BFF;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #0056b3;
+}
+
+.pagination span {
+    background-color: #E3F2FD;
+    color: #007BFF;
+}
+
+.pagination a:disabled {
+    background-color: #B0C4DE;
+    cursor: not-allowed;
+}
+
+/* Notification */
+.toast-container {
+    z-index: 1050;
+    max-width: 350px;
+}
+
+.toast-body {
+    font-size: 14px;
 }

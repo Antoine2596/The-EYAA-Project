@@ -1,6 +1,12 @@
 {% extends "core/base.html" %}
 {% load static %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'sequences_non_assigned' %}">Outil d'attribution</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ sequence.sequence_id }}</li>
+{% endblock %}
+
 {% block content %}
     <link rel="stylesheet" href="{% static 'core/style_attribution.css' %}">
 
