@@ -36,7 +36,7 @@
 </style>
 
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
 
     {% if obj_type == "genome" %}
 
@@ -70,23 +70,33 @@
                     <th>Position</th>
                     <th>Statut</th>
                     <th>Séquence</th>
+                    <th>Annotation</th>
                 </tr>
             </thead>
             <tbody>
                 {% for seq in page_obj %}
                 <tr>
                     <td>{{ seq.sequence_id }}</td>
-                    <td>{{ seq.gene_name }}</td>
+                    <td>
+                        {% if seq.annotation and seq.get_sequence_status_display == "Validée" %}
+                            {{ seq.gene_name }}
+                        {% else %}
+                            <span class="text-muted">Pas disponible</span>
+                        {% endif %}
+                    </td>
                     <td>{{ seq.sequence_start }} - {{ seq.sequence_stop }}</td>
                     <td class="{% if seq.get_sequence_status_display == 'Non-annotée' %}status-red{% elif seq.get_sequence_status_display == 'Attribuée' %}status-orange{% elif seq.get_sequence_status_display == 'En attente de validation' %}status-yellow{% elif seq.get_sequence_status_display == 'Validée' %}status-green{% endif %}">
                         {{ seq.get_sequence_status_display }}
                     </td>
-
-                    <td><button class="btn btn-secondary btn-sm" onclick="toggleSequence('{{ seq.sequence_id }}')">Voir séquence</button></td>
-                </tr>
-                <tr id="seq-{{ seq.sequence_id }}" class="d-none">
-                    <td colspan="5">
-                        <pre class="bg-light p-3" style="width: 100%; word-wrap: break-word; overflow-x: auto;">{{ seq.dna_sequence }}</pre>
+                    <td>
+                        <a href="{% url 'visualisation' obj_type='sequence' obj_id=seq.sequence_id %}" class="btn btn-secondary btn-sm">Informations de la séquence</a>
+                    </td>
+                    <td>
+                        {% if seq.annotation and seq.get_sequence_status_display == "Validée" %}
+                            <a href="{% url 'visualisation' obj_type='annotation' obj_id=seq.annotation.annotation_id %}" class="btn btn-gray btn-sm">Voir l'annotation</a>
+                        {% else %}
+                            <span class="text-muted">Aucune annotation disponible</span>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -105,14 +115,6 @@
                 {% endif %}
             </ul>
         </nav>
-
-
-        <script>
-            function toggleSequence(seqId) {
-                let element = document.getElementById("seq-" + seqId);
-                element.classList.toggle("d-none");
-            }
-        </script>
 
     {% elif obj_type == "sequence" %}
 
@@ -144,9 +146,21 @@
         </section>
 
     {% elif obj_type == "annotation" %}
-        <h1 class="visualisation">On retrouve ici la visualisation de l'annotation : {{ obj.annotation_id }}</h1>
+        <h1 class="text-center text-white">Annotation : {{ obj.annotation_id }}</h1>
+        <div class="card mb-4">
+            <div class="card-header">Détails</div>
+            <div class="card-body">
+            <p><strong>ID de l'annotation :</strong> {{ obj.annotation_id }}</p>
+            <p><strong>Auteur :</strong> {{ obj.annotation_author }}</p>
+            <p><strong>Séquence associée :</strong> {{ obj.sequence.sequence_id }}</p>
+            </div>
+        </div>
 
-
+        <h2 class="text-center text-white">Texte de l'annotation</h2>
+            <pre style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                {{ obj.annotation_text }}
+            </pre>
+       
     {% else %}
         <p>Type d'objet non reconnu.</p>
     {% endif %}
