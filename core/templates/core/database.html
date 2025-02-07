@@ -93,20 +93,21 @@ Database - EYAA
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a href="?page=1{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Premier</a>
-                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Précédent</a>
+                        <a href="?page=1&{{ request.GET.urlencode }}">Premier</a>
+                        <a href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">Précédent</a>
                     {% endif %}
                     
                     <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
                     </span>
             
                     {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Suivant</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.user_request %}&user_request={{ request.GET.user_request }}{% endif %}{% if request.GET.filter_type %}&filter_type={{ request.GET.filter_type|join:',' }}{% endif %}{% if request.GET.is_annotated %}&is_annotated={{ request.GET.is_annotated }}{% endif %}">Dernier</a>
+                        <a href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Suivant</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}&{{ request.GET.urlencode }}">Dernier</a>
                     {% endif %}
                 </span>
             </div>
+            
         {% endif %}
     </div>
 
