@@ -103,7 +103,7 @@
                         <a href="{% url 'visualisation' obj_type='sequence' obj_id=seq.sequence_id %}" class="btn btn-secondary btn-sm">Informations de la séquence</a>
                     </td>
                     <td>
-                        {% if seq.annotation and seq.get_sequence_status_display == "Validée" %}
+                        {% if seq.annotation and seq.get_sequence_status_display == "Validée" or seq.get_sequence_status_display == "En attente de validation" %}
                             <a href="{% url 'visualisation' obj_type='annotation' obj_id=seq.annotation.annotation_id %}" class="btn btn-gray btn-sm">Voir l'annotation</a>
                         {% else %}
                             <span class="text-muted">Aucune annotation disponible</span>
@@ -155,9 +155,29 @@
                 {{ obj.aa_sequence }}
             </pre>
         </section>
+        
+        <a href="{% url 'visualisation' 'genome' obj.genome  %}" class="btn btn-secondary btn-sm">
+            Voir le génome
+        </a>
+        
+        {% if obj.annotation %}
+            <a href="{% url 'visualisation' 'annotation' obj.annotation.annotation_id %}"  class="btn btn-secondary btn-sm">
+                Voir l'annotation
+            </a>
+        {% endif %}
+
+        
 
     {% elif obj_type == "annotation" %}
         <h1 class="text-center text-white">Annotation : {{ obj.annotation_id }}</h1>
+        
+    
+        {% if obj.sequence.get_sequence_status_display != "Validée"%}
+            <hr>
+            <h2 style="color: darkorange;" >Attention cette, annotation n'a pas encore été Validée</h2>
+            <hr>
+        {% endif%}
+
         <div class="card mb-4">
             <div class="card-header">Détails</div>
             <div class="card-body">
@@ -171,13 +191,23 @@
             <pre style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;">
                 {{ obj.annotation_text }}
             </pre>
+
+        <a href="{% url 'visualisation' 'genome' obj.sequence.genome  %}" class="btn btn-secondary btn-sm">
+            Voir le génome
+        </a>
+        
+
+            <a href="{% url 'visualisation' 'sequence' obj.sequence%}"  class="btn btn-secondary btn-sm">
+                Voir la séquence
+            </a>
+
        
     {% else %}
         <p>Type d'objet non reconnu.</p>
     {% endif %}
 
     <footer>
-        <a href="{% url 'genome_database' %}">Retour à la base de données</a>
+        <a href="{% url 'genome_database' %}" style="color:white">Retour à la base de données</a>
     </footer>
 
 {% endblock %}

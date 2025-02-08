@@ -143,16 +143,16 @@ Extraction - EYAA
         if (!exportBtn) return;
 
         exportBtn.addEventListener("click", function (event) {
-            event.preventDefault(); // Empêche la navigation instantanée
+            event.preventDefault(); 
 
-            let params = new URLSearchParams(window.location.search); // Récupère les paramètres de la page actuelle
+            let params = new URLSearchParams(window.location.search); 
             document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
                 if (checkbox.checked) {
                     params.set(checkbox.name, "true");
                 }
             });
 
-            window.location.href = exportBtn.href + "?" + params.toString(); // Redirige avec les bons paramètres
+            window.location.href = exportBtn.href + "?" + params.toString(); 
         });
     });
 </script>
