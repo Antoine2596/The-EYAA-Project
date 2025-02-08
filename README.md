@@ -6,7 +6,7 @@
 
 The EYAA Project (reprenant les initiales des développeurs : Emma, Youna, Anne, Antoine) est une application web permettant de gérer l'annotation et la visualisation de génomes procaryotes.  
 
-Un diagramme UML de la base de données est disponible : **models_diagram.png**.
+Un diagramme UML de la base de données est disponible dans le répertoire sous le nom de **models_diagram.png**.
 
 ---
 
