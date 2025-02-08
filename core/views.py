@@ -347,7 +347,7 @@ def annotations_listing(request):
 
     return render(request, "core/annotations_non_validates.html",  {"page_obj": page_obj, "genomes": genomes, "annotations_count": annotations_count})
 
-@role_required(["validateur"])
+@user_passes_test(is_validator)
 def validate_annotation(request, annotation_id):
     annotation = get_object_or_404(Annotation, annotation_id=annotation_id)
     sequence = annotation.sequence
