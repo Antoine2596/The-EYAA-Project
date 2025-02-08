@@ -207,7 +207,7 @@ def database_view(request):
     chromosome = request.GET.get("chromosome")
     sequence_type = request.GET.get("sequence_type")
     Brin = request.GET.get("Brin")
-    Annotation_request = request.GET.get("Annotation")
+
 
     genomes = sequences = None
     
@@ -244,13 +244,16 @@ def database_view(request):
             
 
         elif selected_type == "sequence":
+            
+            
             sequences = Sequence.objects.filter(
                 (Q(sequence_id__icontains=user_request) | 
                  Q(gene_name__icontains=user_request) | 
                  Q(dna_sequence__icontains=user_request) |
                  Q(aa_sequence__icontains=user_request) |
-                 Q(genome__genome_id__icontains=user_request) |  # Filtrer par genome_id
-                 Q(genome__organism__icontains=user_request) )
+                 Q(genome__genome_id__icontains=user_request) | 
+                 Q(genome__organism__icontains=user_request) ) |
+                 Q(annotation__annotation_text__icontains=user_request)
             )
             if min_length:
                 sequences = sequences.filter(sequence_length__gte=int(min_length))
@@ -262,8 +265,7 @@ def database_view(request):
                 sequences = sequences.filter(sequence_brin__iexact=Brin)
             if sequence_type:
                 sequences = sequences.filter(selected_type_iexact=sequence_type)
-            if Annotation_request:
-                sequences = Sequence.objects.filter(annotation__annotation_text__icontains=user_request)
+            
 
         combined_results = (
     [{"obj": obj, "type": "Genome"} for obj in genomes] if genomes else []
@@ -411,7 +413,6 @@ def extraction_file(request):
     chromosome = request.GET.get("chromosome")
     sequence_type = request.GET.get("sequence_type")
     Brin = request.GET.get("Brin")
-    Annotation_request = request.GET.get("Annotation")
 
 
     genomes = sequences = None
@@ -426,13 +427,15 @@ def extraction_file(request):
 
     elif selected_type == "sequence":
         sequences = Sequence.objects.filter(
-            (Q(sequence_id__icontains=user_request) | 
-                Q(gene_name__icontains=user_request) | 
-                Q(dna_sequence__icontains=user_request) |
-                Q(aa_sequence__icontains=user_request) |
-                Q(genome__genome_id__icontains=user_request) |  # Filtrer par genome_id
-                Q(genome__organism__icontains=user_request) )
-        )
+                (Q(sequence_id__icontains=user_request) | 
+                 Q(gene_name__icontains=user_request) | 
+                 Q(dna_sequence__icontains=user_request) |
+                 Q(aa_sequence__icontains=user_request) |
+                 Q(genome__genome_id__icontains=user_request) | 
+                 Q(genome__organism__icontains=user_request) ) |
+                 Q(annotation__annotation_text__icontains=user_request)
+            )
+
         if min_length:
             sequences = sequences.filter(sequence_length__gte=int(min_length))
         if max_length:
@@ -443,8 +446,6 @@ def extraction_file(request):
             sequences = sequences.filter(sequence_brin__iexact=Brin)
         if sequence_type:
             sequences = sequences.filter(selected_type_iexact=sequence_type)
-        if Annotation_request:
-            sequences = Sequence.objects.filter(annotation__annotation_text__icontains=user_request)
 
 
     # 2- Récupérer les champs sélectionnés
@@ -483,7 +484,7 @@ def extraction_file(request):
             fields.append("sequence_stop")
         if selected_fields.get("sequence_length"):
             fields.append("sequence_length")
-        if selected_fields.get("Brin"):
+        if selected_fields.get("Brin_champ"):
             fields.append("sequence_brin")
         if selected_fields.get("support"):
             fields.append("information_support")
@@ -503,7 +504,7 @@ def extraction_file(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="exported_results.csv"'
 
-    writer = csv.writer(response)
+    writer = csv.writer(response, delimiter = ';')
     
     # Titre des colonnes selon les champs sélectionnés
     header = []
