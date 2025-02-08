@@ -22,16 +22,19 @@
             {{ annotation.annotation_text }}</p>
             
             <br>
+            <br>
             <h3>ADN :</h3>
-            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px; overflow-y: auto;">
+            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px; overflow-y:auto;">
                 {{ annotation.sequence.dna_sequence }}
-            </textarea>
+            </textarea> <br>
             <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button>
+            <br>
+            <br>
 
             <h3>Protéine :</h3>
             <textarea id="protein_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px;overflow-y: auto;">
                 {{ annotation.sequence.aa_sequence }}
-            </textarea>
+            </textarea> <br>
             <button onclick="copyToClipboard('protein_sequence')">Copier Protéine</button>
 
             <div class="button-container">
