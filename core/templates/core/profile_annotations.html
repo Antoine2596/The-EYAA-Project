@@ -33,6 +33,7 @@
                     <strong>Séquence associée :</strong> {{ annotation.sequence.sequence_id }}</p>
                     <br> 
                     {{ annotation.annotation_text }}
+                    <br>
                     <a href="{% url 'annoter' annotation.sequence.sequence_id %}" class="btn-view">Voir Détails/Modifier</a>
                 </div>
 

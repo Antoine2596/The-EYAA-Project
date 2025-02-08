@@ -22,11 +22,11 @@
             <p><strong>Position sur le génome (chromosome) :</strong>{{ sequence.num_chromosome }}</p>
             
             <h3>ADN :</h3>
-            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+            <pre style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;height: 150px; overflow-y: auto;">
                 {{ sequence.dna_sequence }}
             </pre>
             <h3>Protéine :</h3>
-            <pre style="word-wrap: break-word; white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 5px;">
+            <pre style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;height: 150px;overflow-y: auto;">
                 {{ sequence.aa_sequence }}
             </pre>
 
@@ -40,10 +40,14 @@
 
                 <label for="annotateur">Sélectionner un annotateur :</label>
                 <select id="annotateur" name="annotateur" required>
+                    {% if annotateurs %}
                     <option value="" disabled selected>-- Choisir un annotateur --</option>
                     {% for annotateur in annotateurs %}
-                        <option value="{{ annotateur.email }}">{{ annotateur.email }}({{ annotateur.role }}) </option>
+                        <option value="{{ annotateur.email }}">{{ annotateur.email }} ({{ annotateur.role }}) </option>
                     {% endfor %}
+                {% else %}
+                    <option value="" disabled selected>Aucun annotateur disponible actuellement</option>
+                {% endif %}
                 </select>
 
                 <button type="submit">Attribuer</button>

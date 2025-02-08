@@ -61,17 +61,17 @@ def profile_informations(request):
 @login_required
 def profile_change_PSWD(request):
 
-    if request.method == 'POST':
-        password_form = PasswordChangeForm(user=request.user, data=request.POST)
+    if request.method == "POST":
+        password_form = PasswordChangeForm(request.user, request.POST)
         if password_form.is_valid():
             user = password_form.save()
-            update_session_auth_hash(request, user)
-            return redirect('profile_informations')
-    else:  
-        password_form = PasswordChangeForm(user=request.user)
+            update_session_auth_hash(request, user)  # Important pour éviter la déconnexion
+            messages.success(request, "Votre mot de passe a été mis à jour avec succès.")
+            return redirect("profile")  # Redirige vers le profil après changement
+    else:
+        password_form = PasswordChangeForm(request.user)  # Lier le form à l'utilisateur connecté
 
-    return render(request, 'core/profile_change_PSWD.html', {
-        'password_form': password_form})
+    return render(request, "core/profile_change_PSWD.html", {"password_form": password_form})
 
 @login_required
 def profile_annotations(request):
@@ -277,7 +277,6 @@ def is_validator(user):
 @user_passes_test(is_validator)
 def annotations_listing(request):
     genomes = Genome.objects.all()
-
     search = request.GET.get("search", "")
     genome_filter = request.GET.get("genome", "")
     min_length = int(request.GET.get("min_length", 0))
@@ -372,7 +371,7 @@ def sequences_non_assigned(request):
 @user_passes_test(is_validator)
 def attribution_sequence(request, sequence_id):
     sequence_id = get_object_or_404(Sequence, sequence_id = sequence_id)
-    annotateurs = CustomUser.objects.filter(role__in=["annotateur", "validateur"])
+    annotateurs = CustomUser.objects.annotate(annotation_count=Count('annotations', filter=Q(annotations__is_validated=False))).filter(role__in=["annotateur", "validateur"], annotation_count__lt=5)
     
     if request.method == "POST":
         annotateur_id = request.POST.get("annotateur")

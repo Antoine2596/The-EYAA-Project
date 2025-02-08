@@ -22,19 +22,26 @@
             <p><strong>START :</strong>{{ sequence.sequence_start }}&nbsp;
                 <strong>STOP :</strong>{{ sequence.sequence_stop }}&nbsp;
                 <strong>Longueur :</strong>{{ sequence.sequence_length }}</p>
-            <p><strong>Position sur le génome (chromosome) :</strong>{{ sequence.num_chromosome }}</p>
+            <p><strong>Support de l'information :</strong>{{ sequence.information_support }}<br>
+                <strong>Orientation du brin : </strong>{{ sequence.sequence_brin }}</p>
             
             <h3>ADN :</h3>
-            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 50px;">
+            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px; overflow-y: auto;">
                 {{ sequence.dna_sequence }}
             </textarea>
             <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button>
 
             <h3>Protéine :</h3>
-            <textarea id="protein_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 50px;">
+            <textarea id="protein_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px;overflow-y: auto;">
                 {{ sequence.aa_sequence }}
             </textarea>
             <button onclick="copyToClipboard('protein_sequence')">Copier Protéine</button>
+
+            <div class="button-container">
+                <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" class="link-button" target="_blank">Effectuer un blast</a>
+                <a href="https://www.ebi.ac.uk/interpro/search/sequence/" class="link-button" target="_blank">Recherche InterPro</a>
+                <a href="https://www.uniprot.org/" class="link-button" target="_blank">Recherche sur UniProt</a>
+            </div>
 
         </div>
 
@@ -46,7 +53,7 @@
 
                 <div class="text-section">
                     <textarea id="text" name="text" rows="4" placeholder="Descriptif fonctionnel de la séquence."
-                            {% if not is_editable %}readonly style="background: #f4f4f4;"{% endif %}>{{ annotation.annotation_text }}></textarea>
+                            {% if not is_editable %}readonly style="background: #f4f4f4;"{% endif %}>{{ annotation.annotation_text }}</textarea>
                 </div>
                 <br>
                 <div class="text-section">
