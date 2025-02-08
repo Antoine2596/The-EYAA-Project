@@ -190,6 +190,8 @@ class Command(BaseCommand):
                         
                         if not "gene_name" in dic[id].keys():
                             dic[id]["gene_name"] = "None"
+                        if not "status" in dic[id].keys():
+                             dic[id]["status"] = "Nothing"
                 
             else:
                 if dna_sequence: 
