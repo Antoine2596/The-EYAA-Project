@@ -44,9 +44,9 @@ python manage.py import_my_data {Repertoire/des/donnees} {mode}
 ```
 
 📌 **Modes d'importation** :  
-- `k` → Garde les deux génomes  
-- `r` → Remplace le génome existant  
-- `i` → Ignore le nouveau génome  
+- `k` → Garde les deux génomes
+- `r` → Remplace le génome existant
+- `i` → Ignore le nouveau génome
 
 ### 3️⃣ Lancer le serveur en local  
 
