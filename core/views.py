@@ -50,7 +50,7 @@ def access_denied(request):
 
 # Page d'accueil
 def page_non_connecte(request):
-    return render(request, "core/non_connecte.html")
+    return render(request, "core/home.html")
 
 # Accès public (pas de restriction)
 def home(request):
@@ -121,7 +121,7 @@ def Pageinscription(request):
 
 def deconnexion(request):
     logout(request)
-    return redirect("page_non_connecte")
+    return redirect("home")
 
 
 @login_required
