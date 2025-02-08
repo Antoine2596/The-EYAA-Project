@@ -111,11 +111,10 @@ Lors de l'importation des données, les comptes suivants sont créés automatiqu
 ---
 
 ## ✨ Auteurs  
-
-- **Youna Maillié** - [GitHub](https://github.com/YounaMKr)  
-- **Antoine Loth** - [GitHub](https://github.com/Antoine2596)  
-- **Anne Beigeaud** - [GitHub](https://github.com/abgd29)  
 - **Emma Le Roy Pardonche**  - [GitHub](https://github.com/emmaleroyp)  
+- **Youna Maillié** - [GitHub](https://github.com/YounaMKr)  
+- **Anne Beigeaud** - [GitHub](https://github.com/abgd29)  
+- **Antoine Loth** - [GitHub](https://github.com/Antoine2596)  
 
 ---
 
