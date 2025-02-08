@@ -2,6 +2,8 @@
 
 The EYAA Project est une application web permettant de gérer l'annotation et la visualisation de génomes procaryotes.  
 
+Un diagramme UML de la base de données est disponible : **models_diagram.png**.
+
 ---
 
 ## 🚀 Installation  
@@ -41,7 +43,7 @@ python manage.py migrate
 python manage.py import_my_data {Repertoire/des/donnees} {mode}
 ```
 
-📌 **Modes d'importation en cas de génomes identiques** :  
+📌 **Modes d'importation** :  
 - `k` → Garde les deux génomes  
 - `r` → Remplace le génome existant  
 - `i` → Ignore le nouveau génome  
@@ -51,6 +53,16 @@ python manage.py import_my_data {Repertoire/des/donnees} {mode}
 ```bash
 python manage.py runserver
 ```
+
+### ⚙️ Automatiser la migration et l'importation des données
+
+Un script bash **run_django_migrations.sh** est disponible pour faciliter ces actions. 
+
+#### Utilisation :
+```bash
+./run_django_migrations.sh <Repertoire/des/donnees> <mode>
+```
+
 
 ---
 
