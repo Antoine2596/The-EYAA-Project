@@ -5,6 +5,12 @@
 Extraction - EYAA
 {% endblock %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'genome_database' %}">Base de Données</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Extraction des données</li>
+{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'core/style_extraction.css' %}">
 

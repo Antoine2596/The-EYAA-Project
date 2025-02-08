@@ -24,20 +24,20 @@
             <select name="genome" id="genome">
                 <option value="">Tous les génomes</option>
                 {% for genome in genomes %}
-                    <option value="{{ genome.genome_id }}" {% if genome.genome_id == request.GET.genome %}selected{% endif %}>{{ genome.organism }}</option>
+                    <option value="{{ genome.genome_id }}" {% if genome.genome_id == request.GET.genome %}selected{% endif %}>{{ genome.genome_id }}</option>
                 {% endfor %}
             </select>
         </div>
     
         <div>
             <label for="min_length">Longueur min :</label>
-            <input type="range" id="min_length" name="min_length" min="0" max="1000" value="{{ request.GET.min_length|default:0 }}">
+            <input type="range" id="min_length" name="min_length" min="0" max="10000" value="{{ request.GET.min_length|default:0 }}">
             <span id="min_length_value">{{ request.GET.min_length|default:0 }}</span>
         </div>
     
         <div>
             <label for="max_length">Longueur max :</label>
-            <input type="range" id="max_length" name="max_length" min="0" max="1000" value="{{ request.GET.max_length|default:1000 }}">
+            <input type="range" id="max_length" name="max_length" min="0" max="10000" value="{{ request.GET.max_length|default:1000 }}">
             <span id="max_length_value">{{ request.GET.max_length|default:1000 }}</span>
         </div>
     
