@@ -57,6 +57,28 @@
         background-color: #6c757d !important; 
         color: white !important;
     }
+    .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    }
+    .link-button {
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+    }
+    .link-button:hover {
+        background-color: #0056b3;
+    }
 </style>
 
 
@@ -154,6 +176,7 @@
                 <p><strong>Longueur :</strong> {{ obj.sequence_length }}</p>
                 <p><strong>Support :</strong> {{ obj.information_support }}</p>
                 <p><strong>Brin :</strong> {{ obj.sequence_brin }}</p>
+                <p><strong>Nom du peptide :</strong> {{ obj.peptide_product }}</p>
             </div>
         </div>
         
@@ -179,7 +202,11 @@
             </a>
         {% endif %}
 
-        
+        <div class="button-container">
+            <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" class="link-button" target="_blank">Effectuer un blast</a>
+            <a href="https://www.ebi.ac.uk/interpro/search/text/" class="link-button" target="_blank">Recherche InterPro</a>
+            <a href="https://www.uniprot.org/" class="link-button" target="_blank">Recherche sur UniProt</a>
+        </div>
 
     {% elif obj_type == "annotation" %}
         <h1 class="text-center text-white">Annotation : {{ obj.annotation_id }}</h1>
@@ -197,6 +224,8 @@
             <p><strong>ID de l'annotation :</strong> {{ obj.annotation_id }}</p>
             <p><strong>Auteur :</strong> {{ obj.annotation_author }}</p>
             <p><strong>Séquence associée :</strong> {{ obj.sequence.sequence_id }}</p>
+            <p><strong>Nom du gène :</strong> {{ obj.sequence.gene_name }}</p>
+            <p><strong>Nom du peptide :</strong> {{ obj.sequence.peptide_product }}</p>
             </div>
         </div>
 
@@ -204,6 +233,7 @@
             <pre style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-y: auto;">
                 {{ obj.annotation_text }}
             </pre>
+        
 
         <a href="{% url 'visualisation' 'genome' obj.sequence.genome  %}" class="btn btn-secondary btn-sm">
             Voir le génome
