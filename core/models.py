@@ -99,14 +99,17 @@ class Sequence(models.Model):
                       ("Validated", "Validée")]
     
 
-    SUPPORT_CHOICES = [(1, "Direct"),
-                       (-1, "Indirect"),
-                        (0, "Unknown")]
+    BRIN_CHOICES = [(1, "Direct"),
+                    (-1, "Indirect"),
+                    (0, "Unknown")]
     
-    sequence_brin = models.IntegerField( choices=SUPPORT_CHOICES, default=0)
+    SUPPORT_CHOICES = [("plasmid","Plasmide"),
+                       ("chromosome","Chromosome")]
+    
+    sequence_brin = models.IntegerField( choices=BRIN_CHOICES, default=0)
     sequence_status = models.CharField(max_length=50, choices=STATUS_CHOICES)
     
-    information_support = models.TextField()
+    information_support = models.CharField(max_length=50, choices=SUPPORT_CHOICES)
 
     # Relation One-to-Many avec genome
     genome = models.ForeignKey(Genome, on_delete=models.CASCADE,
