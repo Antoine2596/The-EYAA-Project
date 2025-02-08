@@ -39,7 +39,6 @@
                 <a href="https://www.ebi.ac.uk/interpro/search/sequence/" class="link-button" target="_blank">Recherche InterPro</a>
                 <a href="https://www.uniprot.org/" class="link-button" target="_blank">Recherche sur UniProt</a>
             </div>
-
         </div>
 
         {% if annotation.annotation_author.email != user.email %}
@@ -67,4 +66,20 @@
         {% endif %}
 
     </div>
+    <script>
+        function copyToClipboard(id) {
+            var copyText = document.getElementById(id);
+
+            // Selectionner le texte du textarea
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Pour les appareils mobiles
+
+            // Copier dans le presse-papiers
+            navigator.clipboard.writeText(copyText.value).then(function() {
+            alert('Séquence copiée dans le presse-papiers');
+            }).catch(function(error) {
+            console.error('Erreur lors de la copie dans le presse-papiers: ', error);
+            });
+        }
+    </script>
 {% endblock %}

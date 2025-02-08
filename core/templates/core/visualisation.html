@@ -170,12 +170,12 @@
             <div class="card-header">Détails</div>
             <div class="card-body">
                 <p><strong>ID de la séquence :</strong> {{ obj.sequence_id }}</p>
-                <p><strong>Nom du gène :</strong> {{ obj.gene_name }}</p>
-                <p><strong>Statut :</strong> {{ obj.get_sequence_status_display }}</p>
                 <p><strong>Génome associé :</strong> {{ obj.genome.genome_id }}</p>
-                <p><strong>Longueur :</strong> {{ obj.sequence_length }}</p>
+                <p><strong>Statut :</strong> {{ obj.get_sequence_status_display }}</p>
                 <p><strong>Support :</strong> {{ obj.information_support }}</p>
                 <p><strong>Brin :</strong> {{ obj.sequence_brin }}</p>
+                <p><strong>Longueur :</strong> {{ obj.sequence_length }}</p>
+                <p><strong>Nom du gène :</strong> {{ obj.gene_name }}</p>
                 <p><strong>Nom du peptide :</strong> {{ obj.peptide_product }}</p>
             </div>
         </div>
@@ -214,7 +214,7 @@
     
         {% if obj.sequence.get_sequence_status_display != "Validée"%}
             <hr>
-            <h2 style="color: darkorange;" >Attention cette, annotation n'a pas encore été Validée</h2>
+            <h2 style="color: darkorange;" >Attention cette annotation n'a pas encore été Validée</h2>
             <hr>
         {% endif%}
 
