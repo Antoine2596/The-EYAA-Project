@@ -237,6 +237,14 @@ header {
     justify-content: center;
 }
 
+.zone-fonctions h1{
+    color: white;
+    text-shadow: black 0 0 3px;
+    font-size: 2.5em;
+    text-align: center;
+    
+}
+
 .lien_function{
     height: 20vh;
     width: 20vw;
