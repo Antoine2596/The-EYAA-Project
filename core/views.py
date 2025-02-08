@@ -57,13 +57,12 @@ def home(request):
     return render(request, "core/home.html")
 
 # Accès restreint à certains rôles
-@role_required("lecteur", "annotateur", "validateur")
 def contacts(request):
     return render(request, "core/contacts.html")
 
 
 # @login_required
-@role_required(["lecteur", "annotateur", "validateur"])
+@role_required("lecteur", "annotateur", "validateur")
 def profile(request):
     return render(request, "core/profile.html")
 
@@ -204,7 +203,7 @@ def connexion(request):
             messages.error(request, "Adresse email ou mot de passe incorrect.")
     return render(request, "core/connexion.html")
 
-@role_required(["lecteur", "annotateur", "validateur"])
+@role_required("lecteur", "annotateur", "validateur")
 def genome_list(request):
     genomes = Genome.objects.all()  # Récupère tous les génomes
     return render(request, "test.html", {"genomes": genomes})

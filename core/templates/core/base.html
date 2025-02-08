@@ -14,7 +14,7 @@
     </head>
     <body>
         <header>
-            <a href="#" class="site-name">EYAA</a><i class='bx bx-dna'></i>
+            <a href="#" class="site-name">EYAA<i class='bx bx-dna'></i></a></i>
 
             <nav class="menu">
                 <ul>
@@ -39,7 +39,7 @@
             </div>
 
         </header>
-
+        
         <main>
             <div class="volet">
                 <div class="contenu_volet">
@@ -48,8 +48,13 @@
                         <ul>
                             <li><a href="{% url 'home' %}">Accueil</a></li>
                             <li><a href="{% url 'genome_database' %}">Base de Données</a></li>
+                            {% if user.is_authenticated %}
                             <li><a href="{% url 'profile_informations' %}">Profil</a></li>
+                            {% endif %}
+
+                            {% if user.role == "annotateur" %}
                             <li><a href="{% url 'profile_annotations' %}">Mes Annotations</a></li>
+                            {% endif %}
                             {% if user.role == "validateur" %}
                                 <li><a href="{% url 'annotations_listing' %}">Outil de Validation</a></li>
                                 <li><a href="{% url 'sequences_non_assigned' %}">Attribution Séquences</a></li>
@@ -64,6 +69,7 @@
                     </div>
                 </div>
             </div>
+            
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
