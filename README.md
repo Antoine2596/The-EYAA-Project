@@ -1,44 +1,107 @@
-# The-EYAA-Project
+# The-EYAA-Project  
 
-Quand on recupere le projet il faut faire :
+The EYAA Project est une application web permettant de gérer l'annotation et la visualisation de génomes procaryotes.  
 
-pyhton manage.py makemigrations
+---
+
+## 🚀 Installation  
+
+Pour installer ce projet, suivez les étapes ci-dessous :  
+
+### 1️⃣ Cloner le repository  
+
+```bash
+git clone git@github.com:Antoine2596/The-EYAA-Project.git
+cd ./The-EYAA-Project
+```
+
+### 2️⃣ Installer les dépendances  
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🔧 Utilisation  
+
+Une fois installé, utilisez le projet en suivant ces étapes dans le répertoire du projet :  
+
+### 1️⃣ Créer la base de données  
+
+```bash
+python manage.py makemigrations
 python manage.py makemigrations core
 python manage.py migrate
+```
+
+### 2️⃣ Importer les données  
+
+```bash
 python manage.py import_my_data {Repertoire/des/donnees} {mode}
-    Mode: Comportement a adopter si l id du genome existe deja : k = garde les deux, r = remplace le genome existant, i = ignore le nouveau genome 
-Cela cree automatiquement les comptes suivants :
+```
 
-lecteur : 
-    email = "lecteur@gmail.fr", 
-    password = "lecteur"
+📌 **Modes d'importation en cas de génomes identiques** :  
+- `k` → Garde les deux génomes  
+- `r` → Remplace le génome existant  
+- `i` → Ignore le nouveau génome  
 
-annotateur :
-    email = "annotateur@gmail.fr", 
-    password="annotateur"
+### 3️⃣ Lancer le serveur en local  
 
-validateur:
-email = "validateur@gmail.fr", 
-password="validateur"
+```bash
+python manage.py runserver
+```
 
-visiteur:
-email = "visiteur@gmail.fr", 
-password="visiteur"
+---
 
-admin:
-email= "admin@gmail.fr", 
-password="admin"
+## 🎯 Fonctionnalités  
 
-Etapes pour tracer le diagramme de classe du modele: 
+Cette application propose plusieurs rôles utilisateurs avec des accès spécifiques :  
 
-pip install django-extensions
+### 🔹 Visiteur  
+🅿️ **Rôle temporaire** en attendant la validation du compte par un administrateur. Il ne peut rien faire sur l'application.  
 
-#Rajouter django_extensions dans INSTALLED_APPS de settings.py
+### 🔹 Lecteur  
+✅ Peut effectuer des requêtes sur la base de données et exporter les résultats.  
+✅ Peut visualiser les génomes, les séquences et les annotations.  
 
-sudo apt install graphviz
-python manage.py graph_models -a --dot -o myapp_models.dot dot -Tpng myapp_models.dot -omyapp_models.png
+### 🔹 Annotateur  
+✅ A les mêmes droits que le lecteur.  
+✅ Peut annoter des séquences qui lui sont attribuées.  
+✅ Utilise les bases de données **InterPro** et **UniProt** pour l’annotation.  
 
+### 🔹 Validateur  
+✅ A les mêmes droits que l’annotateur.  
+✅ Peut **valider** ou **refuser** les annotations soumises.  
+✅ Peut attribuer des séquences à annoter **manuellement ou automatiquement**.  
 
+### 🔹 Administrateur  
+🔧 **Possède tous les droits** sur la base de données et gère la validation des comptes utilisateurs.  
+
+---
+
+## 🔑 Comptes par défaut  
+
+Lors de l'importation des données, les comptes suivants sont créés automatiquement :  
+
+| 🏷️ Rôle         | 📧 Email                | 🔐 Mot de passe  |
+|----------------|------------------------|----------------|
+| **Visiteur**   | visiteur@gmail.fr      | visiteur       |
+| **Lecteur**    | lecteur@gmail.fr       | lecteur        |
+| **Annotateur** | annotateur@gmail.fr    | annotateur     |
+| **Validateur** | validateur@gmail.fr    | validateur     |
+| **Admin**      | admin@gmail.fr         | admin          |
+
+---
+
+## ✨ Auteurs  
+
+- **Youna Maillié** - [GitHub](https://github.com/YounaMKr)  
+- **Antoine Loth** - [GitHub](https://github.com/Antoine2596)  
+- **Anne Beigeaud** - [GitHub](https://github.com/abgd29)  
+- **Emma Le Roy Pardonche**  - [GitHub](https://github.com/emmaleroyp)  
+
+---
 
 
 
