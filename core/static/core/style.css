@@ -2,9 +2,10 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: Avantgarde, sans-serif;
-    height: 100vh;
+    /* height: 100vh; */
     background: rgb(97,81,153);
     background-image: url("../images/hero-bg.jpg ");
+    background-size: cover;
 }
 
 header {
