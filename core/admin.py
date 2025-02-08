@@ -86,10 +86,7 @@ class AnnotationAdmin(ImportMixin, admin.ModelAdmin):
     def has_add_permission(self, request):
         return True
 
-@admin.register(ConnectionHistory)
-class ConnectionHistoryAdmin(admin.ModelAdmin):
-    list_display = ('user', 'login_time', 'logout_time')
-    list_filter = ('user', 'login_time')
+
 
 @receiver(post_save, sender=CustomUser)
 def update_user_session(sender, instance, **kwargs):

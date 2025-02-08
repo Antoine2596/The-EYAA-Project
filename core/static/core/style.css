@@ -239,8 +239,8 @@ header {
 
 .zone-fonctions h1{
     color: white;
-    text-shadow: black 0 0 3px;
-    font-size: 2.5em;
+    text-shadow: black 0 0 5px;
+    font-size: 2em;
     text-align: center;
     
 }
@@ -292,7 +292,7 @@ h2{
 .filtre h2{
     text-shadow: black 0 0 3px;
     text-align: center;
-    font-size: 15px;
+    font-size: 10px;
 }
 
 .cours1{
