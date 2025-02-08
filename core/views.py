@@ -261,7 +261,10 @@ def database_view(request):
                 sequences = sequences.filter(sequence_brin__iexact=Brin)
             if sequence_type:
                 sequences = sequences.filter(selected_type_iexact=sequence_type)
-            
+            if is_annotated:
+                sequences = sequences.filter(
+                    Q(sequence_status__iexact="Validated") | Q(sequence_status__iexact="Awaiting validation")
+                            )
 
         combined_results = (
     [{"obj": obj, "type": "Genome"} for obj in genomes] if genomes else []
@@ -541,6 +544,10 @@ def extraction_file(request):
             sequences = sequences.filter(sequence_brin__iexact=Brin)
         if sequence_type:
             sequences = sequences.filter(selected_type_iexact=sequence_type)
+        if is_annotated:
+                sequences = sequences.filter(
+                    Q(sequence_status__iexact="Validated") | Q(sequence_status__iexact="Awaiting validation")
+                            )
 
 
     # 2- Récupérer les champs sélectionnés
