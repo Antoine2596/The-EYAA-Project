@@ -33,8 +33,9 @@ import csv
 # Fonction pour accès
 #############
 # Fonction pour gérer l'accès
+# https://docs.djangoproject.com/en/5.1/topics/http/shortcuts/ 
 def role_required(role1, role2=None, role3=None):
-    def decorator(view_func):
+    def decorator(view_func): # https://docs.djangoproject.com/fr/5.1/topics/http/decorators/
         def wrapper(request):
             if request.user.is_authenticated:  # Vérifie si l'utilisateur est connecté
                 user_role = request.user.role
@@ -169,7 +170,7 @@ def visualisation(request, obj_type, obj_id):
     )
 
 
-
+# https://www.youtube.com/watch?v=KgcCE47a7x8
 def inscription(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -185,7 +186,7 @@ def inscription(request):
     return render(request, "core/inscription.html", {"form": form})
 
 
-
+# https://www.youtube.com/watch?v=KgcCE47a7x8 (même vidéo)
 def connexion(request):
     if request.method == "POST":
 
@@ -465,6 +466,7 @@ def attribution_auto(request):
     messages.success(request, f"{attribution_done} séquences ont été attribuées automatiquement.")
     return redirect("sequences_non_assigned")
 
+# https://docs.djangoproject.com/en/5.1/topics/auth/default/
 @login_required
 def annoter(request, sequence_id):
     sequence = get_object_or_404(Sequence, sequence_id=sequence_id)
