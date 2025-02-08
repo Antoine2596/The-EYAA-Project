@@ -1,3 +1,7 @@
+
+![ezgif-32bcf867cfbca3](https://github.com/user-attachments/assets/f2690f4a-3fc4-47c6-9cd0-7bf5afccf02e)
+
+
 # The-EYAA-Project  
 
 The EYAA Project est une application web permettant de gérer l'annotation et la visualisation de génomes procaryotes.  
