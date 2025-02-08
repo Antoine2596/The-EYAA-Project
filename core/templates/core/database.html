@@ -12,6 +12,8 @@ Database - EYAA
     <form method="GET" action="{% url 'genome_database' %}">
         <div class="search-bar">
             <input type="text" name="user_request" placeholder="ID, Espèce, séquence" value="{{ request.GET.user_request|default_if_none:'' }}">
+            <button type="submit" value="Recherche" style="color: white;">Rechercher</button>
+        </div>
         </div>
     </form>
 </div>
@@ -107,6 +109,14 @@ Database - EYAA
                     {% endif %}
                 </span>
             </div>
+
+            <div class="Extraction">
+                <a href="{% url 'extraction' %}?{{ request.GET.urlencode }}" class="extraction-button">
+                    Télécharger les résultats
+                </a>
+            </div>
+            
+            
             
         {% endif %}
     </div>
