@@ -22,6 +22,9 @@ from django.http import HttpResponse
 #from import_export.formats.base import BaseFormat
 from .resources import GenomeResource
 from .admin import GenomeImportForm
+import csv
+
+
 
 # Page d'accueil
 def page_non_connecte(request):
@@ -191,17 +194,22 @@ def is_not_visitor(user):
 @login_required
 @user_passes_test(is_not_visitor)
 def database_view(request):
+
     user_request = request.GET.get("user_request", "").strip()
-    filter_types = request.GET.getlist("filter_type")
+    selected_type = request.GET.get("type", "genome") 
     is_annotated = request.GET.get("is_annotated") == "true"
     min_length = request.GET.get("min_length")
     max_length = request.GET.get("max_length")
-    chromosome = request.GET.get("chromosome", "").strip()
+    chromosome = request.GET.get("chromosome")
+    sequence_type = request.GET.get("sequence_type")
+    Brin = request.GET.get("Brin")
 
-    genomes = sequences = annotations = None
+
+    genomes = sequences = None
     
     # Si l'utilisateur n'a pas fait de recherche, afficher le dashboard
     dashboard = not bool(user_request)
+
 
     if dashboard:
         
@@ -209,6 +217,7 @@ def database_view(request):
         total_species = Genome.objects.values("organism").distinct().count()
         total_sequences = Sequence.objects.count()
         annotated_sequences = Annotation.objects.filter(is_validated=True).values("sequence").distinct().count()
+        
         
         # Calcul de la proportion des séquences annotées
         annotation_ratio = (annotated_sequences / total_sequences * 100) if total_sequences > 0 else 0
@@ -222,49 +231,56 @@ def database_view(request):
         }
 
     else:
-        query = Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)
-        if "genome" in filter_types or not filter_types:
-            genomes = Genome.objects.filter(query)
+        if selected_type == "genome":
+            genomes = Genome.objects.filter(
+                (Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)) | Q(genome_sequence__icontains=user_request) 
+            )
             if is_annotated:
                 genomes = genomes.filter(is_annotated=True)
+            
 
-        if "sequence" in filter_types or not filter_types:
+        elif selected_type == "sequence":
+            
+            
             sequences = Sequence.objects.filter(
-                Q(sequence_id__icontains=user_request) | Q(gene_name__icontains=user_request)
+                (Q(sequence_id__icontains=user_request) | 
+                 Q(gene_name__icontains=user_request) | 
+                 Q(dna_sequence__icontains=user_request) |
+                 Q(aa_sequence__icontains=user_request) |
+                 Q(genome__genome_id__icontains=user_request) | 
+                 Q(genome__organism__icontains=user_request) ) |
+                 Q(annotation__annotation_text__icontains=user_request)
             )
-
-            # Appliquer les filtres sur les résultats
             if min_length:
                 sequences = sequences.filter(sequence_length__gte=int(min_length))
             if max_length:
                 sequences = sequences.filter(sequence_length__lte=int(max_length))
             if chromosome:
-                sequences = sequences.filter(num_chromosome__iexact=chromosome)
+                sequences = sequences.filter(information_support__iexact=chromosome)
+            if Brin:
+                sequences = sequences.filter(sequence_brin__iexact=Brin)
+            if sequence_type:
+                sequences = sequences.filter(selected_type_iexact=sequence_type)
+            
 
-        if "annotation" in filter_types or not filter_types:
-            annotations = Annotation.objects.filter(
-                (Q(annotation_id__icontains=user_request) | Q(annotation_text__icontains=user_request)) &
-                Q(is_validated=True))
+        combined_results = (
+    [{"obj": obj, "type": "Genome"} for obj in genomes] if genomes else []
+) + (
+    [{"obj": obj, "type": "Sequence"} for obj in sequences] if sequences else []
+)
+
         
-        combined_results = [
-            {"obj": obj, "type": "Genome"} for obj in genomes
-        ] + [
-            {"obj": obj, "type": "Sequence"} for obj in sequences
-        ] + [
-            {"obj": obj, "type": "Annotation"} for obj in annotations
-        ]
-        
-        # Pagination
-        paginator = Paginator(combined_results, 3)  # 10 résultats par page
+
+        paginator = Paginator(combined_results, 3)  
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        
+
         context = {
             "dashboard": False,
             "page_obj": page_obj,
-            "total_genomes": len(genomes),
-            "total_sequences": len(sequences),
-            "total_annotations": len(annotations),
+            "total_genomes": len(genomes) if genomes else 0,
+            "total_sequences": len(sequences) if sequences else 0,
+            "selected_type": selected_type,  # Garde la sélection active
         }
 
     return render(request, "core/database.html", context)
@@ -468,3 +484,227 @@ def annoter(request, sequence_id):
             "is_editable": is_editable
         }
     )
+
+def extraction_view(request):
+
+    selected_type = request.GET.get("type", "genome") 
+    type = (selected_type == "genome")
+
+    context = {
+            "type": type,
+    }
+    return render(request, "core/extraction.html", context)
+
+
+def extraction_file(request):
+
+    # 1-Filrer les données
+
+    user_request = request.GET.get("user_request", "").strip()
+    selected_type = request.GET.get("type", "genome") 
+    is_annotated = request.GET.get("is_annotated") == "true"
+    min_length = request.GET.get("min_length")
+    max_length = request.GET.get("max_length")
+    chromosome = request.GET.get("chromosome")
+    sequence_type = request.GET.get("sequence_type")
+    Brin = request.GET.get("Brin")
+
+
+    genomes = sequences = None
+    
+    if selected_type == "genome":
+        genomes = Genome.objects.filter(
+            (Q(genome_id__icontains=user_request) | Q(organism__icontains=user_request)) | Q(genome_sequence__icontains=user_request) 
+        )
+        if is_annotated:
+            genomes = genomes.filter(is_annotated=True)
+        
+
+    elif selected_type == "sequence":
+        sequences = Sequence.objects.filter(
+                (Q(sequence_id__icontains=user_request) | 
+                 Q(gene_name__icontains=user_request) | 
+                 Q(dna_sequence__icontains=user_request) |
+                 Q(aa_sequence__icontains=user_request) |
+                 Q(genome__genome_id__icontains=user_request) | 
+                 Q(genome__organism__icontains=user_request) ) |
+                 Q(annotation__annotation_text__icontains=user_request)
+            )
+
+        if min_length:
+            sequences = sequences.filter(sequence_length__gte=int(min_length))
+        if max_length:
+            sequences = sequences.filter(sequence_length__lte=int(max_length))
+        if chromosome:
+            sequences = sequences.filter(information_support__iexact=chromosome)
+        if Brin:
+            sequences = sequences.filter(sequence_brin__iexact=Brin)
+        if sequence_type:
+            sequences = sequences.filter(selected_type_iexact=sequence_type)
+
+
+    # 2- Récupérer les champs sélectionnés
+    selected_fields = request.GET
+
+    fields = []
+
+    if selected_type == "genome":
+        if selected_fields.get("genome_id"):
+            fields.append("genome_id")
+        if selected_fields.get("genome_sequence"):
+            fields.append("genome_sequence")
+        if selected_fields.get("genome_type"):
+            fields.append("genome_type")
+        if selected_fields.get("genome_organisme"):
+            fields.append("organism")
+        if selected_fields.get("genome_annotation"):
+            fields.append("is_annotated")
+    else:  # Si c'est une séquence
+
+        if selected_fields.get("sequence_id"):
+            fields.append("sequence_id")
+        if selected_fields.get("genome"):
+            fields.append("genome")
+        if selected_fields.get("organisme"):
+            fields.append("organism")
+
+        if selected_fields.get("dna_sequence"):
+            fields.append("dna_sequence")
+        if selected_fields.get("aa_sequence"):
+            fields.append("aa_sequence")
+
+        if selected_fields.get("sequence_start"):
+            fields.append("sequence_start")
+        if selected_fields.get("sequence_stop"):
+            fields.append("sequence_stop")
+        if selected_fields.get("sequence_length"):
+            fields.append("sequence_length")
+        if selected_fields.get("Brin_champ"):
+            fields.append("sequence_brin")
+        if selected_fields.get("support"):
+            fields.append("information_support")
+
+        if selected_fields.get("sequence_name"):
+            fields.append("gene_name")
+        if selected_fields.get("sequence_pep"):
+            fields.append("peptide_product")
+        if selected_fields.get("sequence_annot"):
+            fields.append("annotation_text")
+        if selected_fields.get("sequence_annot_status"):
+            fields.append("sequence_status")
+        
+
+
+    # 3 - Création du fichier CSV
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="exported_results.csv"'
+
+    writer = csv.writer(response, delimiter = ';')
+    
+    # Titre des colonnes selon les champs sélectionnés
+    header = []
+
+    if selected_type == "genome": 
+        if "genome_id" in fields:
+            header.append("Identifiant Génome")
+        if "genome_sequence" in fields:
+            header.append("Génome")
+        if "genome_type" in fields:
+            header.append("Type du Génome")
+        if "organism" in fields:
+            header.append("Organisme")
+        if "is_annotated" in fields:
+            header.append("Est entièrement annoté")
+    else: 
+        if "sequence_id" in fields:
+            header.append("Identifiant de la séquence")
+        if "genome" in fields:
+            header.append("Identifiant du génome")
+        if "organism" in fields:
+            header.append("Espèce")
+
+        if "dna_sequence" in fields:
+            header.append("Séquence nucléotidique")
+        if "aa_sequence" in fields:
+            header.append("Séquence protéique")
+        
+        if "sequence_start" in fields:
+            header.append("Position du premier nucléotide")
+        if "sequence_stop" in fields:
+            header.append("Position du dernier nucléotide")
+        if "sequence_length" in fields:
+            header.append("Taille")
+        if "sequence_brin" in fields:
+            header.append("Brin")
+        if "information_support" in fields:
+            header.append("Support")
+
+        if "gene_name" in fields:
+            header.append("Nom du gène")
+        if "peptide_product" in fields:
+            header.append("Produit peptidique")
+        if "annotation_text" in fields:
+            header.append("Annotation")
+        if "sequence_status" in fields:
+            header.append("Statut de l'annotation")
+
+    writer.writerow(header)
+
+    # Remplir le CSV avec les données sélectionnées
+    if selected_type == "genome":
+        for genome in genomes:
+            row = []
+            if "genome_id" in fields:
+                row.append(genome.genome_id)
+            if "genome_sequence" in fields:
+                row.append(genome.genome_sequence)
+            if "genome_type" in fields:
+                row.append(genome.genome_type)
+            if "organism" in fields:
+                row.append(genome.organism)
+            if "is_annotated" in fields:
+                row.append(genome.is_annotated)
+            writer.writerow(row)
+
+    if selected_type == "sequence":
+        for sequence in sequences:
+            row = []
+            if "sequence_id" in fields:
+                row.append(sequence.sequence_id)
+            if "genome" in fields:
+                row.append(sequence.genome.genome_id)
+            if "organism" in fields:
+                row.append(sequence.genome.organism)
+
+            if "dna_sequence" in fields:
+                row.append(sequence.dna_sequence)
+            if "aa_sequence" in fields:
+                row.append(sequence.aa_sequence)
+
+            if "sequence_start" in fields:
+                row.append(sequence.sequence_start)
+            if "sequence_stop" in fields:
+                row.append(sequence.sequence_stop)
+            if "sequence_length" in fields:
+                row.append(sequence.sequence_length)
+            if "sequence_brin" in fields:
+                row.append(sequence.sequence_brin)
+            if "information_support" in fields:
+                row.append(sequence.information_support)
+
+            if "gene_name" in fields:
+                row.append(sequence.gene_name)
+            if "peptide_product" in fields:
+                row.append(sequence.peptide_product)
+            if "annotation_text" in fields:
+                annotation_text = sequence.annotation.annotation_text if hasattr(sequence, 'annotation') else "NA"
+                row.append(annotation_text)
+            if "sequence_status" in fields:
+                row.append(sequence.sequence_status)
+            writer.writerow(row)
+
+    print(f"🔹 Nombre de séquences trouvées: {sequences.count() if sequences else 0}")
+
+
+
+    return response
