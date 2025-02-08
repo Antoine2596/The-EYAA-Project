@@ -18,9 +18,28 @@
             <p>Auteur : {{ annotation.annotation_author }} </p>
             <p><strong>Sequence ID :</strong> {{ annotation.sequence.sequence_id }}</p>
             <p><strong>Genome Organism :</strong> {{ annotation.sequence.genome.organism }}</p>
-            <br>
             <p><strong>Texte de l'annotation :</strong><br> 
             {{ annotation.annotation_text }}</p>
+            
+            <br>
+            <h3>ADN :</h3>
+            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px; overflow-y: auto;">
+                {{ annotation.sequence.dna_sequence }}
+            </textarea>
+            <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button>
+
+            <h3>Protéine :</h3>
+            <textarea id="protein_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px;overflow-y: auto;">
+                {{ annotation.sequence.aa_sequence }}
+            </textarea>
+            <button onclick="copyToClipboard('protein_sequence')">Copier Protéine</button>
+
+            <div class="button-container">
+                <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" class="link-button" target="_blank">Effectuer un blast</a>
+                <a href="https://www.ebi.ac.uk/interpro/search/sequence/" class="link-button" target="_blank">Recherche InterPro</a>
+                <a href="https://www.uniprot.org/" class="link-button" target="_blank">Recherche sur UniProt</a>
+            </div>
+
         </div>
 
         {% if annotation.annotation_author.email != user.email %}

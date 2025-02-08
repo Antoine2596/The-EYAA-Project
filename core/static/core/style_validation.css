@@ -53,12 +53,17 @@ h1 {
 }
 
 button {
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
+    background-color: darkgray;
+    color: white;
+    padding: 10px 15px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: gray;
 }
 
 .btn-validate {
@@ -95,4 +100,27 @@ textarea {
 textarea:focus {
     outline: none;
     border-color: #0056b3;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+.link-button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+.link-button:hover {
+    background-color: #0056b3;
 }

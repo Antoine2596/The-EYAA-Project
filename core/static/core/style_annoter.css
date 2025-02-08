@@ -46,42 +46,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-.button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-button {
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-validate {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-validate:hover {
-    background-color: #218838;
-}
-
-.btn-reject {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-reject:hover {
-    background-color: #c82333;
-}
-
-.comment-section {
-    margin-top: 20px;
-}
 
 textarea {
     width: 90%;
@@ -96,3 +60,41 @@ textarea:focus {
     outline: none;
     border-color: #0056b3;
 }
+
+button {
+    background-color: darkgray;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: gray;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+.link-button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+.link-button:hover {
+    background-color: #0056b3;
+}
+
