@@ -115,6 +115,7 @@ header {
 .profile-icon{
     text-decoration: none;
 }
+
 /* Volet */
 .button_volet {
     color: white;
@@ -126,8 +127,8 @@ header {
 }
 
 .volet {
-    backdrop-filter: blur(20px);
-    background-color: #0b469863;
+    backdrop-filter: blur(3px);
+    background-color: rgba(14, 37, 95, 0.751);
     box-shadow: black 0 0 10px;
     bottom: 3vh;
     left: 0;
@@ -141,6 +142,7 @@ header {
     transition: all 0.5s ease;
     z-index: 2;
     font-weight: bold ;
+    border-radius: 15px;
 }
 
 .contenu_titre h2 {
@@ -160,7 +162,7 @@ header {
 }
 
 .afficher_volet {
-    margin-left: 0; 
+    margin-left: -3%; 
 }
 
 .contenu_volet {
