@@ -18,7 +18,7 @@
     <form method="GET" action="{% url 'sequences_non_assigned' %}">
         <div>
             <label for="search">Rechercher :</label>
-            <input type="text" name="search" id="search" placeholder="Search Sequence ID or Annotation Text" value="{{ request.GET.search }}">
+            <input type="text" name="search" id="search" placeholder="Search Sequence ID" value="{{ request.GET.search }}">
         </div>
         
         <div>

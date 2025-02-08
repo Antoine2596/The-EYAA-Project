@@ -138,9 +138,9 @@ def visualisation(request, obj_type, obj_id):
         search_query = request.GET.get('search', '')
 
         if search_query:
-            # pour faire la recherche par nom de gène 
+            # pour faire la recherche par nom de gène & peptide
             associated_sequences = associated_sequences.filter(
-                Q(gene_name__icontains=search_query)
+                Q(gene_name__icontains=search_query) | Q(peptide_product__icontains=search_query)
             )
 
         # pagination : 20 CDS par page

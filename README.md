@@ -1,8 +1,12 @@
+
+![ezgif-36f996a459e0f5](https://github.com/user-attachments/assets/b5e8985c-d55a-40f4-b28d-289733fc9baa)
+
+
 # The-EYAA-Project  
 
-The EYAA Project est une application web permettant de gérer l'annotation et la visualisation de génomes procaryotes.  
+The EYAA Project (reprenant les initiales des développeurs : Emma, Youna, Anne, Antoine) est une application web permettant de gérer l'annotation et la visualisation de génomes procaryotes.  
 
-Un diagramme UML de la base de données est disponible : **models_diagram.png**.
+Un diagramme UML de la base de données est disponible dans le répertoire sous le nom de **models_diagram.png**.
 
 ---
 
@@ -44,9 +48,9 @@ python manage.py import_my_data {Repertoire/des/donnees} {mode}
 ```
 
 📌 **Modes d'importation** :  
-- `k` → Garde les deux génomes  
-- `r` → Remplace le génome existant  
-- `i` → Ignore le nouveau génome  
+- `k` → Garde les deux génomes
+- `r` → Remplace le génome existant
+- `i` → Ignore le nouveau génome
 
 ### 3️⃣ Lancer le serveur en local  
 
@@ -107,11 +111,10 @@ Lors de l'importation des données, les comptes suivants sont créés automatiqu
 ---
 
 ## ✨ Auteurs  
-
-- **Youna Maillié** - [GitHub](https://github.com/YounaMKr)  
-- **Antoine Loth** - [GitHub](https://github.com/Antoine2596)  
-- **Anne Beigeaud** - [GitHub](https://github.com/abgd29)  
 - **Emma Le Roy Pardonche**  - [GitHub](https://github.com/emmaleroyp)  
+- **Youna Maillié** - [GitHub](https://github.com/YounaMKr)  
+- **Anne Beigeaud** - [GitHub](https://github.com/abgd29)  
+- **Antoine Loth** - [GitHub](https://github.com/Antoine2596)  
 
 ---
 
