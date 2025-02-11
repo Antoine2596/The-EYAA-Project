@@ -17,10 +17,13 @@
             <h2>Annotation ID : {{ annotation.annotation_id }}</h2>
             <p>Auteur : {{ annotation.annotation_author }} </p>
             <p><strong>Sequence ID :</strong> {{ annotation.sequence.sequence_id }}</p>
-            <p><strong>Genome Organism :</strong> {{ annotation.sequence.genome.organism }}</p>
-            <p><strong>Texte de l'annotation :</strong><br> 
+            <p><strong>Genome Organism :</strong> {{ annotation.sequence.genome.organism }}</p><br>
+
+            <p><strong>Texte de l'annotation :</strong><br>
             {{ annotation.annotation_text }}</p>
-            
+            <p><strong>Nom du gène :</strong> {{ annotation.sequence.gene_name }}</p>
+            <p><strong>Nom du peptide :</strong> {{ annotation.sequence.peptide_product }}</p><br>
+
             <br>
             <h3>ADN :</h3>
             <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px; overflow-y: auto;">

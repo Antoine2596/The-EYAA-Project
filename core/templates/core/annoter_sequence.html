@@ -45,6 +45,14 @@
 
         </div>
 
+        {% if rejected_comment %}
+        <div class="alert alert-warning">
+            <strong>Votre annotation a été rejetée.</strong><br>
+            <em>Commentaire du validateur :</em> {{ rejected_comment }}
+        </div>
+        {% endif %}
+
+
         <div class="annotation-actions">
             <h3>Texte descriptif/annotation fonctionnelle :</h3>
 
@@ -70,8 +78,10 @@
                 {% if is_editable %}
                     <button type="submit" name="send_to_validation">Envoyer pour validation</button>
                     <button type="submit" name="save">Sauvegarder les modifications</button>
-                {% else %}
+                {% elif sequence.sequence_status == "Awaiting-validation" %}
                     <p style="color: red;"><strong>Cette annotation est en attente de validation et ne peut pas être modifiée.</strong></p>
+                {% elif sequence.sequence_status == "Validated" %}
+                    <p><strong>Cette annotation a été validée le {{ annotation.validation_date}}</strong></p>
                 {% endif %}
                 </form>
         </div>

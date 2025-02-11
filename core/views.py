@@ -316,6 +316,7 @@ def validate_annotation(request, annotation_id):
 
         if action == "validate":
             annotation.is_validated = True
+            annotation.rejected_comment = None
             annotation.validation_date = now()
             sequence.sequence_status = "Validated"
             messages.success(request, "L'annotation a été validée avec succès.")
@@ -431,6 +432,7 @@ def annoter(request, sequence_id):
     annotation = get_object_or_404(Annotation, sequence=sequence, annotation_author=request.user)
 
     is_editable = annotation.sequence.sequence_status == "Assigned"
+    rejected_comment = annotation.rejected_comment
 
     if request.method == "POST" and is_editable:
         gene_name = request.POST.get('gene_name')
@@ -464,6 +466,7 @@ def annoter(request, sequence_id):
         {
             "sequence": sequence, 
             "annotation": annotation, 
-            "is_editable": is_editable
+            "is_editable": is_editable,
+            "rejected_comment":rejected_comment,
         }
     )
