@@ -2,9 +2,10 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: Avantgarde, sans-serif;
-    height: 100vh;
+    /* height: 100vh; */
     background: rgb(97,81,153);
     background-image: url("../images/hero-bg.jpg ");
+    background-size: cover;
 }
 
 header {
@@ -28,7 +29,7 @@ header {
     font-weight: bold;
     font-family: "Audiowide", serif;
     text-transform: uppercase;
-}
+}   
 
 .site-name a {
     color: white;
@@ -74,8 +75,33 @@ header {
 }
 
 .bx {
+    font-size: 1em;
+    color: white;
+}   
+
+.menu-right .bx {
     font-size: 2em;
     color: white;
+    margin-right: 10px;
+}   
+
+.site-name .bx {
+    -webkit-animation:spin 2s linear infinite;
+    -moz-animation:spin 2s linear infinite;
+    animation:spin 2s linear infinite;
+}   
+
+@-moz-keyframes spin { 
+    100% { -moz-transform: rotate(360deg); } 
+}
+@-webkit-keyframes spin { 
+    100% { -webkit-transform: rotate(360deg); } 
+}
+@keyframes spin { 
+    100% { 
+        -webkit-transform: rotate(360deg); 
+        transform:rotate(360deg); 
+    } 
 }
 
 .connexion-button {
@@ -106,6 +132,9 @@ header {
     background-color: teal;
 }
 
+.profile-icon{
+    text-decoration: none;
+}
 
 /* Volet */
 .button_volet {
@@ -118,8 +147,8 @@ header {
 }
 
 .volet {
-    backdrop-filter: blur(20px);
-    background-color: #0b469863;
+    backdrop-filter: blur(3px);
+    background-color: rgba(14, 37, 95, 0.751);
     box-shadow: black 0 0 10px;
     bottom: 3vh;
     left: 0;
@@ -133,6 +162,7 @@ header {
     transition: all 0.5s ease;
     z-index: 2;
     font-weight: bold ;
+    border-radius: 15px;
 }
 
 .contenu_titre h2 {
@@ -152,7 +182,7 @@ header {
 }
 
 .afficher_volet {
-    margin-left: 0; 
+    margin-left: -3%; 
 }
 
 .contenu_volet {
@@ -217,16 +247,24 @@ header {
 
 
 .zone-fonctions{
-    margin-top: 15px;
+    margin-top: 5%;
     padding-left: 15%;
     padding-right: 15%;
     display: flex;
-    height: 40vh;
+    height: 60vh;
     z-index: 0;
     /* transform: translate(-50%,0); */
     align-items: flex-start;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.zone-fonctions h1{
+    color: white;
+    text-shadow: black 0 0 5px;
+    font-size: 2em;
+    text-align: center;
+    
 }
 
 .lien_function{
@@ -245,7 +283,7 @@ header {
     color: white;
     border-radius: 15px;
     transition: 0.5 ease; 
-    background-color: orange;
+    /* background-color: orange; */
     text-decoration: none;
     /* transform: scale(1.0); */
     transition: ease-in-out 0.6s;
@@ -269,6 +307,16 @@ header {
 
 }
 
+h2{
+    text-align: center;
+}
+
+.filtre h2{
+    text-shadow: black 0 0 3px;
+    text-align: center;
+    font-size: 10px;
+}
+
 .cours1{
     background-color: orange;
 }
@@ -281,4 +329,53 @@ header {
     background-size: cover;
     background-position: center;
     transition: opacity 0.5s ease; 
+}
+
+.function_gene_protein_vizu {
+    position: relative;
+    background-image: url("../images/gene_dna_visualization.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.function_dna_alignement {
+    position: relative;
+    background-image: url("../images/gene_protein_alignment.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.BD_info {
+    position: relative;
+    background-image: url("../images/BD_image.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.requete_genome {
+    position: relative;
+    background-image: url("../images/requete_genome.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+.validation_annotation{
+    position: relative;
+    background-image: url("../images/validation_annotation.jpg");
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease; 
+}
+
+
+.list_annotation{
+    position: relative;
+    background-image: url("../images/list_annotation.jpg");
+    background-size: cover; 
+    background-position: center;
+    transition: opacity 0.5s ease;   
 }

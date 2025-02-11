@@ -1,44 +1,122 @@
-# The-EYAA-Project
 
-Quand on recupere le projet il faut faire :
+![ezgif-36f996a459e0f5](https://github.com/user-attachments/assets/b5e8985c-d55a-40f4-b28d-289733fc9baa)
 
-pyhton manage.py makemigrations
+
+# The-EYAA-Project  
+
+The EYAA Project (reprenant les initiales des développeurs : Emma, Youna, Anne, Antoine) est une application web permettant de gérer l'annotation et la visualisation de génomes procaryotes.  
+
+Un diagramme UML de la base de données est disponible dans le répertoire sous le nom de **models_diagram.png**.
+
+---
+
+## 🚀 Installation  
+
+Pour installer ce projet, suivez les étapes ci-dessous :  
+
+### 1️⃣ Cloner le repository  
+
+```bash
+git clone git@github.com:Antoine2596/The-EYAA-Project.git
+cd ./The-EYAA-Project
+```
+
+### 2️⃣ Installer les dépendances  
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🔧 Utilisation  
+
+Une fois installé, utilisez le projet en suivant ces étapes dans le répertoire du projet :  
+
+### 1️⃣ Créer la base de données  
+
+```bash
+python manage.py makemigrations
 python manage.py makemigrations core
 python manage.py migrate
+```
+
+### 2️⃣ Importer les données  
+
+```bash
 python manage.py import_my_data {Repertoire/des/donnees} {mode}
-    Mode: Comportement a adopter si l id du genome existe deja : k = garde les deux, r = remplace le genome existant, i = ignore le nouveau genome 
-Cela cree automatiquement les comptes suivants :
+```
 
-lecteur : 
-    email = "lecteur@gmail.fr", 
-    password = "lecteur"
+📌 **Modes d'importation** :  
+- `k` → Garde les deux génomes
+- `r` → Remplace le génome existant
+- `i` → Ignore le nouveau génome
 
-annotateur :
-    email = "annotateur@gmail.fr", 
-    password="annotateur"
+### 3️⃣ Lancer le serveur en local  
 
-validateur:
-email = "validateur@gmail.fr", 
-password="validateur"
+```bash
+python manage.py runserver
+```
 
-visiteur:
-email = "visiteur@gmail.fr", 
-password="visiteur"
+### ⚙️ Automatiser la migration et l'importation des données
 
-admin:
-email= "admin@gmail.fr", 
-password="admin"
+Un script bash **run_django_migrations.sh** est disponible pour faciliter ces actions. 
 
-Etapes pour tracer le diagramme de classe du modele: 
-
-pip install django-extensions
-
-#Rajouter django_extensions dans INSTALLED_APPS de settings.py
-
-sudo apt install graphviz
-python manage.py graph_models -a --dot -o myapp_models.dot dot -Tpng myapp_models.dot -omyapp_models.png
+#### Utilisation :
+```bash
+./run_django_migrations.sh <Repertoire/des/donnees> <mode>
+```
 
 
+---
+
+## 🎯 Fonctionnalités  
+
+Cette application propose plusieurs rôles utilisateurs avec des accès spécifiques :  
+
+### 🔹 Visiteur  
+🅿️ **Rôle temporaire** en attendant la validation du compte par un administrateur. Il ne peut rien faire sur l'application.  
+
+### 🔹 Lecteur  
+✅ Peut effectuer des requêtes sur la base de données et exporter les résultats.  
+✅ Peut visualiser les génomes, les séquences et les annotations.  
+
+### 🔹 Annotateur  
+✅ A les mêmes droits que le lecteur.  
+✅ Peut annoter des séquences qui lui sont attribuées.  
+✅ Utilise les bases de données **InterPro** et **UniProt** pour l’annotation.  
+
+### 🔹 Validateur  
+✅ A les mêmes droits que l’annotateur.  
+✅ Peut **valider** ou **refuser** les annotations soumises.  
+✅ Peut attribuer des séquences à annoter **manuellement ou automatiquement**.  
+
+### 🔹 Administrateur  
+🔧 **Possède tous les droits** sur la base de données et gère la validation des comptes utilisateurs.  
+
+---
+
+## 🔑 Comptes par défaut  
+
+Lors de l'importation des données, les comptes suivants sont créés automatiquement :  
+
+| 🏷️ Rôle         | 📧 Email                | 🔐 Mot de passe  |
+|----------------|------------------------|----------------|
+| **Visiteur**   | visiteur@gmail.fr      | visiteur       |
+| **Lecteur**    | lecteur@gmail.fr       | lecteur        |
+| **Annotateur** | annotateur@gmail.fr    | annotateur     |
+| **Validateur** | validateur@gmail.fr    | validateur     |
+| **Admin**      | admin@gmail.fr         | admin          |
+
+---
+
+## ✨ Auteurs  
+- **Emma Le Roy Pardonche**  - [GitHub](https://github.com/emmaleroyp)  
+- **Youna Maillié** - [GitHub](https://github.com/YounaMKr)  
+- **Anne Beigeaud** - [GitHub](https://github.com/abgd29)  
+- **Antoine Loth** - [GitHub](https://github.com/Antoine2596)  
+
+---
 
 
 

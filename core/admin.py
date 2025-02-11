@@ -14,9 +14,10 @@ from django.dispatch import receiver
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ("email", "first_name", "last_name", "role", "is_staff", "is_superuser", "last_login")
-    search_fields = ("email", "first_name", "last_name", "role")
-    list_editable = ("role",)  # Permet la modification du rôle directement depuis la liste des utilisateurs
+    list_display = ("email", "first_name", "last_name", "role", "requested_role", "is_staff", "is_superuser", "last_login")
+    search_fields = ("email", "first_name", "last_name", "role", "requested_role")
+    list_editable = ("role",) 
+
 
 
 # Formulaire pour recuperer manuellement l id et le nom du genome 
@@ -85,10 +86,7 @@ class AnnotationAdmin(ImportMixin, admin.ModelAdmin):
     def has_add_permission(self, request):
         return True
 
-@admin.register(ConnectionHistory)
-class ConnectionHistoryAdmin(admin.ModelAdmin):
-    list_display = ('user', 'login_time', 'logout_time')
-    list_filter = ('user', 'login_time')
+
 
 @receiver(post_save, sender=CustomUser)
 def update_user_session(sender, instance, **kwargs):

@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}
+Accueil - EYAA
+{% endblock %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Accès Refusé</title>
+    <style>
+        h2{
+            color:white
+        }
+
+        h2{
+            text-align: center;
+            padding-top: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Accès interdit</h2>
+    <h2><a href="{% url 'home' %}">Retour à l'accueil</a></h2>
+{% endblock %}

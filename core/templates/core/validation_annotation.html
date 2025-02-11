@@ -25,16 +25,19 @@
             <p><strong>Nom du peptide :</strong> {{ annotation.sequence.peptide_product }}</p><br>
 
             <br>
+            <br>
             <h3>ADN :</h3>
-            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px; overflow-y: auto;">
+            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px; overflow-y:auto;">
                 {{ annotation.sequence.dna_sequence }}
-            </textarea>
+            </textarea> <br>
             <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button>
+            <br>
+            <br>
 
             <h3>Protéine :</h3>
             <textarea id="protein_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; width: 60%; height: 150px;overflow-y: auto;">
                 {{ annotation.sequence.aa_sequence }}
-            </textarea>
+            </textarea> <br>
             <button onclick="copyToClipboard('protein_sequence')">Copier Protéine</button>
 
             <div class="button-container">
@@ -42,7 +45,6 @@
                 <a href="https://www.ebi.ac.uk/interpro/search/sequence/" class="link-button" target="_blank">Recherche InterPro</a>
                 <a href="https://www.uniprot.org/" class="link-button" target="_blank">Recherche sur UniProt</a>
             </div>
-
         </div>
 
         {% if annotation.annotation_author.email != user.email %}
@@ -70,4 +72,20 @@
         {% endif %}
 
     </div>
+    <script>
+        function copyToClipboard(id) {
+            var copyText = document.getElementById(id);
+
+            // Selectionner le texte du textarea
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Pour les appareils mobiles
+
+            // Copier dans le presse-papiers
+            navigator.clipboard.writeText(copyText.value).then(function() {
+            alert('Séquence copiée dans le presse-papiers');
+            }).catch(function(error) {
+            console.error('Erreur lors de la copie dans le presse-papiers: ', error);
+            });
+        }
+    </script>
 {% endblock %}

@@ -2,8 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.page_non_connecte, name="page_non_connecte"),
-    path("home", views.home, name="home"),
+    path("", views.home, name="home"),
     path("inscription/", views.inscription, name="inscription"),
     path("connexion/", views.connexion, name="connexion"),
     path("contacts/", views.contacts, name="contacts"),
@@ -19,5 +18,8 @@ urlpatterns = [
     path("outil_validation/annotation_detail/<str:annotation_id>/", views.validate_annotation, name="validate_annotation"),
     path("attribution_sequence/", views.sequences_non_assigned, name="sequences_non_assigned"),
     path("attribution_sequence/sequence_detail/<str:sequence_id>/", views.attribution_sequence, name="attribution_manuelle"),
+    path('extraction/', views.extraction_view, name='extraction'),
+    path('extraction_file/', views.extraction_file, name='extraction_file'),
     path('attribution_sequence/attribution_auto', views.attribution_auto, name='attribution_auto'),
+    path('access_denied/', views.access_denied, name='access_denied'),
 ]

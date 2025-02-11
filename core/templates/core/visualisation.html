@@ -57,6 +57,41 @@
         background-color: #6c757d !important; 
         color: white !important;
     }
+    .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    }
+    .link-button {
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+    }
+    .link-button:hover {
+        background-color: #0056b3;
+    }
+    button {
+    background-color: darkgray;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: gray;
+    }
 </style>
 
 
@@ -81,7 +116,7 @@
 
         <form method="get" class="mb-4">
             <div class="input-group">
-                <input type="text" name="search" class="form-control" value="{{ search_query }}" placeholder="Rechercher par nom du gène">
+                <input type="text" name="search" class="form-control" value="{{ search_query }}" placeholder="Rechercher par nom du gène ou peptide">
                 <button class="btn btn-secondary" type="submit">Rechercher</button>
             </div>
         </form>
@@ -116,7 +151,7 @@
                         <a href="{% url 'visualisation' obj_type='sequence' obj_id=seq.sequence_id %}" class="btn btn-secondary btn-sm">Informations de la séquence</a>
                     </td>
                     <td>
-                        {% if seq.annotation and seq.get_sequence_status_display == "Validée" %}
+                        {% if seq.annotation and seq.get_sequence_status_display == "Validée" or seq.get_sequence_status_display == "En attente de validation" %}
                             <a href="{% url 'visualisation' obj_type='annotation' obj_id=seq.annotation.annotation_id %}" class="btn btn-gray btn-sm">Voir l'annotation</a>
                         {% else %}
                             <span class="text-muted">Aucune annotation disponible</span>
@@ -148,35 +183,65 @@
             <div class="card-header">Détails</div>
             <div class="card-body">
                 <p><strong>ID de la séquence :</strong> {{ obj.sequence_id }}</p>
-                <p><strong>Nom du gène :</strong> {{ obj.gene_name }}</p>
-                <p><strong>Statut :</strong> {{ obj.get_sequence_status_display }}</p>
                 <p><strong>Génome associé :</strong> {{ obj.genome.genome_id }}</p>
-                <p><strong>Longueur :</strong> {{ obj.sequence_length }}</p>
+                <p><strong>Statut :</strong> {{ obj.get_sequence_status_display }}</p>
                 <p><strong>Support :</strong> {{ obj.information_support }}</p>
                 <p><strong>Brin :</strong> {{ obj.sequence_brin }}</p>
+                <p><strong>Longueur :</strong> {{ obj.sequence_length }}</p>
+                <p><strong>Nom du gène :</strong> {{ obj.gene_name }}</p>
+                <p><strong>Nom du peptide :</strong> {{ obj.peptide_product }}</p>
             </div>
         </div>
         
         <h2 class="text-center text-white">Séquences</h2>
 
             <h3 class = "text-white">ADN :</h3>
-            <pre style=" white-space: normal; font-family: monospace; background: #f4f4f4; padding: 10px; border-radius: 5px;height: 150px; overflow-y: auto;">
+            <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;width:100%; height: 150px; overflow-y: auto;">
                 {{ obj.dna_sequence }}
-            </pre>
+            </textarea> <br>
+            <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button>
+
             <h3 class = "text-white">Protéine :</h3>
-            <pre style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;height: 150px; overflow-y: auto;">
+            <textarea id="aa_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;width:100%; height: 150px; overflow-y: auto;">
                 {{ obj.aa_sequence }}
-            </pre>
-        </section>
+            </textarea> <br>
+            <button onclick="copyToClipboard('aa_sequence')">Copier ADN</button> <br>
+            <br>
+        
+        <a href="{% url 'visualisation' 'genome' obj.genome  %}" class="btn btn-secondary btn-sm">
+            Voir le génome
+        </a>
+        
+        {% if obj.annotation %}
+            <a href="{% url 'visualisation' 'annotation' obj.annotation.annotation_id %}"  class="btn btn-secondary btn-sm">
+                Voir l'annotation
+            </a>
+        {% endif %}
+
+        <div class="button-container">
+            <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" class="link-button" target="_blank">Effectuer un blast</a>
+            <a href="https://www.ebi.ac.uk/interpro/search/sequence/ " class="link-button" target="_blank">Recherche InterPro</a>
+            <a href="https://www.uniprot.org/" class="link-button" target="_blank">Recherche sur UniProt</a>
+        </div>
 
     {% elif obj_type == "annotation" %}
         <h1 class="text-center text-white">Annotation : {{ obj.annotation_id }}</h1>
+        
+    
+        {% if obj.sequence.get_sequence_status_display != "Validée"%}
+            <hr>
+            <h2 style="color: darkorange;" >Attention cette annotation n'a pas encore été Validée</h2>
+            <hr>
+        {% endif%}
+
         <div class="card mb-4">
             <div class="card-header">Détails</div>
             <div class="card-body">
             <p><strong>ID de l'annotation :</strong> {{ obj.annotation_id }}</p>
             <p><strong>Auteur :</strong> {{ obj.annotation_author }}</p>
             <p><strong>Séquence associée :</strong> {{ obj.sequence.sequence_id }}</p>
+            <p><strong>Nom du gène :</strong> {{ obj.sequence.gene_name }}</p>
+            <p><strong>Nom du peptide :</strong> {{ obj.sequence.peptide_product }}</p>
             </div>
         </div>
 
@@ -184,13 +249,45 @@
             <pre style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-y: auto;">
                 {{ obj.annotation_text }}
             </pre>
+        
+
+        <a href="{% url 'visualisation' 'genome' obj.sequence.genome  %}" class="btn btn-secondary btn-sm">
+            Voir le génome
+        </a>
+        
+            <a href="{% url 'visualisation' 'sequence' obj.sequence%}"  class="btn btn-secondary btn-sm">
+                Voir la séquence
+            </a>
+
+            <div class="button-container">
+                <a href="https://www.ebi.ac.uk/interpro/search/text/" class="link-button" target="_blank">Recherche InterPro</a>
+                <a href="https://www.uniprot.org/" class="link-button" target="_blank">Recherche sur UniProt</a>
+            </div>
+
        
     {% else %}
         <p>Type d'objet non reconnu.</p>
     {% endif %}
 
     <footer>
-        <a href="{% url 'genome_database' %}">Retour à la base de données</a>
+        <a href="{% url 'genome_database' %}" style="color:white">Retour à la base de données</a>
     </footer>
+
+    <script>
+        function copyToClipboard(id) {
+            var copyText = document.getElementById(id);
+
+            // Selectionner le texte du textarea
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Pour les appareils mobiles
+
+            // Copier dans le presse-papiers
+            navigator.clipboard.writeText(copyText.value).then(function() {
+            alert('Séquence copiée dans le presse-papiers');
+            }).catch(function(error) {
+            console.error('Erreur lors de la copie dans le presse-papiers: ', error);
+            });
+        }
+    </script>
 
 {% endblock %}

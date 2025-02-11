@@ -1,0 +1,167 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}
+Extraction - EYAA
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'genome_database' %}">Base de Données</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Extraction des données</li>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/style_extraction.css' %}">
+
+<div class="page-container">
+    <h1 class="page-title">Extraction des Données</h1>
+    <h2 class="page-subtitle">Sélectionnez les champs à extraire</h2>
+
+    <div class="main-content">
+        <!-- SECTION PRINCIPALE -->
+
+        
+        <div class="database-section">
+            <div class="select-all-button">
+                <label>
+                    <input type="checkbox" name="all" value="true"> Tout sélectionner
+                </label>
+            </div>
+            <hr>
+ 
+
+            {%if type%}
+
+                
+        
+                <form method="GET" action="{% url 'extraction_file' %}">
+                    {% for key, value in request.GET.items %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                    {% endfor %}
+
+                    <!-- Filtres de recherche -->
+       
+                    <div class="filter-menu button">
+
+                        <label>
+                            <input type="checkbox" name="genome_id" value="true"> Identifiant
+                        </label>
+                        <hr>
+
+                        <label>
+                            <input type="checkbox" name="genome_sequence" value="true"> Génome
+                        </label>
+                        <hr>
+                        <label>
+                            <input type="checkbox" name="genome_type" value="true"> Type du génome
+                        </label>
+                        <hr>
+    
+                        <label>
+                            <input type="checkbox" name="genome_organisme" value="true"> Genre Espèce
+                        </label>
+                        <hr>
+    
+                        <label>
+                            <input type="checkbox" name="genome_annotation" value="true"> Statut de l'anotation
+                        </label>
+                        <hr>
+                    </div>
+                </form>
+            {% else %}
+
+                <form method="GET" action="{% url 'extraction_file' %}">
+                    {% for key, value in request.GET.items %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                    {% endfor %}
+                    
+
+                    <div class="filter-menu button">
+                        <!-- Informations générales -->
+                        <h3>Informations générales</h3>
+                        <label><input type="checkbox" name="sequence_id" value="true"> Identifiant de la séquence</label>
+                        <label><input type="checkbox" name="genome" value="true"> Identifiant du génome</label>
+                        <label><input type="checkbox" name="organisme" value="true"> Espèce</label>
+                        <hr>
+            
+                        <!-- Données sur la séquence -->
+                        <h3>Données sur la séquence</h3>
+                        <label><input type="checkbox" name="dna_sequence" value="true"> Séquence nucléotidique</label>
+                        <label><input type="checkbox" name="aa_sequence" value="true"> Séquence protéique</label>
+                        
+                        <hr>
+            
+                        <!-- Position et structure -->
+                        <h3>Position et structure</h3>
+                        <label><input type="checkbox" name="sequence_start" value="true"> Position du premier nucléotide</label>
+                        <label><input type="checkbox" name="sequence_stop" value="true"> Position du dernier nucléotide</label>
+                        <label><input type="checkbox" name="sequence_length" value="true"> Taille</label>
+                        <label><input type="checkbox" name="Brin_champ" value="true"> Brin</label>
+                        <label><input type="checkbox" name="support" value="true"> Support </label>
+                        <hr>
+            
+                        <!-- Annotation et statut -->
+                        <h3>Annotation</h3>
+                        <label><input type="checkbox" name="sequence_name" value="true"> Nom du gène</label>
+                        <label><input type="checkbox" name="sequence_pep" value="true"> Nom du produit peptidique</label>
+                        <label><input type="checkbox" name="sequence_annot" value="true"> Annotation</label>
+                        <label><input type="checkbox" name="sequence_annot_status" value="true"> Statut de l'annotation</label>
+                        <hr>
+                    </div>
+                </form>
+
+
+            {% endif %}
+            <div class="Extraction">
+                <a id="export-btn" href="{% url 'extraction_file' %}" class="extraction-button">Confirmer l'export</a>
+            </div>
+
+        </div>
+
+        
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const selectAllCheckbox = document.querySelector("input[name='all']");
+        const checkboxes = document.querySelectorAll(".filter-menu input[type='checkbox']");
+
+        selectAllCheckbox.addEventListener("change", function() {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
+        // Mise à jour du "Tout sélectionner" si toutes les cases sont cochées/décochées manuellement
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function() {
+                selectAllCheckbox.checked = Array.from(checkboxes).every(cb => cb.checked);
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const exportBtn = document.getElementById("export-btn");
+        if (!exportBtn) return;
+
+        exportBtn.addEventListener("click", function (event) {
+            event.preventDefault(); 
+
+            let params = new URLSearchParams(window.location.search); 
+            document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+                if (checkbox.checked) {
+                    params.set(checkbox.name, "true");
+                }
+            });
+
+            window.location.href = exportBtn.href + "?" + params.toString(); 
+        });
+    });
+</script>
+
+
+{% endblock %}
