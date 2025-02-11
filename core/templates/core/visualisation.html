@@ -199,13 +199,14 @@
             <textarea id="dna_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;width:100%; height: 150px; overflow-y: auto;">
                 {{ obj.dna_sequence }}
             </textarea> <br>
-            <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button>
+            <button onclick="copyToClipboard('dna_sequence')">Copier ADN</button><br>
+            <br>
 
             <h3 class = "text-white">Protéine :</h3>
             <textarea id="aa_sequence" readonly style="word-wrap: break-word; white-space: normal; background: #f4f4f4; padding: 10px; border-radius: 5px;width:100%; height: 150px; overflow-y: auto;">
                 {{ obj.aa_sequence }}
             </textarea> <br>
-            <button onclick="copyToClipboard('aa_sequence')">Copier ADN</button> <br>
+            <button onclick="copyToClipboard('aa_sequence')">Copier Protéine</button> <br>
             <br>
         
         <a href="{% url 'visualisation' 'genome' obj.genome  %}" class="btn btn-secondary btn-sm">
